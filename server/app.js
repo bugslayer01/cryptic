@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import authRoute from './src/routes/auth.js'
 import connectMongo from "./src/db/mongoose.js";
 
 
@@ -32,6 +32,7 @@ connectMongo();
 app.get("/", (req, res) => {
   res.render("home");
 });
+app.use(authRoute);
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).render("404", { url: req.originalUrl });
