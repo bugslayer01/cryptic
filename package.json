@@ -1,0 +1,37 @@
+{
+  "name": "cryptic",
+  "version": "1.0.0",
+  "description": "Cryptic hunt website for Frosh Week'24",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/app.js",
+    "style": "npx tailwindcss -i ./public/styles/input.css -o ./public/styles/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fyxod/cryptic.git"
+  },
+  "author": "MLSC DB Team - Batch of '27",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fyxod/cryptic/issues"
+  },
+  "homepage": "https://github.com/Fyxod/cryptic#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.4.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "nodemon": "^3.1.3",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4"
+  }
+}
