@@ -3,6 +3,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import connectMongo from "./src/db/mongoose.js";
+
 
 // Configure environment variables
 dotenv.config();
@@ -25,15 +27,7 @@ app.set("views", path.join(__dirname, "../public/views"));
 app.use(express.static(path.join(__dirname, "../public")));
 
 // MongoDB connection
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("connected to mongodb");
-  })
-  .catch((err) => {
-    console.log("could not connect to MongoDB, some error occured\n", err);
-  });
-
+connectMongo();
 // Routes
 app.get("/", (req, res) => {
   res.render("home");
