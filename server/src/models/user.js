@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-    team: {
+    teamId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Team',
         required: [true, "Please enter the team name"]
