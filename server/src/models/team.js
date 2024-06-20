@@ -5,11 +5,10 @@ const teamSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter the team name"],
   },
-  members: {
+  members: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, "Please enter the member"],
-  },
+  }],
   //more to be added
 });
 
