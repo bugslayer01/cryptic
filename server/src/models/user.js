@@ -1,18 +1,29 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
-const adminSchema = new mongoose.Schema({
-  username: {
-    type: String,
-    required: (true, "Please enter the username"),
-  },
-  password: {
-    type: String,
-    required: (true, "Please enter your password"),
-  },
+const userSchema = new mongoose.Schema({
+    team: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team',
+        required: [true, "Please enter the team name"]
+    },
+    username: {
+        type: String,
+        required: [true, "Please enter your username"]
+    },
+    email: {
+        type: String,
+        required: [true, "Please enter your email address"]
+    },
+    password: {
+        type: String,
+        required: [true, "Please enter your password"]
+    },
+    isLeader: {
+        type: Boolean,
+        required: true
+    }
 });
 
-const Admin = mongoose.model("admin", adminSchema);
+const User = mongoose.model('User', userSchema);
 
-module.exports = {
-  Admin,
-};
+export default User;
