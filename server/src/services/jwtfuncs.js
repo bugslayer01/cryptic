@@ -1,18 +1,21 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-export async function setUser(data) {
-    return jwt.sign(
-        data,
-        process.env.secret || 'notaverygoodsecret',
-        { expiresIn: process.env.expiryTime | '1h' });
+export function setUser(data) {
+    try {
+        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret');
+    } catch (err) {
+        console.error('Token signing failed:', err);
+        return null;
+    }
 }
 
-export async function getUser(token) {
+export function getUser(token) {
     if (!token || typeof token !== 'string') {
         return null;
     }
+
     try {
-        return jwt.verify(token, process.env.secret || 'notaverygoodsecret');
+        return jwt.verify(token, process.env.JWT_SECRET || 'notaverygoodsecret');
     } catch (err) {
         console.error('Token verification failed:', err);
         return null;
