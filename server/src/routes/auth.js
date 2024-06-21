@@ -5,22 +5,25 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt'
 import { setUser } from '../services/jwtfuncs.js';
 const router = express.Router();
-
 const registerSchema = z.object({
-    teamName: z.string().min(1, "Please enter the team name"),
-    username: z.string().min(2, "Username should be atleast 2 characters long"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(6, "Password should be atleast 6 characters long"),
+    teamName: z.string().min(1, {message : "Please enter the team name"}),
+    username: z.string().min(2, {message : "Username should be atleast 2 characters long"}),
+    email: z.string().email({message : "Please enter a valid email address"}),
+    password: z.string().min(6, {message : "Password should be atleast 6 characters long"}),
 });
 
 const loginSchema = z.object({
-    username: z.string().min(2, "Username is atleast 2 characters long"),
-    password: z.string().min(6, "Password is atleast 6 characters long"),
+    username: z.string().min(2, {message : "Username is atleast 2 characters long"}),
+    password: z.string().min(6, {message : "Password is atleast 6 characters long"}),
 });
 
 router.get('/register', (req, res) => {
-    res.render('registerLeader', { error: null });
-})
+    res.render('register', { error: null });
+});
+
+router.get('/login', (req, res) => {
+    res.render('login', { error: null });
+});
 
 router.post('/register', async (req, res) => {
     try {
@@ -31,13 +34,13 @@ router.post('/register', async (req, res) => {
         const emailExists = await User.findOne({ email });
 
         if (teamExists) {
-            res.render('registerLeader', { error: 'Team with this name already registered' });
+            res.render('register', { error: 'Team with this name already registered' });
         }
         if (usernameExists) {
-            res.render('registerLeader', { error: 'User with this username already registered' });
+            res.render('register', { error: 'User with this username already registered' });
         }
         if (emailExists) {
-            res.render('registerLeader', { error: 'Email already registered' });
+            res.render('register', { error: 'Email already registered' });
         }
         const hash = await bcrypt.hash(password, 12);
         const team = new Team({
@@ -57,15 +60,15 @@ router.post('/register', async (req, res) => {
 
         res.redirect("/login");
 
-    } catch {
-        res.render('registerLeader', { error: error.errors[0].message });
+    } catch(error) {
+        res.render('register', { error: error.errors[0].message });
     }
 });
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
         const { username, password } = loginSchema.parse(req.body);
-        const user = User.findOne({ username })
+        const user = await User.findOne({ username })
         if (!user) {
             res.render('login', { error: 'Invalid username or password' });
         }
@@ -73,13 +76,12 @@ router.get('/login', async (req, res) => {
         if (!validPassword) {
             res.render('login', { error: 'Invalid username or password' });
         }
-        const token = setUser({ id: user._id, username: user.username, isLeader: user.isLeader });
-
+        const token = setUser({ _id: user._id, username: user.username, isLeader: user.isLeader });
         res.cookie('token', token, { httpOnly: true });
 
         res.redirect('/dashboard');
-    } catch{
-        res.render('registerLeader', { error: error.errors[0].message });
+    } catch(error) {
+        res.render('login', { error: error.errors[0].message });
     }
 })
 
