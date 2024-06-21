@@ -23,7 +23,15 @@
         </div>
     </nav>
     <div class="container mx-auto mt-4">
-        Welcome <%= username %> of <%= teamName %>
+        <% for(user of userData){ %>
+            <div>
+                Name: <%= user.username %><br>
+                Email: <%= user.email %>
+                <form action="/deleteUser/<%= user._id %>?_method=DELETE" method="POST">
+                <button>Delete user</button>
+                </form>
+            </div>
+            <% } %>
     </div>
 </body>
 
