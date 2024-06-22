@@ -1,5 +1,12 @@
 const questions = [
     {
+      q: "Demo Question",
+      a: "Demo Answer",
+      imagepath : 'assets/images/questions/sample_image.jpg',
+      audiopath : null,
+      videopath : null
+    },
+    {
       q: "What is the capital of France?",
       a: "Paris",
       imagepath : null,

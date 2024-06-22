@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import methodOverride from 'method-override'
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
+import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
 
 
@@ -39,6 +40,7 @@ app.get("/", (req, res) => {
 });
 app.use(authRoute);
 app.use(mainRoute);
+app.use(crypticRoute)
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).render("404", { url: req.originalUrl });
