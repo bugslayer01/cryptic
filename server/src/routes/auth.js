@@ -18,11 +18,11 @@ const loginSchema = z.object({
 });
 
 router.get('/register', (req, res) => {
-    res.render('register', { error: null });
+    return res.render('register', { error: null });
 });
 
 router.get('/login', (req, res) => {
-    res.render('login', { error: null });
+    return res.render('login', { error: null });
 });
 
 router.post('/register', async (req, res) => {
@@ -34,13 +34,13 @@ router.post('/register', async (req, res) => {
         const emailExists = await User.findOne({ email });
 
         if (teamExists) {
-            res.render('register', { error: 'Team with this name already registered' });
+            return res.render('register', { error: 'Team with this name already registered' });
         }
         if (usernameExists) {
-            res.render('register', { error: 'User with this username already registered' });
+            return res.render('register', { error: 'User with this username already registered' });
         }
         if (emailExists) {
-            res.render('register', { error: 'Email already registered' });
+            return res.render('register', { error: 'Email already registered' });
         }
         const hash = await bcrypt.hash(password, 12);
         const team = new Team({
@@ -58,10 +58,10 @@ router.post('/register', async (req, res) => {
         team.members.push(newUser._id)
         await team.save();
 
-        res.redirect("/login");
+        return res.redirect("/login");
 
     } catch(error) {
-        res.render('register', { error: error.errors[0].message });
+       return res.render('register', { error: (error.errors[0].message || "Bad Credentials") });
     }
 });
 
@@ -70,18 +70,19 @@ router.post('/login', async (req, res) => {
         const { username, password } = loginSchema.parse(req.body);
         const user = await User.findOne({ username })
         if (!user) {
-            res.render('login', { error: 'Invalid username or password' });
+           return res.render('login', { error: 'Invalid username or password' });
         }
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            res.render('login', { error: 'Invalid username or password' });
+            return res.render('login', { error: 'Invalid username or password' });
         }
         const token = setUser({ _id: user._id, username: user.username, isLeader: user.isLeader });
-        res.cookie('token', token, { httpOnly: true });
+        res.cookie('token', token);
+        // res.cookie('token', token, { httpOnly: true });
 
-        res.redirect('/dashboard');
+        return res.redirect('/dashboard');
     } catch(error) {
-        res.render('login', { error: error.errors[0].message });
+        return res.render('login', { error: error.errors[0].message });
     }
 })
 
