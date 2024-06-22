@@ -84,6 +84,12 @@ router.post('/login', async (req, res) => {
     } catch(error) {
         return res.render('login', { error: error.errors[0].message });
     }
+});
+
+router.get('/logout', (req, res) => {
+    req.user = null;
+    res.clearCookie('token');
+    return res.redirect('/login')
 })
 
 export default router;
