@@ -9,8 +9,20 @@ const teamSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   }],
-  //more to be added
+  questionData: {
+    current: { type: Number, default: 0 },
+    score: { type: Number, default: 0 },
+    questions: [{
+      answered: { type: Boolean, default: false },
+      timeTaken: { type: Number, default: 0 },
+      answeredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
+      attempts: { type: Number, default: 0 },
+      submitTime: { type: Date, default: null },
+      allAnswers: [{ type: String }],
+    }],
+  },
 });
+
 
 const Team = mongoose.model('Team', teamSchema);
 
