@@ -22,19 +22,25 @@
             </div>
         </div>
     </nav>
-    <div class="container mx-auto mt-4 flex justify-end">
-        <a href="/registermember" class="bg-blue-500 text-white px-4 py-2 rounded">Add Users</a>
-    </div>
+    <% if(isLeader){ %>
+        <div class="container mx-auto mt-4 flex justify-end">
+            <a href="/registermember" class="bg-blue-500 text-white px-4 py-2 rounded">Add Users</a>
+        </div>
+        <% } %>
+    
     <div class="container mx-auto mt-4">
-        <% for(user of userData){ %>
+        <% for(let i=0; i<userData.length; i++){ %>
             <div class="mb-4 p-4 bg-gray-100 rounded shadow-md">
-                <p>Name: <%= user.username %></p>
-                <p>Email: <%= user.email %></p>
-                <form action="/deleteuser/<%= user._id %>?_method=DELETE" method="POST">
-                    <button class="mt-2">
-                        <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete" class="w-6 h-6">
-                    </button>
-                </form>
+                <p>Name: <%= userData[i].username %></p>
+                <p>Email: <%= userData[i].email %></p>
+                <% if(isLeader && i !== 0){ %>
+                    <form action="/deleteuser/<%= userData[i]._id %>?_method=DELETE" method="POST">
+                        <button class="mt-2">
+                            <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete"
+                                class="w-6 h-6">
+                        </button>
+                    </form>
+                <% } %>
             </div>
         <% } %>
     </div>

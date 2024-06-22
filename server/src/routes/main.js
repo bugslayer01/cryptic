@@ -42,7 +42,7 @@ router.get('/team', checkAuth, async (req, res) => {
             const member = await User.findById(id);
             userData.push(member);
         }
-        return res.render('team', { userData })
+        return res.render('team', { userData, isLeader: req.user.isLeader })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
         res.status(500).send('Internal Server Error');
