@@ -1,8 +1,11 @@
 import express from "express";
 import path from "path";
+import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import methodOverride from 'method-override'
 import authRoute from './src/routes/auth.js'
+import mainRoute from './src/routes/main.js'
 import connectMongo from "./src/db/mongoose.js";
 
 
@@ -18,6 +21,8 @@ const __dirname = path.dirname(__filename);
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
+app.use(methodOverride("_method"));
 
 // Set up view engine
 app.set("view engine", "ejs");
@@ -33,6 +38,7 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 app.use(authRoute);
+app.use(mainRoute);
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).render("404", { url: req.originalUrl });
