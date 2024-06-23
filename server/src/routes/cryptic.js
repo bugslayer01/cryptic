@@ -6,7 +6,7 @@ import questions from "../db/questions.js";
 import express from 'express'
 import { z } from 'zod'
 const router = express.Router();
-const startTime = null;
+let startTime = null;
 
 const answerSchema = z.object({
     answer: z.string().min(1, { message: "Please enter the answer" })
@@ -27,7 +27,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
         return res.redirect('/login')
     }
     try {
-        const { answer } = answerSchema.parse(req.body);
+        let { answer } = answerSchema.parse(req.body);
         answer = answer.trim();
         const user = await User.findById(req.user._id);
         const team = await Team.findById(user.teamId);
@@ -43,16 +43,16 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                     team.questionData.questions[0].timeTaken = team.questionData.questions[0].submitTime - startTime;
                 }
                 else {
-                    team.questionData.questions[0].timeTaken = team.questionData.questions[current].submitTime - team.questionData.questions[current - 1].submitTime;
+                    team.questionData.questions[current].timeTaken = team.questionData.questions[current].submitTime - team.questionData.questions[current - 1].submitTime;
                 }
                 team.questionData.current += 1;
             }
         }
         else {
-            const answeredBy = null
-            const answered = false;
-            const submitTime = null;
-            const timeTaken = 0;
+            let answeredBy = null
+            let answered = false;
+            let submitTime = null;
+            let timeTaken = 0;
             if (questions[current].a.toLowerCase() == answer.toLowerCase()) {
                 answeredBy = user._id;
                 answered = true;
@@ -65,7 +65,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                 }
                 team.questionData.current += 1;
             }
-            const newQuestion = {
+            let newQuestion = {
                 answered,
                 timeTaken,
                 answeredBy,
@@ -86,6 +86,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
 });
 
 router.get('/start', (req, res) => {
+    console.log("Event started")
     startTime = new Date();
     res.redirect('/admin')
 });
