@@ -27,35 +27,40 @@
             <!-- Box with 2px black border -->
             <div class="flex flex-col items-center space-y-4">
                 <!-- Image -->
-                 <% if(question.imagepath){ %>
-                <img src="<%= question.imagepath %>" alt="Sample Image" class="w-64 h-64 object-cover">
+                <% if(question.imagepath){ %>
+                    <img src="<%= question.imagepath %>" alt="Sample Image" class="w-64 h-64 object-cover">
                     <% } %>
-                <!-- Audio Player -->
-                <% if(question.audioPath){ %>
-                <audio controls>
-                    <source src="path_to_your_audio_file.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-                                    <% } %>
+                        <!-- Audio Player -->
+                        <% if(question.audioPath){ %>
+                            <audio controls>
+                                <source src="path_to_your_audio_file.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                            <% } %>
 
-                <!-- Question -->
-                <div class="w-full">
-                    <p class="text-lg font-semibold">Question:</p>
-                    <p class="mt-2 text-gray-700" id="question"><%= question.q %></p>
-                </div>
+                                <!-- Question -->
+                                <div class="w-full">
+                                    <p class="text-lg font-semibold">Question:</p>
+                                    <p class="mt-2 text-gray-700" id="question">
+                                        <%= question.q %>
+                                    </p>
+                                </div>
 
-                <!-- Answer Input and Submit Button -->
-                <form action="/submit-answer" method="POST" class="w-full">
-                    <div class="w-full">
-                        <label for="answer" class="block text-lg font-semibold">Your Answer:</label>
-                        <input type="text" id="answer" name="answer" class="mt-2 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
-                    </div>
-                    <div class="w-full">
-                        <button type="submit" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                            Submit
-                        </button>
-                    </div>
-                </form>
+                                <!-- Answer Input and Submit Button -->
+                                <form action="/submit-answer" method="POST" class="w-full">
+                                    <div class="w-full">
+                                        <label for="answer" class="block text-lg font-semibold">Your Answer:</label>
+                                        <input type="text" id="answer" name="answer"
+                                            class="mt-2 p-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            required>
+                                    </div>
+                                    <div class="w-full">
+                                        <button type="submit"
+                                            class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
+                                            Submit
+                                        </button>
+                                    </div>
+                                </form>
             </div>
         </div>
     </div>
