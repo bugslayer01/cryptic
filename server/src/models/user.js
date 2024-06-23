@@ -21,7 +21,19 @@ const userSchema = new mongoose.Schema({
     isLeader: {
         type: Boolean,
         required: true
-    }
+    },
+    loggedIn: {
+        type: Boolean,
+        default: false
+    },
+    noOfAttempts: {
+        type: Number,
+        default: 0
+    },
+    noOfQuestionsAnswered: {
+        type: Number,
+        default: 0
+    },
 });
 
 const User = mongoose.model('User', userSchema);
