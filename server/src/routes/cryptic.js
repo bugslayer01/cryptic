@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import checkAuth from "../middlewares/auth.js";
+import {checkAuth} from "../middlewares/auth.js";
 import User from "../models/user.js";
 import Team from "../models/team.js";
 import questions from "../db/questions.js";

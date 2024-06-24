@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt'
-import checkAuth from '../middlewares/auth.js';
+import {checkAuth} from '../middlewares/auth.js';
 import mongoose from 'mongoose';
 import Team from '../models/team.js';
 import User from '../models/user.js';

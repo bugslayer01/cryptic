@@ -4,6 +4,7 @@ import User from '../models/user.js';
 import { z } from 'zod';
 import bcrypt from 'bcrypt'
 import { setUser } from '../services/jwtfuncs.js';
+import { checkAuth } from '../middlewares/auth.js';
 const router = express.Router();
 const registerSchema = z.object({
     teamName: z.string().min(1, {message : "Please enter the team name"}),
@@ -78,6 +79,8 @@ router.post('/login', async (req, res) => {
         }
         const token = setUser({ _id: user._id, username: user.username, isLeader: user.isLeader });
         res.cookie('token', token);
+        user.loggedIn = true;
+        await user.save();
         // res.cookie('token', token, { httpOnly: true });
 
         return res.redirect('/dashboard');
@@ -86,7 +89,10 @@ router.post('/login', async (req, res) => {
     }
 });
 
-router.get('/logout', (req, res) => {
+router.get('/logout',checkAuth, async (req, res) => {
+    const user = await User.findById(req.user._id);
+    user.loggedIn = false;
+    await user.save();
     req.user = null;
     res.clearCookie('token');
     return res.redirect('/login')
