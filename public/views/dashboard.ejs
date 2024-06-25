@@ -1,30 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Dashboard</title>
-    <!-- Include the Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
+    <link rel="stylesheet" href="../styles/dashboard.css" />
 
-<body>
-    <nav class="bg-gray-800 p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-white text-xl font-bold">Event - name</div>
-            <div class="flex space-x-4">
-                <a href="/home" class="text-white">Home</a>
-                <a href="/cryptic" class="text-white">Cryptic</a>
-                <a href="/team" class="text-white">My Team</a>
-                <a href="/logout" class="text-white">Logout</a>
-            </div>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="hero-section">
+        <div class="nav">
+          <div class="artist">MLSC '27 presents</div>
+          <div class="watch">
+            <ion-icon name="play"></ion-icon><a href="/cryptic">Play now</a>
+          </div>
+          <div class="menu">
+            <a href="/logout"><ion-icon name="power"></ion-icon></a>
+          </div>
         </div>
-    </nav>
-    <div class="container mx-auto mt-4">
-        Welcome <%= username %> of <%= teamName %>
-    </div>
-</body>
 
+        <div class="hero-gif"></div>
+
+        <div class="hero-title">
+          <h1 class="glitch" data-text="Consperia">Consperia</h1>
+          <p>The hunt begins</p>
+        </div>
+
+        <div class="rotatethis">
+          <h2 id="rotated">chase • fight • solve • win • mlsc •</h2>
+        </div>
+
+        <div class="social-media">
+          <ul>
+            <li>
+              <a href="https://www.instagram.com/mlsc_db/" target="_blank"
+                >instagram</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://www.linkedin.com/company/microsoft-learn-student-chapter-tiet/"
+                target="_blank"
+                >linkedIn</a
+              >
+            </li>
+            <li><a href="https://google.com" target="_blank">website</a></li>
+          </ul>
+        </div>
+
+        <div class="ionicon">
+          <ul>
+            <li><ion-icon name="play"></ion-icon></li>
+            <li><ion-icon name="flame"></ion-icon></li>
+            <li><ion-icon name="heart"></ion-icon></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="gif-overlay"></div>
+    </div>
+
+    <script
+      type="text/javascript"
+      src="https://rawgit.com/peterhry/CircleType/master/dist/circletype.min.js"
+    ></script>
+
+    <script>
+      const circleType = new CircleType(document.getElementById("rotated"));
+
+      TweenMax.from(".artist", 2, {
+        delay: 5.4,
+        opacity: 0,
+        y: 20,
+        ease: Expo.easeInOut,
+      });
+
+      TweenMax.from(".watch", 2, {
+        delay: 5.5,
+        opacity: 0,
+        y: 20,
+        ease: Expo.easeInOut,
+      });
+
+      TweenMax.from(".menu", 2, {
+        delay: 5.6,
+        opacity: 0,
+        y: 20,
+        ease: Expo.easeInOut,
+      });
+
+      TweenMax.from(".rotatethis", 2, {
+        delay: 6,
+        opacity: 0,
+        ease: Expo.easeInOut,
+      });
+
+      TweenMax.staggerFrom(
+        ".social-media ul li",
+        2,
+        {
+          delay: 5.7,
+          opacity: 0,
+          y: 20,
+          ease: Expo.easeInOut,
+        },
+        0.1
+      );
+
+      TweenMax.staggerFrom(
+        ".listensong ul li",
+        2,
+        {
+          delay: 5.9,
+          opacity: 0,
+          y: 20,
+          ease: Expo.easeInOut,
+        },
+        0.1
+      );
+
+      TweenLite.fromTo(
+        ".hero-title h1",
+        0.3,
+        {
+          x: -6,
+          y: 2,
+          opacity: 0,
+        },
+        {
+          delay: 5,
+          x: 6,
+          y: -2,
+          opacity: 1,
+          ease: RoughEase.ease.config({
+            strength: 8,
+            points: 40,
+            template: Linear.easeNone,
+            randomize: false,
+          }),
+          clearProps: "all",
+        }
+      );
+
+      TweenLite.fromTo(
+        ".hero-title p",
+        0.3,
+        {
+          x: -6,
+          y: 2,
+          opacity: 0,
+        },
+        {
+          delay: 9,
+          x: 6,
+          y: -2,
+          opacity: 1,
+          ease: RoughEase.ease.config({
+            strength: 8,
+            points: 40,
+            template: Linear.easeNone,
+            randomize: false,
+          }),
+          clearProps: "all",
+        }
+      );
+    </script>
+  </body>
 </html>
