@@ -6,6 +6,7 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt'
 import { setAdmin } from '../services/jwtfuncs.js';
 import { checkAdmin } from '../middlewares/auth.js';
+import getRanks from '../services/rank.js';
 const router = express.Router();
 
 const adminSchema = z.object({
@@ -14,20 +15,70 @@ const adminSchema = z.object({
 });
 
 router.get('/phoenix', checkAdmin, async (req, res) => {
-    const {show, loggedIn} = req.query;
-    if(show == 'users'){
-        if(!loggedIn){
-            const users = await User.find();
+    try {
+        const { show, loggedIn, teamName } = req.query;
+        console.log(req.query)
+        if (show == 'users') {
+            let users = null
+            if (loggedIn == 'NA') {
+                users = await User.find();
+            }
+            if (loggedIn == 'true') {
+                users = await User.find({ loggedIn: true });
+            }
+            if (loggedIn == 'false') {
+                users = await User.find({ loggedIn: false });
+            }
             let teams = []
-            for (let user of users){
+            for (let user of users) {
                 const team = await Team.findById(user.teamId)
-
-
                 teams.push(team.teamName)
             }
-            return res.render('admin', {query: "allUsers", userdata: users, teams});
+            return res.render('admin', { query: "allUsers", userdata: users, teams });
+
         }
+        if (show == 'teams') {
+            let teams = null;
+            let teamsData = null;
+            const ranks = await getRanks()
+            if (sort == 'alpha') {
+                teams = await Team.find().sort({ teamName: 1 });
+                teamsData = teams;
+            }
+            if (sort == 'reversealpha') {
+                teams = await Team.find().sort({ teamName: -1 });
+            }
+            if (sort == 'rank') {
+                teamsData = [];
+                teams = await Team.find().sort({ teamName: -1 });
+                for (let i = 1; i <= teams.length; i++) {
+                    for (let j = 0; j < teams.length; i++) {
+                        if (i == ranks.teams[j].teamName) {
+                            teamsData.push(teams[j])
+                        }
+                    }
+                }
+            }
+            return res.render('admin', { query: 'teams', teamsData, ranks });
+        }
+        if(show == 'teamdetails' && teamName){
+            const ranks = await getRanks()
+            const team = await Team.findOne({teamName});
+            console.log(team.members)
+            const teamName = team.teamName
+            let userdata = [];
+            for (let i = 0; i < team.members.length; i++){
+                const user = await User.findById(team.members[i]);
+                userdata.push(user);
+            }
+            console.log(ranks.teamName)
+            return res.render('admin', {query: 'teamdetails', team, userdata, ranks})
+        }
+    } catch(error){
+        console.log(error);
+        res.send('internal server error');
     }
+    
 });
 
 router.get('/tempreg', (req, res) => {
@@ -55,10 +106,10 @@ router.post('/tempreg', async (req, res) => {
 });
 
 router.get('/phoenix/login', (req, res) => {
-    if(req.user){
+    if (req.pelican) {
         return res.redirect('/admin')
     }
-    return res.render('login', { error: null });
+    return res.render('adminlogin', { error: null });
 });
 
 router.post('/phoenix/login', async (req, res) => {
@@ -66,10 +117,13 @@ router.post('/phoenix/login', async (req, res) => {
         const { username, password } = adminSchema.parse(req.body);
         const admin = await Admin.findOne({ username });
         if (!admin) {
+            console.log('admin not found')
             return res.render("adminlogin", { error: "Invalid username or password." });
         }
         const validPassword = await bcrypt.compare(password, admin.password);
         if (!validPassword) {
+            console.log('apass not found')
+
             return res.render("adminlogin", { error: "Invalid username or password." });
         }
         const token = setAdmin({ id: admin._id, username: admin.username });

@@ -68,6 +68,94 @@
     </div>
     <% } %>
 
+    <% if(query == "allTeams"){ %>
+        <div class="container mx-auto mt-8">
+            <% if (teamsdata && teamsdata.length > 0) { %>
+                <% for(let i = 0; i < teamsdata.length; i++) { %>
+                    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                        <div class="flex justify-between items-center">
+                            <div class="flex-1">
+                                <p class="text-xl font-semibold"><%= teamsdata[i].teamName %></p>
+                            </div>
+                            <div class="flex space-x-4 items-center">
+                                <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader: <%= leaderNames.teamsdata[i].teamName %></p>
+                                
+                            </div>
+                        </div>
+                        <div class="mt-4 flex justify-between">
+                            <div class="flex-1">
+                                <p><span class="font-semibold">Rank:</span> <%= ranks.teamsdata[i].teamName %></p>
+                            </div>
+                            <div class="flex-1">
+                                <p><span class="font-semibold">Score:</span> <%= teamsdata[i].questionData.score %></p>
+                            </div>
+                            <div class="flex-1">
+                                <p><span class="font-semibold">Current Question:</span> <%= teamsdata[i].questionData.current %></p>
+                            </div>
+                            <div class="flex-1">
+                                <p><span class="font-semibold">Time Spent on Current Question:</span> To be configured</p>
+                            </div>
+                            <div class="flex-1">
+                                <p><span class="font-semibold">No of Members:</span> <%= teamsdata[i].members.length %></p>
+                            </div>
+                            <div class="flex-1 text-right">
+                                <button>
+                                    <span class="text-2xl"><img src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="Delete"
+                                        class="w-10 h-10"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <p class="text-center text-gray-500">No team data available.</p>
+            <% } %>
+        </div>
+        <% } %>
+        <% if(query == 'teamdetails'){ %>
+            <h1><%= team.teamName %></h1>
+            <h2>Rank - <%= ranks.team.teamName %></h2>
+            <span>Current question - <%= team.questionData.current %></span>
+            <div class="container mx-auto mt-8">
+                <% if (userdata && userdata.length > 0) { %>
+                    <% for(let i = 0; i < userdata.length; i++){ %>
+                        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+                            <div class="flex justify-between items-center">
+                                <div class="flex-1">
+                                    <p class="text-xl font-semibold"><%= userdata[i].username %></p>
+                                    <p class="text-sm text-gray-500"><%= teams[i] %></p>
+                                </div>
+                                <div class="flex space-x-4 items-center">
+                                    <% if (userdata[i].isLeader) { %>
+                                        <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader</p>
+                                    <% } %>
+                                    <button class="mt-2">
+                                        <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete"
+                                            class="w-6 h-6">
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mt-4 flex justify-between">
+                                <div class="flex-1">
+                                    <p><span class="font-semibold">Email:</span> <%= userdata[i].email %></p>
+                                </div>
+                                <div class="flex-1">
+                                    <p><span class="font-semibold">No of Attempts:</span> <%= userdata[i].noOfAttempts %></p>
+                                </div>
+                                <div class="flex-1">
+                                    <p><span class="font-semibold">No of Questions Answered:</span> <%= userdata[i].noOfQuestionsAnswered %></p>
+                                </div>
+                                <div class="flex-1 text-right">
+                                    <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                <% } else { %>
+                    <p class="text-center text-gray-500">No user data available.</p>
+                <% } %>
+            </div>
+            <% } %>
 
 </body>
 
