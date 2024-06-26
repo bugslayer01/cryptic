@@ -1,8 +1,5 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Team from "../models/team.js";
-import User from '../models/user.js'
-import getRanks from "../services/rank.js";
 dotenv.config();
 
 export default function connectMongo() {

@@ -16,7 +16,7 @@ const adminSchema = z.object({
 
 router.get('/phoenix', checkAdmin, async (req, res) => {
     try {
-        const { show, loggedIn, teamName } = req.query;
+        const { show, loggedIn, teamName, sort } = req.query;
         console.log(req.query)
         if (show == 'users') {
             let users = null
@@ -40,39 +40,39 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         if (show == 'teams') {
             let teams = null;
             let teamsData = null;
+            let leaderList = []
             const ranks = await getRanks()
             if (sort == 'alpha') {
                 teams = await Team.find().sort({ teamName: 1 });
                 teamsData = teams;
             }
-            if (sort == 'reversealpha') {
-                teams = await Team.find().sort({ teamName: -1 });
-            }
             if (sort == 'rank') {
                 teamsData = [];
-                teams = await Team.find().sort({ teamName: -1 });
+                teams = await Team.find().sort();
                 for (let i = 1; i <= teams.length; i++) {
-                    for (let j = 0; j < teams.length; i++) {
-                        if (i == ranks.teams[j].teamName) {
+                    for (let j = 0; j < teams.length; j++) {
+                        if (i == ranks[teams[j].teamName]) {
                             teamsData.push(teams[j])
                         }
                     }
                 }
             }
-            return res.render('admin', { query: 'teams', teamsData, ranks });
+            for(let team of teamsData){
+                const leader = await User.findById(team.members[0]);
+                leaderList.push(leader.username);
+            }
+            return res.render('admin', { query: 'allTeams', teamsData, ranks, leaderList });
         }
         if(show == 'teamdetails' && teamName){
             const ranks = await getRanks()
             const team = await Team.findOne({teamName});
-            console.log(team.members)
-            const teamName = team.teamName
+            const nameOfTeam = team.teamName
             let userdata = [];
             for (let i = 0; i < team.members.length; i++){
                 const user = await User.findById(team.members[i]);
                 userdata.push(user);
             }
-            console.log(ranks.teamName)
-            return res.render('admin', {query: 'teamdetails', team, userdata, ranks})
+            return res.render('admin', {query: 'teamdetails', team, userdata, ranks, nameOfTeam})
         }
     } catch(error){
         console.log(error);
@@ -117,12 +117,10 @@ router.post('/phoenix/login', async (req, res) => {
         const { username, password } = adminSchema.parse(req.body);
         const admin = await Admin.findOne({ username });
         if (!admin) {
-            console.log('admin not found')
             return res.render("adminlogin", { error: "Invalid username or password." });
         }
         const validPassword = await bcrypt.compare(password, admin.password);
         if (!validPassword) {
-            console.log('apass not found')
 
             return res.render("adminlogin", { error: "Invalid username or password." });
         }
