@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../styles/cryptic.css" />
-    <title>Document</title>
+
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+    ></script>
+
+    <title>Cryptic</title>
   </head>
   <body>
     <div class="loader">
@@ -22,7 +28,40 @@
     </div>
 
     <div class="container">
-      <h1>cryptic</h1>
+      <div class="nav">
+        <div class="artist">Cryptic</div>
+        <div class="social-media">
+          <ul>
+            <li>
+              <a href="/dashboard" target="_blank">Dashboard</a>
+            </li>
+            <li>
+              <a href="/leaderboard" target="_blank">LeaderBoard</a>
+            </li>
+          </ul>
+        </div>
+        <div class="menu">
+          <a href="/logout"><ion-icon name="power"></ion-icon></a>
+        </div>
+      </div>
+
+      <video
+        src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/d5sfkiefythgflydvfoa"
+        autoplay
+        loop
+        muted
+      ></video>
+      <div id="question">
+        <h1>This is a sample Quesstion?</h1>
+        <img
+          src="../assets/images/questions/sample_image.jpg"
+          alt="question one"
+        />
+        <div>
+          <input type="text" placeholder="answer*" id="placeholder" />
+          <button id="button">submit</button>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
