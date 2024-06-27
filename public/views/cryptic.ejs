@@ -169,6 +169,16 @@
         ease: "power4.inOut",
         delay: 7.5,
       });
+
+    const input = document.getElementById('placeholder');
+    const button = document.getElementById('button');
+
+    input.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            button.click();
+        }
+    });
     </script>
   </body>
 </html>
