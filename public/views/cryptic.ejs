@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="../styles/cryptic.css" />
 
     <script
@@ -33,15 +39,15 @@
         <div class="social-media">
           <ul>
             <li>
-              <a href="/dashboard" target="_blank">Dashboard</a>
+              <a href="/dashboard">Dashboard</a>
             </li>
             <li>
-              <a href="/leaderboard" target="_blank">LeaderBoard</a>
+              <a href="/leaderboard">Leaderboard</a>
             </li>
           </ul>
-        </div>
-        <div class="menu">
-          <a href="/logout"><ion-icon name="power"></ion-icon></a>
+          <div class="menu">
+            <a href="/logout"><ion-icon name="power"></ion-icon></a>
+          </div>
         </div>
       </div>
 
@@ -52,11 +58,8 @@
         muted
       ></video>
       <div id="question">
-        <h1>This is a sample Quesstion?</h1>
-        <img
-          src="../assets/images/questions/sample_image.jpg"
-          alt="question one"
-        />
+        <h1>This is a sample Question?</h1>
+        <img src="../assets/images/questions/q1.png" alt="question one" />
         <div>
           <input type="text" placeholder="answer*" id="placeholder" />
           <button id="button">submit</button>
@@ -170,15 +173,15 @@
         delay: 7.5,
       });
 
-    const input = document.getElementById('placeholder');
-    const button = document.getElementById('button');
+      const input = document.getElementById("placeholder");
+      const button = document.getElementById("button");
 
-    input.addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            button.click();
+      input.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          button.click();
         }
-    });
+      });
     </script>
   </body>
 </html>
