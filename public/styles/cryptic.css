@@ -137,8 +137,9 @@ body {
   position: fixed;
   width: 100vw;
   height: 80px;
+  padding: 0px 40px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
   top: 0;
   z-index: 100;
@@ -179,19 +180,19 @@ body {
 .social-media a {
   z-index: 2;
   text-decoration: none;
-  color: #fff;
+  color: #bebebe;
   font-family: Helvetica;
 }
 
 .social-media a:hover,
 .social-media a:active {
-  color: #fff;
+  color: #bebebe;
 }
 
 .menu {
   z-index: 2;
   font-size: 20px;
-  color: #fff;
+  color: #bebebe;
 }
 
 .menu a {
@@ -211,21 +212,23 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 3vh;
+  padding: 20px;
   height: 100vh;
   z-index: 10;
   text-align: center;
 }
 
-#question h1{
+#question h1 {
   color: white;
   font-size: 2vw;
-  font-family: "Saol Display";
-  font-weight: lighter;
-  font-style: italic;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 #question img {
   width: 30vw;
+  padding: 5px;
 }
 
 #question input {
