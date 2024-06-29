@@ -3,19 +3,19 @@ import Team from '../models/team.js';
 import User from '../models/user.js';
 import { z } from 'zod';
 import bcrypt from 'bcrypt'
-import { setUser } from '../services/jwtfuncs.js';
+import { setUser } from '../utils/jwtfuncs.js';
 import { checkAuth } from '../middlewares/auth.js';
 const router = express.Router();
 const registerSchema = z.object({
-    teamName: z.string().min(1, {message : "Please enter the team name"}),
-    username: z.string().min(2, {message : "Username should be atleast 2 characters long"}),
-    email: z.string().email({message : "Please enter a valid email address"}),
-    password: z.string().min(6, {message : "Password should be atleast 6 characters long"}),
+    teamName: z.string().min(1, { message: "Please enter the team name" }),
+    username: z.string().min(2, { message: "Username should be atleast 2 characters long" }),
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
 });
 
 const loginSchema = z.object({
-    username: z.string().min(2, {message : "Username is atleast 2 characters long"}),
-    password: z.string().min(6, {message : "Password is atleast 6 characters long"}),
+    username: z.string().min(2, { message: "Username is atleast 2 characters long" }),
+    password: z.string().min(6, { message: "Password is atleast 6 characters long" }),
 });
 
 router.get('/register', (req, res) => {
@@ -61,8 +61,8 @@ router.post('/register', async (req, res) => {
 
         return res.redirect("/login");
 
-    } catch(error) {
-       return res.render('register', { error: (error.errors[0].message || "Bad Credentials") });
+    } catch (error) {
+        return res.render('register', { error: (error.errors[0].message || "Bad Credentials") });
     }
 });
 
@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
         const { username, password } = loginSchema.parse(req.body);
         const user = await User.findOne({ username })
         if (!user) {
-           return res.render('login', { error: 'Invalid username or password' });
+            return res.render('login', { error: 'Invalid username or password' });
         }
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
@@ -84,17 +84,23 @@ router.post('/login', async (req, res) => {
         // res.cookie('token', token, { httpOnly: true });
 
         return res.redirect('/dashboard');
-    } catch(error) {
+    } catch (error) {
         return res.render('login', { error: error.errors[0].message });
     }
 });
 
-router.get('/logout',checkAuth, async (req, res) => {
-    const user = await User.findById(req.user._id);
-    user.loggedIn = false;
-    await user.save();
+router.get('/logout', checkAuth, async (req, res) => {
+    if (req.user) {
+        const user = await User.findById(req.user._id);
+        user.loggedIn = false;
+        await user.save();
+    }
     req.user = null;
+    req.admin = null;
+    req.superuser = null
     res.clearCookie('token');
+    res.clearCookie('pelican');
+    res.clearCookie('titan');
     return res.redirect('/login')
 })
 

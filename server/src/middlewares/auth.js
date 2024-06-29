@@ -1,6 +1,6 @@
-import { getUser, getAdmin } from '../services/jwtfuncs.js';
+import { getUser, getAdmin, getSuperUser } from '../utils/jwtfuncs.js';
 
-export function checkAuth(req, res, next) {
+export async function checkAuth(req, res, next) {
 
   const token = req.cookies?.token;
   if (!token) {
@@ -9,7 +9,7 @@ export function checkAuth(req, res, next) {
     return next();
   }
 
-  const user = getUser(token);
+  const user = await getUser(token);
 
   req.user = user;
 
@@ -28,6 +28,22 @@ export function checkAdmin(req, res, next) {
   const admin = getAdmin(pelican);
 
   req.admin = admin;
+
+  return next();
+}
+
+export function checkSuperUser(req, res, next) {
+
+  const titan = req.cookies?.titan;
+  if (!titan) {
+
+    req.superuser = null;
+    return next();
+  }
+
+  const superuser = getSuperUser(titan);
+
+  req.superuser = superuser;
 
   return next();
 }

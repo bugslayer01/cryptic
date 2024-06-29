@@ -4,17 +4,93 @@ import User from '../models/user.js';
 import Admin from '../models/admin.js'
 import { z } from 'zod';
 import bcrypt from 'bcrypt'
-import { setAdmin } from '../services/jwtfuncs.js';
-import { checkAdmin } from '../middlewares/auth.js';
-import getRanks from '../services/rank.js';
+import dotenv from "dotenv";
+import { setAdmin, setSuperUser } from '../utils/jwtfuncs.js';
+import { checkAdmin, checkSuperUser } from '../middlewares/auth.js';
+import getRanks from '../utils/rank.js';
+import Control from '../models/settings.js';
 const router = express.Router();
+dotenv.config();
 
 const adminSchema = z.object({
     username: z.string().min(3, { message: 'Username must be at least 3 characters long.' }).max(50, { message: 'Username must be at most 50 characters long.' }),
     password: z.string().min(6, { message: 'Password must be at least 6 characters long.' }),
 });
 
+router.get('/phoenix/superlogin', checkAdmin, (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    res.render('superlogin', { error: null });
+});
+
+router.post('/phoenix/superlogin', checkAdmin, (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    try {
+        const { password } = req.body;
+        if (password == process.env.superaccesskey) {
+            const token = setSuperUser({ message: "You are logged in My Lord" });
+            res.cookie('titan', token, { httpOnly: true });
+            return res.redirect('/phoenix/settings');
+        }
+        else
+            return res.render('superlogin', { error: "Wrong Key" });
+    } catch(err) {
+        console.log(err)
+        return res.status(500).send("Internal Server Error");
+    }
+});
+
+router.get('/phoenix/settings', checkAdmin, checkSuperUser, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    if (!req.superuser) {
+        return res.redirect('/phoenix/superlogin');
+    }
+
+    let { flash } = req.query
+    const control = await Control.findOne();
+
+    res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations });
+});
+
+router.post('/phoenix/settings/save', checkAdmin, checkSuperUser, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    if (!req.superuser) {
+        return res.redirect('/phoenix/superlogin');
+    }
+    try{
+    let { crypticStatus, regStatus } = req.body;
+    if (!crypticStatus) {
+        crypticStatus = false;
+    }
+
+    if (!regStatus) {
+        regStatus = false;
+    }
+    const control = await Control.findOne();
+
+    control.eventActive = crypticStatus;
+    control.registrations = regStatus;
+    await control.save();
+
+    return res.redirect('/phoenix/settings?flash=true');
+}catch(err){
+    console.log(err)
+    return res.status(500).send("Internal Server Error");
+}
+});
+
+
 router.get('/phoenix', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
     try {
         const { show, loggedIn, teamName, sort } = req.query;
         console.log(req.query)
@@ -57,28 +133,28 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
                     }
                 }
             }
-            for(let team of teamsData){
+            for (let team of teamsData) {
                 const leader = await User.findById(team.members[0]);
                 leaderList.push(leader.username);
             }
             return res.render('admin', { query: 'allTeams', teamsData, ranks, leaderList });
         }
-        if(show == 'teamdetails' && teamName){
+        if (show == 'teamdetails' && teamName) {
             const ranks = await getRanks()
-            const team = await Team.findOne({teamName});
+            const team = await Team.findOne({ teamName });
             const nameOfTeam = team.teamName
             let userdata = [];
-            for (let i = 0; i < team.members.length; i++){
+            for (let i = 0; i < team.members.length; i++) {
                 const user = await User.findById(team.members[i]);
                 userdata.push(user);
             }
-            return res.render('admin', {query: 'teamdetails', team, userdata, ranks, nameOfTeam})
+            return res.render('admin', { query: 'teamdetails', team, userdata, ranks, nameOfTeam })
         }
-    } catch(error){
+    } catch (error) {
         console.log(error);
-        res.send('internal server error');
+        return res.status(500).send("Internal Server Error");
     }
-    
+
 });
 
 router.get('/tempreg', (req, res) => {
@@ -101,7 +177,7 @@ router.post('/tempreg', async (req, res) => {
         console.log('Admin registered successfully');
         return res.redirect('/phoenix/login');
     } catch (error) {
-        res.render('registeradmin', { error: error.errors[0].message });
+        return res.render('registeradmin', { error: error.errors[0].message });
     }
 });
 
@@ -113,6 +189,9 @@ router.get('/phoenix/login', (req, res) => {
 });
 
 router.post('/phoenix/login', async (req, res) => {
+    if (req.pelican) {
+        return res.redirect('/admin')
+    }
     try {
         const { username, password } = adminSchema.parse(req.body);
         const admin = await Admin.findOne({ username });

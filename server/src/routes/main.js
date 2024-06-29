@@ -1,6 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt'
-import {checkAuth} from '../middlewares/auth.js';
+import { checkAuth } from '../middlewares/auth.js';
 import mongoose from 'mongoose';
 import Team from '../models/team.js';
 import User from '../models/user.js';
@@ -14,10 +14,10 @@ const memberRegisterSchema = z.object({
 });
 
 router.get('/dashboard', checkAuth, async (req, res) => {
+    if (!req.user) {
+        return res.redirect('/login')
+    }
     try {
-        if (!req.user) {
-            return res.redirect('/login')
-        }
         const user = await User.findById(req.user._id)
         const team = await Team.findById(user.teamId)
 
@@ -123,6 +123,9 @@ router.delete('/deleteuser/:_id', checkAuth, async (req, res) => {
                 { $pull: { members: id } },
                 { new: true }
             );
+        }
+        else {
+            return res.send("<h1>Zyada hacker banne ki koshish kar rahe ho🤡</h1>");
         }
         return res.redirect('/team');
     } catch (error) {
