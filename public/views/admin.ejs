@@ -24,11 +24,11 @@
         </div>
     </div>
     <div class="container mx-auto mt-4 flex justify-end space-x-4">
-        <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">All teams</button>
+        <a href="/phoenix?show=teams" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">All teams</a>
         <h1>Sort By - </h1>
         <a href="/phoenix?show=teams&sort=alpha">Name</a>
         <a href="/phoenix?show=teams&sort=rank">Rank</a>
-        <button class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">All users</button>
+        <a href="/phoenix?show=users" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">All users</a>
     </div>
     <% if(query == "allUsers"){ %>
     <div class="container mx-auto mt-8">

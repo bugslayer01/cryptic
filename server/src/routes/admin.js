@@ -118,7 +118,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             let teamsData = null;
             let leaderList = []
             const ranks = await getRanks()
-            if (sort == 'alpha') {
+            if (sort == 'alpha' || !sort) {
                 teams = await Team.find().sort({ teamName: 1 });
                 teamsData = teams;
             }
