@@ -2,7 +2,7 @@ const questions = [
     {
       q: "Demo Question",
       a: "Demo Answer",
-      imagepath : 'assets/images/questions/sample_image.jpg',
+      imagepath : 'assets/images/questions/q1.png',
       audiopath : null,
       videopath : null,
       score : 5,
