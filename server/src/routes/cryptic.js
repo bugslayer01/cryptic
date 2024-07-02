@@ -1,8 +1,8 @@
-import mongoose from "mongoose";
-import {checkAuth} from "../middlewares/auth.js";
+import { checkAuth } from "../middlewares/auth.js";
 import User from "../models/user.js";
 import Team from "../models/team.js";
 import questions from "../db/questions.js";
+import dares from "../db/dares.js";
 import express from 'express'
 import { z } from 'zod'
 const router = express.Router();
@@ -14,23 +14,55 @@ const answerSchema = z.object({
 
 router.get('/cryptic', checkAuth, async (req, res) => {
     if (!req.user) {
-        return res.redirect('/login')
+        return res.redirect('/login');
     }
     const user = await User.findById(req.user._id);
     const team = await Team.findById(user.teamId);
+
     const question = questions[team.questionData.current];
-    return res.render('cryptic', { question })
+
+    if (team.isBlocked) {
+        let dare = null;
+        let dareNo = null
+        if (!team.questionData.currentDare) {
+            if (team.questionData.daresCompleted.length == dares.length) {
+                dare = "Ask the organisers for the dare";
+                team.questionData.currentDare = 666;
+            }
+            else {
+                while (true) {
+                    const dareNo = Math.floor(Math.random() * dares.length) + 1;
+                    if (!team.questionData.daresCompleted.includes(dareNo))
+                        dare = dares[dareNo]
+                    team.questionData.currentDare = dareNo;
+                    break;
+                }
+            }
+        }
+        else{
+            dareNo = team.questionData.currentDare
+            dare = dares[dareNo]
+        }
+        await team.save();
+        return res.render('cryptic', { question, isBlocked: true, dare, dareNo })
+    }
+    console.log("printing question", question)
+    return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null })
 });
 
 router.post('/cryptic', checkAuth, async (req, res) => {
     if (!req.user) {
-        return res.redirect('/login')
+        return res.redirect('/login');
     }
     try {
         let { answer } = answerSchema.parse(req.body);
         answer = answer.trim();
+        console.log("printing answer", answer)
         const user = await User.findById(req.user._id);
         const team = await Team.findById(user.teamId);
+        if (team.isBlocked) {
+            return res.redirect('/cryptic')
+        }
         const current = team.questionData.current;
         if (team.questionData.questions[current]) {
             team.questionData.questions[current].allAnswers.push(answer);
@@ -39,6 +71,8 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                 team.questionData.questions[current].answered = true;
                 team.questionData.questions[current].answeredBy = user._id;
                 team.questionData.questions[current].submitTime = new Date();
+                team.questionData.wrongAttempts = 0;
+                team.questionData.score += questions[current].score;
                 if (current == 0) {
                     team.questionData.questions[0].timeTaken = team.questionData.questions[0].submitTime - startTime;
                 }
@@ -46,6 +80,12 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                     team.questionData.questions[current].timeTaken = team.questionData.questions[current].submitTime - team.questionData.questions[current - 1].submitTime;
                 }
                 team.questionData.current += 1;
+            }
+            else {
+                team.questionData.wrongAttempts += 1;
+                if (team.questionData.wrongAttempts >= 3) {
+                    team.isBlocked = true;
+                }
             }
         }
         else {
@@ -57,6 +97,8 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                 answeredBy = user._id;
                 answered = true;
                 submitTime = new Date();
+                team.questionData.wrongAttempts = 0;
+                team.questionData.score += questions[current].score;
                 if (current == 0) {
                     timeTaken = submitTime - startTime;
                 }
@@ -64,6 +106,12 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                     timeTaken = submitTime - team.questionData.questions[current - 1].submitTime;
                 }
                 team.questionData.current += 1;
+            }
+            else {
+                team.questionData.wrongAttempts += 1;
+                if (team.questionData.wrongAttempts >= 3) {
+                    team.isBlocked = true;
+                }
             }
             let newQuestion = {
                 answered,

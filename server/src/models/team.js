@@ -9,9 +9,13 @@ const teamSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   }],
+  isBlocked: { type: Boolean, default: false },
   questionData: {
     current: { type: Number, default: 0 },
     score: { type: Number, default: 0 },
+    wrongAttempts: { type: Number, default: 0 },
+    currentDare: {type: Number, default: null},
+    daresCompleted: [{ type: Number}],
     questions: [{
       answered: { type: Boolean, default: false },
       timeTaken: { type: Number, default: 0 },

@@ -37,7 +37,7 @@ router.post('/phoenix/superlogin', checkAdmin, (req, res) => {
         }
         else
             return res.render('superlogin', { error: "Wrong Key" });
-    } catch(err) {
+    } catch (err) {
         console.log(err)
         return res.status(500).send("Internal Server Error");
     }
@@ -64,26 +64,26 @@ router.post('/phoenix/settings/save', checkAdmin, checkSuperUser, async (req, re
     if (!req.superuser) {
         return res.redirect('/phoenix/superlogin');
     }
-    try{
-    let { crypticStatus, regStatus } = req.body;
-    if (!crypticStatus) {
-        crypticStatus = false;
+    try {
+        let { crypticStatus, regStatus } = req.body;
+        if (!crypticStatus) {
+            crypticStatus = false;
+        }
+
+        if (!regStatus) {
+            regStatus = false;
+        }
+        const control = await Control.findOne();
+
+        control.eventActive = crypticStatus;
+        control.registrations = regStatus;
+        await control.save();
+
+        return res.redirect('/phoenix/settings?flash=true');
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send("Internal Server Error");
     }
-
-    if (!regStatus) {
-        regStatus = false;
-    }
-    const control = await Control.findOne();
-
-    control.eventActive = crypticStatus;
-    control.registrations = regStatus;
-    await control.save();
-
-    return res.redirect('/phoenix/settings?flash=true');
-}catch(err){
-    console.log(err)
-    return res.status(500).send("Internal Server Error");
-}
 });
 
 
@@ -94,9 +94,9 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
     try {
         const { show, loggedIn, teamName, sort } = req.query;
         console.log(req.query)
-        if (show == 'users') {
+        if (show == 'users' || !show) {
             let users = null
-            if (loggedIn == 'NA') {
+            if (loggedIn == 'NA' || !loggedIn) {
                 users = await User.find();
             }
             if (loggedIn == 'true') {
@@ -124,7 +124,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             }
             if (sort == 'rank') {
                 teamsData = [];
-                teams = await Team.find().sort();
+                teams = await Team.find();
                 for (let i = 1; i <= teams.length; i++) {
                     for (let j = 0; j < teams.length; j++) {
                         if (i == ranks[teams[j].teamName]) {
@@ -141,14 +141,9 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         }
         if (show == 'teamdetails' && teamName) {
             const ranks = await getRanks()
-            const team = await Team.findOne({ teamName });
+            const team = await Team.findOne({ teamName }).populate('members');
             const nameOfTeam = team.teamName
-            let userdata = [];
-            for (let i = 0; i < team.members.length; i++) {
-                const user = await User.findById(team.members[i]);
-                userdata.push(user);
-            }
-            return res.render('admin', { query: 'teamdetails', team, userdata, ranks, nameOfTeam })
+            return res.render('admin', { query: 'teamdetails', team, userdata: team.members, ranks, nameOfTeam })
         }
     } catch (error) {
         console.log(error);
@@ -212,5 +207,47 @@ router.post('/phoenix/login', async (req, res) => {
         return res.render('adminlogin', { error: error.errors[0].message });
     }
 });
+
+router.get('/phoenix/blocked', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    let leaderList = []
+    const ranks = await getRanks()
+    const teamsData = await Team.find({ isBlocked: true });
+    for (let team of teamsData) {
+        const leader = await User.findById(team.members[0]);
+        leaderList.push(leader.username);
+    }
+    return res.render('blocked', {  teamsData, ranks, leaderList });
+});
+
+router.post('/phoenix/unblock/:_id', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    const { _id } = req.params;
+    const team = await Team.findById(_id);
+    team.isBlocked = false
+    team.questionData.wrongAttempts = 0;
+    if(team.questionData.currentDare != 666){
+    team.questionData.daresCompleted.push(team.questionData.currentDare);
+    }
+    team.questionData.currentDare = null; 
+    await team.save()
+    res.redirect('/phoenix/blocked')
+
+});
+router.post('/phoenix/block/:_id',checkAdmin, async (req, res) =>{
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    const { _id } = req.params;
+    const team = await Team.findById(_id);
+    team.isBlocked = true;
+    team.questionData.currentDare = 420 //Someone delibirately blocked the team from the admin side
+    team.save();
+    res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`)
+})
 
 export default router;
