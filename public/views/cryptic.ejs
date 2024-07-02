@@ -13,25 +13,37 @@
     <% if(isBlocked){ %>
     <style>
       .centered-box {
-            position: fixed;
-            z-index: 1000;
-            width: 300px;
-            height: 150px;
-            background-color: white;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .blur{
-          filter: blur(5px);
-        }
+        position: fixed;
+        z-index: 1000;
+        text-align: center;
+        width: 80%;
+        color: white;
+        flex-direction: column;
+        font-size: 1.3vw;
+        font-family: "Saol Display";
+        font-weight: lighter;
+        width: 50vw;
+        height: 50vh;
+        background: rgba(80, 80, 80, 0.2);
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(147, 147, 147, 0.3);
+      }
+
+      .blur {
+        filter: blur(5px);
+      }
     </style>
     <% } %>
+
     <script
       type="module"
       src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
@@ -40,7 +52,7 @@
     <title>Cryptic</title>
   </head>
   <body>
-    <div class="loader">
+    <div class="loader" id="loader">
       <h1 class="counter">0</h1>
       <div class="site-tester">
         <span>Be ready to win this battle :D</span>
@@ -54,7 +66,7 @@
       </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="container">
       <div class="nav">
         <div class="artist">Cryptic</div>
         <div class="social-media">
@@ -71,35 +83,41 @@
           </div>
         </div>
       </div>
-        <div class="blur">
-      <video
-        src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/d5sfkiefythgflydvfoa"
-        autoplay
-        loop
-        muted
-      ></video>
-      <div id="question">
-        <h1><%= question.q %></h1>
-        <% if(question.imagepath){ %>
-        <img src=<%= question.imagepath %> alt="question one" />
-      <% } %>
-        <div>
-          <form action="/cryptic" method="post">
-          <input type="text" placeholder="answer*" id="placeholder" name="answer" />
-          <button type="submit" id="button">submit</button>
-        </form>
+      <div class="blur">
+        <video
+          src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/d5sfkiefythgflydvfoa"
+          autoplay
+          loop
+          muted
+        ></video>
+        <div id="question">
+          <h1><%= question.q %></h1>
+          <% if(question.imagepath){ %>
+          <img src="<%= question.imagepath %>" alt="question one" />
+          <% } %>
+          <div>
+            <form action="/cryptic" method="post">
+              <input
+                type="text"
+                placeholder="answer*"
+                id="placeholder"
+                name="answer"
+              />
+              <button type="submit" id="button">submit</button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
       <% if(isBlocked){ %>
       <div class="centered-box">
-        You have been blocked due to three wrong attempts. Complete the following dare to unblock
-       <%= dare %>
+        <p>You have been blocked due to three wrong attempts.</p>
+        <p>Complete the following dare to unblock:</p>
+        <br>
+        <p><%= dare %></p>
+      </div>
+      <% } %>
     </div>
-    <% } %>
-    </div>
-    
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script>
       function startLoader() {
@@ -123,88 +141,98 @@
         updateCounter();
       }
 
-      startLoader();
+      if (!localStorage.getItem("loaderShown")) {
+        localStorage.setItem("loaderShown", "true");
 
-      gsap.from(".circles", 2, {
-        top: "-100%",
-        ease: "elastic.out",
-        delay: 0.5,
-      });
+        startLoader();
 
-      gsap.to(".circle-inner", 1, {
-        width: "75px",
-        height: "75px",
-        ease: "power4.inOut",
-        delay: 2,
-      });
+        gsap.from(".circles", 2, {
+          top: "-100%",
+          ease: "elastic.out",
+          delay: 0.5,
+        });
 
-      gsap.to(".circle-inner-rotator", 1, {
-        scale: 1,
-        ease: "power4.inOut",
-        delay: 2.5,
-      });
+        gsap.to(".circle-inner", 1, {
+          width: "75px",
+          height: "75px",
+          ease: "power4.inOut",
+          delay: 2,
+        });
 
-      gsap.to(".circles", 1.5, {
-        rotation: 360,
-        ease: "power4.inOut",
-        delay: 3,
-      });
+        gsap.to(".circle-inner-rotator", 1, {
+          scale: 1,
+          ease: "power4.inOut",
+          delay: 2.5,
+        });
 
-      gsap.to(".block", 0.75, {
-        display: "block",
-        height: "200px",
-        ease: "power4.inOut",
-        delay: 4,
-      });
-      gsap.to(".block", 0.75, {
-        display: "block",
-        height: "800px",
-        ease: "power4.inOut",
-        delay: 4.5,
-      });
+        gsap.to(".circles", 1.5, {
+          rotation: 360,
+          ease: "power4.inOut",
+          delay: 3,
+        });
 
-      gsap.fromTo(
-        ".container",
-        {
-          duration: 2,
-          left: "100%",
-          scale: 0.5,
+        gsap.to(".block", 0.75, {
+          display: "block",
+          height: "200px",
           ease: "power4.inOut",
           delay: 4,
-        },
-        {
-          duration: 2,
-          left: "50%",
-          scale: 0.5,
-          transform: "TranslateX(-50%)",
+        });
+        gsap.to(".block", 0.75, {
+          display: "block",
+          height: "800px",
           ease: "power4.inOut",
-          delay: 4,
-        }
-      );
+          delay: 4.5,
+        });
 
-      gsap.to(".block", 1.5, {
-        width: "0px",
-        ease: "power4.inOut",
-        delay: 5,
-      });
+        gsap.fromTo(
+          ".container",
+          {
+            duration: 2,
+            left: "100%",
+            scale: 0.5,
+            ease: "power4.inOut",
+            delay: 4,
+          },
+          {
+            duration: 2,
+            left: "50%",
+            scale: 0.5,
+            transform: "TranslateX(-50%)",
+            ease: "power4.inOut",
+            delay: 4,
+          }
+        );
 
-      gsap.from(".circles", 1.5, {
-        rotation: 0,
-        ease: "power4.inOut",
-        delay: 6.5,
-      });
+        gsap.to(".block", 1.5, {
+          width: "0px",
+          ease: "power4.inOut",
+          delay: 5,
+        });
 
-      gsap.to(".loader", 2.5, {
-        scale: 0,
-        ease: "power4.inOut",
-        delay: 7,
-      });
+        gsap.from(".circles", 1.5, {
+          rotation: 0,
+          ease: "power4.inOut",
+          delay: 6.5,
+        });
 
-      gsap.to(".container", 2, {
-        scale: 1,
-        ease: "power4.inOut",
-        delay: 7.5,
-      });
+        gsap.to(".loader", 2.5, {
+          scale: 0,
+          ease: "power4.inOut",
+          delay: 7,
+          onComplete: function () {
+            document.getElementById("loader").style.display = "none";
+          },
+        });
+
+        gsap.to(".container", 2, {
+          scale: 1,
+          ease: "power4.inOut",
+          delay: 7.5,
+        });
+      } else {
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("container").style.display = "block";
+      }
 
       const input = document.getElementById("placeholder");
       const button = document.getElementById("button");
