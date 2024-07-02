@@ -43,7 +43,7 @@ body {
   font-family: "Saol Display";
   font-weight: lighter;
   font-style: italic;
-  z-index: 1000;
+  z-index: 800;
 }
 
 .site-tester span {
