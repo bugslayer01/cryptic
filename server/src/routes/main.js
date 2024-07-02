@@ -18,10 +18,8 @@ router.get('/dashboard', checkAuth, async (req, res) => {
         return res.redirect('/login')
     }
     try {
-        const user = await User.findById(req.user._id)
-        const team = await Team.findById(user.teamId)
-
-        return res.render('dashboard', { username: user.username, teamName: team.teamName, })
+        const user = await User.findById(req.user._id).populate('teamId');
+        return res.render('dashboard', { username: user.username, teamName: user.teamId.teamName, })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
         res.status(500).send('Internal Server Error');
@@ -35,14 +33,8 @@ router.get('/team', checkAuth, async (req, res) => {
 
     try {
         const user = await User.findById(req.user._id)
-        const team = await Team.findById(user.teamId)
-        const allIds = team.members;
-        let userData = [];
-        for (let id of allIds) {
-            const member = await User.findById(id);
-            userData.push(member);
-        }
-        return res.render('team', { userData, isLeader: req.user.isLeader })
+        const team = await Team.findById(user.teamId).populate('members')
+        return res.render('team', { userData: team.members, isLeader: req.user.isLeader })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
         res.status(500).send('Internal Server Error');
