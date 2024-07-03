@@ -63,6 +63,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
         if (team.isBlocked) {
             return res.redirect('/cryptic')
         }
+        user.noOfAttempts +=1;
         const current = team.questionData.current;
         if (team.questionData.questions[current]) {
             team.questionData.questions[current].allAnswers.push(answer);
@@ -73,6 +74,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
                 team.questionData.questions[current].submitTime = new Date();
                 team.questionData.wrongAttempts = 0;
                 team.questionData.score += questions[current].score;
+                user.noOfQuestionsAnswered += 1
                 if (current == 0) {
                     team.questionData.questions[0].timeTaken = team.questionData.questions[0].submitTime - startTime;
                 }
@@ -94,6 +96,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
             let submitTime = null;
             let timeTaken = 0;
             if (questions[current].a.toLowerCase() == answer.toLowerCase()) {
+                user.noOfQuestionsAnswered += 1
                 answeredBy = user._id;
                 answered = true;
                 submitTime = new Date();
@@ -124,6 +127,7 @@ router.post('/cryptic', checkAuth, async (req, res) => {
             newQuestion.allAnswers.push(answer);
             team.questionData.questions.push(newQuestion);
         }
+        await user.save();
         await team.save();
         return res.redirect('/cryptic')
     } catch (error) {
