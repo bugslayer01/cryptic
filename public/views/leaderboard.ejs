@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Rankings</title>
+    <style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+.rank {
+    font-size: 1.2em;
+}
+
+.team-name {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.score {
+    font-size: 1.2em;
+}
+
+    </style>
+</head>
+<body>
+    <h1>Leaderboard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team Name</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for(let i = 0; i < teamsData.length; i++) { %>
+                <tr>
+                    <td class="rank"><%= i + 1 %></td> 
+                    <td class="team-name"><%= teamsData[i].teamName %></td> 
+                    <td class="score"><%= teamsData[i].questionData.score %></td> 
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</body>
+</html>

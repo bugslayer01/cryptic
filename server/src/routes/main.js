@@ -1,10 +1,11 @@
 import express from 'express';
 import bcrypt from 'bcrypt'
-import { checkAuth } from '../middlewares/auth.js';
 import mongoose from 'mongoose';
+import z from 'zod'
+import { checkAuth } from '../middlewares/auth.js';
 import Team from '../models/team.js';
 import User from '../models/user.js';
-import z from 'zod'
+import getRanks from '../utils/rank.js';
 const router = express.Router();
 
 const memberRegisterSchema = z.object({
@@ -126,4 +127,17 @@ router.delete('/deleteuser/:_id', checkAuth, async (req, res) => {
     }
 });
 
+router.get('/leaderboard', async (req, res) => {
+    const ranks = await getRanks();
+    const teamsData = [];
+    const teams = await Team.find();
+    for (let i = 1; i <= teams.length; i++) {
+        for (let j = 0; j < teams.length; j++) {
+            if (i == ranks[teams[j].teamName]) {
+                teamsData.push(teams[j])
+            }
+        }
+    }
+    res.render('leaderboard', {teamsData})
+})
 export default router;
