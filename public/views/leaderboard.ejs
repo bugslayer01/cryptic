@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Team Rankings</title>
     <link rel="stylesheet" href="../styles/leaderboard.css" />
-</head>
-<body>
+  </head>
+  <body>
     <video
-        src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/jumxgbdwxbp9z1bigagy"
-        autoplay
-        muted
-        loop
-        id="back"
-        class="back"
+      src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/ovc1pcbq0lhthc8w5mgo"
+      autoplay
+      muted
+      loop
+      id="back"
+      class="back"
     ></video>
     <h1>Leaderboard</h1>
     <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Team Name</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(let i = 0; i < teamsData.length; i++) { %>
-                <tr>
-                    <td class="rank"><%= i + 1 %></td>
-                    <td class="team-name"><%= teamsData[i].teamName %></td>
-                    <td class="score"><%= teamsData[i].questionData.score %></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Team Name</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% for(let i = 0; i < teamsData.length; i++) { %>
+          <tr>
+            <td class="rank"><%= i + 1 %></td>
+            <td class="team-name"><%= teamsData[i].teamName %></td>
+            <td class="score"><%= teamsData[i].questionData.score %></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
     </div>
-</body>
+  </body>
 </html>
