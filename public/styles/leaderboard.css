@@ -1,0 +1,87 @@
+@font-face {
+    font-family: "cryptic";
+    src: url("../assets/fonts/pricedown bl.otf");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "cryptic two";
+    src: url("../assets/fonts/ethnocentric rg.otf");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html,
+  body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: "cryptic", sans-serif;
+  }
+  
+  .back {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    z-index: -1;
+  }
+  
+  h1 {
+    text-align: center;
+    font-family: "cryptic two", sans-serif;
+    margin-top: 20px;
+    font-size: 50px;
+    margin-bottom: 20px;
+    background: linear-gradient(to right, #ff0000, #ff8400, #ffb700);   
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent black background */
+  }
+  
+  th,
+  td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.863);
+  }
+  
+  th {
+    background-color: rgba(255, 255, 255, 0.3);
+    font-size: 2.5em;
+    text-align: center;
+    color: white;
+  }
+  
+  .rank {
+    font-size: 1em;
+    font-family: "cryptic two", sans-serif;
+  }
+  
+  .team-name {
+    font-size: 1.2em;
+    font-family: "cryptic two", sans-serif;
+
+  }
+  
+  .score {
+    font-size: 1em;
+    font-family: "cryptic two", sans-serif;
+  }
+  
