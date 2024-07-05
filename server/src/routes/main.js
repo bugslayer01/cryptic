@@ -117,7 +117,9 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
         );
         if (team.members.length == 0) {
             try {
-                await axios.delete(`/phoenix/deleteteam/${team._id}?_method=DELETE`);
+                await Team.findByIdAndDelete(team._id);
+                return res.redirect('/phoenix?show=teams')
+                
             } catch (err) {
                 console.error('Error deleting team:', err);
                 return res.status(500).send('Failed to delete team');
