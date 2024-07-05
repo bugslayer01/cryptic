@@ -1,0 +1,54 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Saol Display";
+  font-weight: lighter;
+  font-style: italic;
+  position: relative;
+}
+
+#back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+#timer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 10rem;
+  color: #fff;
+  text-shadow: 
+    0 0 2px #fff, 
+    0 0 4px #fff, 
+    0 0 6px #fff, 
+    0 0 8px rgb(0, 208, 255), 
+    0 0 10px rgb(0, 208, 255), 
+    0 0 12px rgb(0, 208, 255), 
+    0 0 14px rgb(0, 208, 255), 
+    0 0 16px rgb(0, 208, 255);
+  animation: flicker 1.5s infinite;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    opacity: 0;
+  }
+}
