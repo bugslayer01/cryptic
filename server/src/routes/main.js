@@ -2,10 +2,12 @@ import express from 'express';
 import bcrypt from 'bcrypt'
 import mongoose from 'mongoose';
 import z from 'zod'
-import { checkAuth } from '../middlewares/auth.js';
+import { checkAdmin, checkAuth } from '../middlewares/auth.js';
 import Team from '../models/team.js';
 import User from '../models/user.js';
 import getRanks from '../utils/rank.js';
+import regActive from '../middlewares/registrations.js';
+import eventActive from '../middlewares/cryptic.js';
 const router = express.Router();
 
 const memberRegisterSchema = z.object({
@@ -42,7 +44,7 @@ router.get('/team', checkAuth, async (req, res) => {
     }
 });
 
-router.get('/registermember', checkAuth, async (req, res) => {
+router.get('/registermember', checkAuth, regActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }
@@ -52,7 +54,7 @@ router.get('/registermember', checkAuth, async (req, res) => {
     return res.render('registerMember', { error: null })
 });
 
-router.post('/registermember', checkAuth, async (req, res) => {
+router.post('/registermember', checkAuth, regActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }
@@ -91,43 +93,55 @@ router.post('/registermember', checkAuth, async (req, res) => {
     }
 });
 
-router.delete('/deleteuser/:_id', checkAuth, async (req, res) => {
-    if (!req.user) {
+router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
+    if (!req.user && !req.admin) {
         return res.redirect('/login');
-    }
-    if (!req.user.isLeader) {
-        return res.redirect('/team');
-    }
-    try {
-        const { _id } = req.params;
-        const leader = await User.findById(req.user._id);
-        const team = await Team.findById(leader.teamId);
-        //If a team leader deliberately tries to delete himself
-        if (req.user._id == _id) {
-            return res.send("<h1>You can't delete yourself idiot🤡</h1>");
-        }
-        //If people deliberately call this route with the wrong id or id of a member of another team
-        if (team.members.includes(_id)) {
-            await User.findByIdAndDelete(_id);
-            const id = new mongoose.Types.ObjectId(_id);
+    }else if (req.user?.isLeader) {
+        try {
+            const { _id } = req.params;
+            const leader = await User.findById(req.user._id);
+            const team = await Team.findById(leader.teamId);
+            //If a team leader deliberately tries to delete himself
+            if (req.user._id == _id) {
+                return res.send("<h1>You can't delete yourself idiot🤡</h1>");
+            }
+            //If people deliberately call this route with the wrong id or id of a member of another team
+            if (team.members.includes(_id)) {
+                await User.findByIdAndDelete(_id);
+                const id = new mongoose.Types.ObjectId(_id);
 
-            await Team.findByIdAndUpdate(
-                team._id,
-                { $pull: { members: id } },
-                { new: true }
-            );
+                await Team.findByIdAndUpdate(
+                    team._id,
+                    { $pull: { members: id } },
+                    { new: true }
+                );
+            }
+            else {
+                return res.send("<h1>Zyada hacker banne ki koshish kar rahe ho🤡</h1>");
+            }
+            return res.redirect('/team');
+        } catch (error) {
+            res.status(500).send('Internal Server Error');
+            console.log(error);
         }
-        else {
-            return res.send("<h1>Zyada hacker banne ki koshish kar rahe ho🤡</h1>");
-        }
-        return res.redirect('/team');
-    } catch (error) {
-        res.status(500).send('Internal Server Error');
-        console.log(error);
+    }
+    else if (req.admin) {
+        const { _id } = req.params;
+        const user = await User.findById(_id);
+        const team = await Team.findById(user.teamId);
+        await User.findByIdAndDelete(_id);
+        const id = new mongoose.Types.ObjectId(_id);
+
+        await Team.findByIdAndUpdate(
+            team._id,
+            { $pull: { members: id } },
+            { new: true }
+        );
+        res.redirect('/phoenix')
     }
 });
 
-router.get('/leaderboard', async (req, res) => {
+router.get('/leaderboard', checkAuth, eventActive, async (req, res) => {
     const ranks = await getRanks();
     const teamsData = [];
     const teams = await Team.find();
@@ -138,6 +152,7 @@ router.get('/leaderboard', async (req, res) => {
             }
         }
     }
-    res.render('leaderboard', {teamsData})
-})
+    res.render('leaderboard', { teamsData })
+});
+
 export default router;

@@ -50,7 +50,7 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
     return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null })
 });
 
-router.post('/cryptic', checkAuth, async (req, res) => {
+router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }

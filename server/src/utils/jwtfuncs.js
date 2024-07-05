@@ -53,7 +53,7 @@ export function getAdmin(pelican) {
 
 export function setSuperUser(data) {
     try {
-        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret',{ expiresIn: '5m'});
+        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret',{ expiresIn: '1m'});
     } catch (err) {
         console.error('Token signing for super user failed:', err);
         return null;

@@ -5,6 +5,7 @@ import { z } from 'zod';
 import bcrypt from 'bcrypt'
 import { setUser } from '../utils/jwtfuncs.js';
 import { checkAuth } from '../middlewares/auth.js';
+import regActive from '../middlewares/registrations.js';
 const router = express.Router();
 const registerSchema = z.object({
     teamName: z.string().min(1, { message: "Please enter the team name" }),
@@ -18,7 +19,7 @@ const loginSchema = z.object({
     password: z.string().min(6, { message: "Password is atleast 6 characters long" }),
 });
 
-router.get('/register', (req, res) => {
+router.get('/register', regActive, (req, res) => {
     return res.render('register', { error: null });
 });
 
@@ -26,7 +27,7 @@ router.get('/login', (req, res) => {
     return res.render('login', { error: null });
 });
 
-router.post('/register', async (req, res) => {
+router.post('/register', regActive, async (req, res) => {
     try {
 
         const { teamName, username, email, password } = registerSchema.parse(req.body);
