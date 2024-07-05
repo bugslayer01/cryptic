@@ -97,16 +97,19 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         if (show == 'users' || !show) {
             let users = null
             if (loggedIn == 'true') {
-                users = await User.find({ loggedIn: true }).sort({ username: 1 });
+                users = await User.find({ loggedIn: true }).collation({ locale: 'en', strength: 2 }).sort({ username: 1 });
             }
             else if (loggedIn == 'false') {
-                users = await User.find({ loggedIn: false }).sort({ username: 1 });
+                users = await User.find({ loggedIn: false }).collation({ locale: 'en', strength: 2 }).sort({ username: 1 });
             }
             else if (sort == 'alpha') {
-                users = await User.find().sort({ username: 1 });
+                users = await User.find().collation({ locale: 'en', strength: 2 }).sort({ username: 1 });
+
             }
             else if (sort == 'rank') {
-                users = await User.find().sort({ noOfQuestionsAnswered: 1 });
+                console.log('i am gere')
+                users = await User.find().sort({ noOfQuestionsAnswered: -1 });
+                console.log(users)
             }
             else {
                 users = await User.find();
@@ -125,7 +128,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             let leaderList = []
             const ranks = await getRanks()
             if (sort == 'alpha' || !sort) {
-                teams = await Team.find().sort({ teamName: 1 });
+                teams = await Team.find().collation({ locale: 'en', strength: 2 }).sort({ teamName: 1 });
                 teamsData = teams;
             }
             if (sort == 'rank') {
