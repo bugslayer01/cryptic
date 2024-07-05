@@ -5,6 +5,7 @@ import questions from "../db/questions.js";
 import dares from "../db/dares.js";
 import express from 'express'
 import { z } from 'zod'
+import eventActive from "../middlewares/cryptic.js";
 const router = express.Router();
 let startTime = null;
 
@@ -12,7 +13,7 @@ const answerSchema = z.object({
     answer: z.string().min(1, { message: "Please enter the answer" })
 });
 
-router.get('/cryptic', checkAuth, async (req, res) => {
+router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }
@@ -46,7 +47,6 @@ router.get('/cryptic', checkAuth, async (req, res) => {
         await team.save();
         return res.render('cryptic', { question, isBlocked: true, dare, dareNo })
     }
-    console.log("printing question", question)
     return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null })
 });
 
@@ -57,7 +57,6 @@ router.post('/cryptic', checkAuth, async (req, res) => {
     try {
         let { answer } = answerSchema.parse(req.body);
         answer = answer.trim();
-        console.log("printing answer", answer)
         const user = await User.findById(req.user._id);
         const team = await Team.findById(user.teamId);
         if (team.isBlocked) {
@@ -134,7 +133,6 @@ router.post('/cryptic', checkAuth, async (req, res) => {
         console.log(error)
         return res.render('cryptic', { error: error.errors[0].message });
     }
-
 });
 
 router.get('/start', (req, res) => {
