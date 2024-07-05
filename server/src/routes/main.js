@@ -8,6 +8,7 @@ import User from '../models/user.js';
 import getRanks from '../utils/rank.js';
 import regActive from '../middlewares/registrations.js';
 import eventActive from '../middlewares/cryptic.js';
+import axios from 'axios';
 const router = express.Router();
 
 const memberRegisterSchema = z.object({
@@ -25,7 +26,7 @@ router.get('/dashboard', checkAuth, async (req, res) => {
         return res.render('dashboard', { username: user.username, teamName: user.teamId.teamName, })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
@@ -40,7 +41,7 @@ router.get('/team', checkAuth, async (req, res) => {
         return res.render('team', { userData: team.members, isLeader: req.user.isLeader })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
-        res.status(500).send('Internal Server Error');
+        return res.status(500).send('Internal Server Error');
     }
 });
 
@@ -65,7 +66,11 @@ router.post('/registermember', checkAuth, regActive, async (req, res) => {
     try {
         const { username, email, password } = memberRegisterSchema.parse(req.body);
         const leader = await User.findById(req.user._id);
+        if (!leader)
+            return res.redirect('/login')
         const team = await Team.findById(leader.teamId);
+        if (!team)
+            return res.redirect('/login')
         const usernameExists = await User.findOne({ username })
         const emailExists = await User.findOne({ email });
         if (usernameExists) {
@@ -89,14 +94,39 @@ router.post('/registermember', checkAuth, regActive, async (req, res) => {
         return res.redirect("/team");
     } catch (error) {
         console.log(error)
-        return res.render('registerMember', { error: error.errors[0].message });
+        if (error.errors && error.errors[0]?.message) {
+            return res.render('registerMember', { error: error.errors[0].message });
+        }
+        return res.send("<h1>Internal Server Error</h1>")
     }
 });
 
 router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
-    if (!req.user && !req.admin) {
+    const backURL = req.header('Referer') || '/phoenix';
+    if (req.admin) {
+        const { _id } = req.params;
+        const user = await User.findById(_id);
+        let team = await Team.findById(user.teamId);
+        await User.findByIdAndDelete(_id);
+        const id = new mongoose.Types.ObjectId(_id);
+
+        team = await Team.findByIdAndUpdate(
+            team._id,
+            { $pull: { members: id } },
+            { new: true }
+        );
+        if (team.members.length == 0) {
+            try {
+                await axios.delete(`/phoenix/deleteteam/${team._id}?_method=DELETE`);
+            } catch (err) {
+                console.error('Error deleting team:', err);
+                return res.status(500).send('Failed to delete team');
+            }
+        }
+        return res.redirect(backURL)
+    } else if (!req.user) {
         return res.redirect('/login');
-    }else if (req.user?.isLeader) {
+    } else if (req.user?.isLeader) {
         try {
             const { _id } = req.params;
             const leader = await User.findById(req.user._id);
@@ -119,26 +149,13 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
             else {
                 return res.send("<h1>Zyada hacker banne ki koshish kar rahe ho🤡</h1>");
             }
-            return res.redirect('/team');
+            return res.redirect(backURL);
         } catch (error) {
             res.status(500).send('Internal Server Error');
             console.log(error);
         }
     }
-    else if (req.admin) {
-        const { _id } = req.params;
-        const user = await User.findById(_id);
-        const team = await Team.findById(user.teamId);
-        await User.findByIdAndDelete(_id);
-        const id = new mongoose.Types.ObjectId(_id);
-
-        await Team.findByIdAndUpdate(
-            team._id,
-            { $pull: { members: id } },
-            { new: true }
-        );
-        res.redirect('/phoenix')
-    }
+    return res.redirect(backURL);
 });
 
 router.get('/leaderboard', checkAuth, eventActive, async (req, res) => {
@@ -152,7 +169,7 @@ router.get('/leaderboard', checkAuth, eventActive, async (req, res) => {
             }
         }
     }
-    res.render('leaderboard', { teamsData })
+    return res.render('leaderboard', { teamsData })
 });
 
 export default router;

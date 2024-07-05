@@ -9,10 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <style>
-    .sort:hover{
-        color: rgba(0, 72, 255, 0.734);
-    }
-
     .sort:active{
         color: rgba(0, 0, 0, 0.532)
     }
@@ -41,212 +37,205 @@
         </div>
     </div>
 
-    <div class="container mx-auto mt-4 flex justify-between">
+    <div class="container mx-auto mt-4 flex justify-between items-center px-4">
         <div class="flex space-x-4">
-            <span></span>
-            <a href="/phoenix/award" class="add flex justify-start bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Add Points</a>
+            <a href="/phoenix/award"
+                class="add flex justify-start bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300 ease-in-out">Add Points</a>
         </div>
-        <div class="flex space-x-4">
-            <a href="/phoenix?show=teams" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 main">All teams</a>
+        <div class="flex space-x-4 items-center">
+            <a href="/phoenix?show=teams"
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300 ease-in-out main">All teams</a>
             <h1>Sort By - </h1>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=teams&sort=alpha">Name</a>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=teams&sort=rank">Rank</a>
-            <a href="/phoenix?show=users" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 main">All users</a>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=teams&sort=alpha">Name</a>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=teams&sort=rank">Rank</a>
+            <a href="/phoenix?show=users"
+                class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 ease-in-out main">All users</a>
             <h1>Sort By - </h1>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=users&sort=alpha">Name</a>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=users&loggedIn=true">LoggedIn</a>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=users&loggedIn=false">LoggedOut</a>
-            <a class="sort" style="text-decoration: underline;" href="/phoenix?show=users&sort=rank">Rank</a>
-            <span></span>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=users&sort=alpha">Name</a>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=users&loggedIn=true">LoggedIn</a>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=users&loggedIn=false">LoggedOut</a>
+            <a class="sort underline hover:text-blue-700 transition duration-300 ease-in-out" href="/phoenix?show=users&sort=rank">Rank</a>
         </div>
     </div>
-    
-
 
     <% if(query == "allUsers"){ %>
-    <div class="container mx-auto mt-8">
+    <div class="container mx-auto mt-8 px-4">
         <% if (userdata && userdata.length > 0) { %>
-            <% for(let i = 0; i < userdata.length; i++){ %>
-                <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-                    <div class="flex justify-between items-center">
-                        <div class="flex-1">
-                            <p class="text-xl font-semibold"><%= userdata[i].username %></p>
-                            <p class="text-sm text-gray-500"><%= teams[i] %></p>
-                        </div>
-                        <div class="flex space-x-4 items-center">
-                            <% if (userdata[i].isLeader) { %>
-                                <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader</p>
-                            <% } %>
-                            <form action="/deleteuser/<%= userdata[i]._id %>?_method=DELETE" method="post">
-                                <button class="mt-2 deleteuser">
-                                    <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete"
-                                    class="w-6 h-6">
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex justify-between">
-                        <div class="flex-1">
-                            <p><span class="font-semibold">Email:</span> <%= userdata[i].email %></p>
-                        </div>
-                        <div class="flex-1">
-                            <p><span class="font-semibold">No of Attempts:</span> <%= userdata[i].noOfAttempts %></p>
-                        </div>
-                        <div class="flex-1">
-                            <p><span class="font-semibold">No of Questions Answered:</span> <%= userdata[i].noOfQuestionsAnswered %></p>
-                        </div>
-                        <div class="flex-1 text-right">
-                            <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
-                        </div>
-                    </div>
+        <% for(let i = 0; i < userdata.length; i++){ %>
+        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <p class="text-xl font-semibold"><%= userdata[i].username %></p>
+                    <p class="text-sm text-gray-500"><%= teams[i] %></p>
                 </div>
-            <% } %>
+                <div class="flex space-x-4 items-center">
+                    <% if (userdata[i].isLeader) { %>
+                    <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader</p>
+                    <% } %>
+                    <form action="/deleteuser/<%= userdata[i]._id %>?_method=DELETE" method="post">
+                        <button class="mt-2 deleteuser">
+                            <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000"
+                                alt="Delete" class="w-6 h-6">
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <div class="flex-1">
+                    <p><span class="font-semibold">Email:</span> <%= userdata[i].email %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">No of Attempts:</span> <%= userdata[i].noOfAttempts %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">No of Questions Answered:</span>
+                        <%= userdata[i].noOfQuestionsAnswered %></p>
+                </div>
+                <div class="flex-1 text-right">
+                    <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
+                </div>
+            </div>
+        </div>
+        <% } %>
         <% } else { %>
-            <p class="text-center text-gray-500">No user data available.</p>
+        <p class="text-center text-gray-500">No user data available.</p>
         <% } %>
     </div>
     <% } %>
 
-
-
-
     <% if(query == "allTeams"){ %>
-        <div class="container mx-auto mt-8">
-            <% if (teamsData && teamsData.length > 0) { %>
-                <% for(let i = 0; i < teamsData.length; i++) { %>
-                    <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-                        <div class="flex justify-between items-center">
-                            <div class="flex-1">
-                                <p class="text-xl font-semibold"><%= teamsData[i].teamName %></p>
-                            </div>
-                            <div class="flex space-x-4 items-center">
-                                <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader: <%= leaderList[i] %></p>
-                                
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-between">
-                            <div class="flex-1">
-                                <p><span class="font-semibold">Rank:</span> <%= ranks[teamsData[i].teamName] %></p>
-                            </div>
-                            <div class="flex-1">
-                                <p><span class="font-semibold">Score:</span> <%= teamsData[i].questionData.score %></p>
-                            </div>
-                            <div class="flex-1">
-                                <p><span class="font-semibold">Current Question:</span> <%= teamsData[i].questionData.current %></p>
-                            </div>
-                            <div class="flex-1">
-                                <p><span class="font-semibold">Time Spent on Current Question:</span> To be configured</p>
-                            </div>
-                            <div class="flex-1">
-                                <p><span class="font-semibold">No of Members:</span> <%= teamsData[i].members.length %></p>
-                            </div>
-                            <div class="flex-1 text-right">
-                                <a href="/phoenix?show=teamdetails&teamName=<%= teamsData[i].teamName %>">
-                                    <span class="text-2xl"><img src="https://img.icons8.com/?size=100&id=61&format=png&color=000000" alt="details"
-                                        class="w-10 h-10"></span>
-                                    </a>
-                            </div>
-                        </div>
-                    </div>
-                <% } %>
-            <% } else { %>
-                <p class="text-center text-gray-500">No team data available.</p>
-            <% } %>
+    <div class="container mx-auto mt-8 px-4">
+        <% if (teamsData && teamsData.length > 0) { %>
+        <% for(let i = 0; i < teamsData.length; i++) { %>
+        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <p class="text-xl font-semibold"><%= teamsData[i].teamName %></p>
+                </div>
+                <div class="flex space-x-4 items-center">
+                    <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader: <%= leaderList[i] %></p>
+                </div>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <div class="flex-1">
+                    <p><span class="font-semibold">Rank:</span> <%= ranks[teamsData[i].teamName] %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">Score:</span> <%= teamsData[i].questionData.score %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">Current Question:</span> <%= teamsData[i].questionData.current %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">Time Spent on Current Question:</span> To be configured</p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">No of Members:</span> <%= teamsData[i].members.length %></p>
+                </div>
+                <div class="flex-1 text-right">
+                    <a href="/phoenix?show=teamdetails&teamName=<%= teamsData[i].teamName %>">
+                        <span class="text-2xl"><img src="https://img.icons8.com/?size=100&id=61&format=png&color=000000"
+                                alt="details" class="w-10 h-10"></span>
+                    </a>
+                </div>
+            </div>
         </div>
         <% } %>
+        <% } else { %>
+        <p class="text-center text-gray-500">No team data available.</p>
+        <% } %>
+    </div>
+    <% } %>
 
-
-
-
-        <% if(query == 'teamdetails'){ %>
-            <h1 class="text-3xl font-bold"><%= team.teamName %></h1>
-<h2 class="text-xl font-bold">Rank - <%= ranks[nameOfTeam] %></h2>
-<h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
-<h3 class="font-bold">Score - <%= team.questionData.score %></h3>
-<h3 class="font-bold">Time spent on current question - To be configured</h3>
-            <div class="container mx-auto mt-8">
-                <% if (userdata && userdata.length > 0) { %>
-                    <% for(let i = 0; i < userdata.length; i++){ %>
-                        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
-                            <div class="flex justify-between items-center">
-                                <div class="flex-1">
-                                    <p class="text-xl font-semibold"><%= userdata[i].username %></p>
-                                </div>
-                                <div class="flex space-x-4 items-center">
-                                    <% if (userdata[i].isLeader) { %>
-                                        <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader</p>
-                                    <% } %>
-                                    <form action="/deleteuser/<%= userdata[i]._id %>?_method=DELETE" method="post">
-                                        <button class="mt-2 deleteuser">
-                                            <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete"
-                                            class="w-6 h-6">
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div class="flex-1">
-                                    <p><span class="font-semibold">Email:</span> <%= userdata[i].email %></p>
-                                </div>
-                                <div class="flex-1">
-                                    <p><span class="font-semibold">No of Attempts:</span> <%= userdata[i].noOfAttempts %></p>
-                                </div>
-                                <div class="flex-1">
-                                    <p><span class="font-semibold">No of Questions Answered:</span> <%= userdata[i].noOfQuestionsAnswered %></p>
-                                </div>
-                                <div class="flex-1 text-right">
-                                    <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
+    <% if(query == 'teamdetails'){ %>
+    <h1 class="text-3xl font-bold"><%= team.teamName %></h1>
+    <h2 class="text-xl font-bold">Rank - <%= ranks[nameOfTeam] %></h2>
+    <h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
+    <h3 class="font-bold">Score - <%= team.questionData.score %></h3>
+    <h3 class="font-bold">Time spent on current question - To be configured</h3>
+    <div class="container mx-auto mt-8 px-4">
+        <% if (userdata && userdata.length > 0) { %>
+        <% for(let i = 0; i < userdata.length; i++){ %>
+        <div class="bg-white shadow-md rounded-lg p-4 mb-4">
+            <div class="flex justify-between items-center">
+                <div class="flex-1">
+                    <p class="text-xl font-semibold"><%= userdata[i].username %></p>
+                </div>
+                <div class="flex space-x-4 items-center">
+                    <% if (userdata[i].isLeader) { %>
+                    <p class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Leader</p>
                     <% } %>
-                    <form action="/phoenix/deleteteam/<%= team._id %>?_method=DELETE" method="post">
-                        <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded deleteteam">
-                            Delete Team
+                    <form action="/deleteuser/<%= userdata[i]._id %>?_method=DELETE" method="post">
+                        <button class="mt-2 deleteuser">
+                            <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000"
+                                alt="Delete" class="w-6 h-6">
                         </button>
                     </form>
-                    <% if(team.isBlocked){ %>
-                    <form action="/phoenix/unblock/<%= team._id %>" method="post">
-                        <button type="submit"
-                            class="bg-black text-white px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 hover:shadow-md transition duration-300"
-                            style="transform: translate(150px, -38px);">Unblock</button>
-                    </form>
-                    <% } %>
-                    <% if(!team.isBlocked){ %>
-                    <form action="/phoenix/block/<%= team._id %>" method="POST">
-                        <button type="submit"
-                            class="bg-black text-white px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 hover:shadow-md transition duration-300"
-                            style="transform: translate(150px, -31px);">Block</button>
-                    </form>
-                    <% } %>
-                <% } else { %>
-                    <p class="text-center text-gray-500">No user data available.</p>
-                <% } %>
+                </div>
             </div>
-            <% } %>
+            <div class="mt-4 flex justify-between">
+                <div class="flex-1">
+                    <p><span class="font-semibold">Email:</span> <%= userdata[i].email %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">No of Attempts:</span> <%= userdata[i].noOfAttempts %></p>
+                </div>
+                <div class="flex-1">
+                    <p><span class="font-semibold">No of Questions Answered:</span>
+                        <%= userdata[i].noOfQuestionsAnswered %></p>
+                </div>
+                <div class="flex-1 text-right">
+                    <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <form action="/phoenix/deleteteam/<%= team._id %>?_method=DELETE" method="post">
+            <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded deleteteam">
+                Delete Team
+            </button>
+        </form>
+        <% if(team.isBlocked){ %>
+        <form action="/phoenix/unblock/<%= team._id %>" method="post">
+            <button type="submit"
+                class="bg-black text-white px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 hover:shadow-md transition duration-300"
+                style="transform: translate(150px, -38px);">Unblock</button>
+        </form>
+        <% } %>
+        <% if(!team.isBlocked){ %>
+        <form action="/phoenix/block/<%= team._id %>" method="POST">
+            <button type="submit"
+                class="bg-black text-white px-4 py-2 rounded hover:bg-gray-700 hover:text-gray-100 hover:shadow-md transition duration-300"
+                style="transform: translate(150px, -31px);">Block</button>
+        </form>
+        <% } %>
+        <% } else { %>
+        <p class="text-center text-gray-500">No user data available.</p>
+        <% } %>
+    </div>
+    <% } %>
 
-</body>
-<script>
+    <script>
         document.querySelectorAll('.deleteuser').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const confirmed = confirm('Are you sure you want to delete this user?');
-            if (confirmed) {
-                this.closest('form').submit();
-            }
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const confirmed = confirm('Are you sure you want to delete this user?');
+                if (confirmed) {
+                    this.closest('form').submit();
+                }
+            });
         });
-    });
 
         document.querySelectorAll('.deleteteam').forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.preventDefault();
-            const confirmed = confirm('Are you sure you want to delete this team? The team along with its members will be deleted');
-            if (confirmed) {
-                this.closest('form').submit();
-            }
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+                const confirmed = confirm('Are you sure you want to delete this team? The team along with its members will be deleted');
+                if (confirmed) {
+                    this.closest('form').submit();
+                }
+            });
         });
-    });
-</script>
+    </script>
+</body>
+
 </html>

@@ -9,7 +9,7 @@ const controlSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    //will add more
+    //will add more if needed
 });
 
 const Control = mongoose.model('Control', controlSchema);

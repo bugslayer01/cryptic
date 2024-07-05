@@ -96,14 +96,20 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         console.log(req.query)
         if (show == 'users' || !show) {
             let users = null
-            if (loggedIn == 'NA' || !loggedIn) {
-                users = await User.find();
-            }
             if (loggedIn == 'true') {
-                users = await User.find({ loggedIn: true });
+                users = await User.find({ loggedIn: true }).sort({ username: 1 });
             }
-            if (loggedIn == 'false') {
-                users = await User.find({ loggedIn: false });
+            else if (loggedIn == 'false') {
+                users = await User.find({ loggedIn: false }).sort({ username: 1 });
+            }
+            else if (sort == 'alpha') {
+                users = await User.find().sort({ username: 1 });
+            }
+            else if (sort == 'rank') {
+                users = await User.find().sort({ noOfQuestionsAnswered: 1 });
+            }
+            else {
+                users = await User.find();
             }
             let teams = []
             for (let user of users) {
@@ -219,7 +225,7 @@ router.get('/phoenix/blocked', checkAdmin, async (req, res) => {
         const leader = await User.findById(team.members[0]);
         leaderList.push(leader.username);
     }
-    return res.render('blocked', {  teamsData, ranks, leaderList });
+    return res.render('blocked', { teamsData, ranks, leaderList });
 });
 
 router.post('/phoenix/unblock/:_id', checkAdmin, async (req, res) => {
@@ -230,15 +236,15 @@ router.post('/phoenix/unblock/:_id', checkAdmin, async (req, res) => {
     const team = await Team.findById(_id);
     team.isBlocked = false
     team.questionData.wrongAttempts = 0;
-    if(team.questionData.currentDare != 666){
-    team.questionData.daresCompleted.push(team.questionData.currentDare);
+    if (team.questionData.currentDare != 666) {
+        team.questionData.daresCompleted.push(team.questionData.currentDare);
     }
-    team.questionData.currentDare = null; 
+    team.questionData.currentDare = null;
     await team.save()
     res.redirect('/phoenix/blocked')
 
 });
-router.post('/phoenix/block/:_id',checkAdmin, async (req, res) =>{
+router.post('/phoenix/block/:_id', checkAdmin, async (req, res) => {
     if (!req.admin) {
         return res.redirect('/phoenix/login')
     }
@@ -247,7 +253,40 @@ router.post('/phoenix/block/:_id',checkAdmin, async (req, res) =>{
     team.isBlocked = true;
     team.questionData.currentDare = 420 //Someone delibirately blocked the team from the admin side
     team.save();
-    res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`)
+    return res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`)
 })
+
+router.delete('/phoenix/deleteteam/:_id', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login')
+    }
+    const { _id } = req.params
+    const team = await Team.findById(_id).populate('members');
+    for (let member of team.members) {
+        await User.findByIdAndDelete(member._id);
+    }
+    await Team.findByIdAndDelete(team._id);
+    return res.redirect('/phoenix?show=teams')
+});
+
+router.get('/phoenix/award', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login');
+    }
+    const teams = await Team.find();
+    return res.render('award', { teams, flash: null });
+});
+
+router.post('/phoenix/award', checkAdmin, async (req, res) => {
+    if (!req.admin) {
+        return res.redirect('/phoenix/login');
+    }
+    const { teamId, points } = req.body;
+    const teams = await Team.find();
+    const team = await Team.findById(teamId);
+    team.questionData.score += points;
+    await team.save();
+    return res.render('award', { teams, flash: `${points} points awarded to ${team.teamName}` })
+});
 
 export default router;

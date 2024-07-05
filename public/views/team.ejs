@@ -35,7 +35,7 @@
                 <p>Email: <%= userData[i].email %></p>
                 <% if(isLeader && i !== 0){ %>
                     <form action="/deleteuser/<%= userData[i]._id %>?_method=DELETE" method="POST">
-                        <button class="mt-2">
+                        <button class="mt-2 deleteButton">
                             <img src="https://img.icons8.com/?size=100&id=1942&format=png&color=000000" alt="Delete"
                                 class="w-6 h-6">
                         </button>
@@ -45,5 +45,17 @@
         <% } %>
     </div>
 </body>
+
+<script>
+    document.querySelectorAll('.deleteButton').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault(); 
+            const confirmed = confirm('Are you sure you want to delete this user?');
+            if (confirmed) {
+                this.closest('form').submit();
+            }
+        });
+    });
+</script>
 
 </html>
