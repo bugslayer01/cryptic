@@ -10,6 +10,19 @@
 </head>
 
 <body class="bg-gray-100">
+    <div class="bg-gray-800 text-white">
+        <div class="container mx-auto flex justify-between items-center py-4">
+            <h1 class="text-2xl">Admin Panel</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="/phoenix" class="hover:text-gray-300">Home</a></li>
+                    <li><a href="/phoenix/blocked" class="hover:text-gray-300">Blocked Teams</a></li>
+                    <li><a href="/phoenix/settings" class="hover:text-gray-300">Settings</a></li>
+                    <li><a href="/logout" class="hover:text-gray-300">Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
         <div class="container mx-auto mt-8">
             <% if (teamsData && teamsData.length> 0) { %>
                 <% for(let i=0; i < teamsData.length; i++) { %>
@@ -64,11 +77,13 @@
                                 </form>
                             </div>
                             <div class="flex-1 text-right">
+                                <a href="/phoenix?show=teamdetails&teamName=<%= teamsData[i].teamName %>">
                                 <button>
                                     <span class="text-2xl"><img
                                             src="https://img.icons8.com/?size=100&id=61&format=png&color=000000"
                                             alt="more details button" class="w-10 h-10"></span>
                                 </button>
+                            </a>
                             </div>
                         </div>
                     </div>
