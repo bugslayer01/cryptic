@@ -1,0 +1,274 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: black;
+  width: 100%;
+  overflow: hidden;
+}
+
+.ring {
+  position: relative;
+  left: 20%;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ring i {
+  position: absolute;
+  inset: 0;
+  border: 2px solid #fff;
+  transition: 0.5s;
+}
+
+.ring i:nth-child(1) {
+  border-radius: 40% 60% 60% 40% / 50% 70% 35% 50%;
+  animation: animate 6s linear infinite;
+}
+
+.ring i:nth-child(2) {
+  border-radius: 50% 70% 35% 50% / 40% 60% 60% 40%;
+  animation: animate 4s linear infinite;
+}
+
+.ring i:nth-child(3) {
+  border-radius: 50% 70% 35% 50% / 40% 60% 60% 40%;
+  animation: animate2 10s linear infinite;
+}
+
+.ring:hover i {
+  border: 6px solid var(--clr);
+  filter: drop-shadow(0 0 20px var(--clr));
+}
+
+.login {
+  position: absolute;
+  width: 300px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login h2 {
+  font-size: 2em;
+  color: #fff;
+}
+
+.inputaccount {
+  position: relative;
+  width: 100%;
+}
+
+.inputaccount input {
+  position: relative;
+  width: 100%;
+  padding: 12px 20px;
+  background: transparent;
+  border: 1.5px solid #fff;
+  border-radius: 15px;
+  font-size: 1.2em;
+  color: #fff;
+  box-shadow: none;
+  outline: none;
+}
+
+#combined {
+  display: flex;
+  justify-content: space-between;
+}
+
+#combined .inputaccount {
+  width: 47%;
+}
+
+#combined .inputaccount input {
+  font-size: 0.9em;
+}
+
+#signupsubmit {
+  width: 100%;
+  background: #0078ff;
+  background: linear-gradient(45deg, #ea00d9, #133e7c);
+  border: none;
+  cursor: pointer;
+  transition: background 1s ease-in-out;
+}
+
+#signupsubmit:hover {
+  background: linear-gradient(120deg, #ea00d9, #133e7c);
+}
+
+.inputaccount input::placeholder {
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+spline-viewer {
+  width: 100%;
+  height: 80%;
+  margin-right: 130px;
+}
+
+.links {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-weight: 400;
+}
+
+.links a {
+  font-weight: 400;
+  color: #fff;
+  text-decoration: none;
+}
+
+.links a:hover {
+  background: linear-gradient(45deg, #ea00d9, #133e7c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes animate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes animate2 {
+  0% {
+    transform: rotate(360deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .ring {
+    width: 400px;
+    height: 400px;
+  }
+
+  .login h2 {
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 768px) {
+  .ring {
+    left: 10%;
+    width: 300px;
+    height: 300px;
+  }
+
+  .login {
+    width: 250px;
+  }
+
+  .login h2 {
+    font-size: 1.2em;
+  }
+
+  .inputaccount input {
+    padding: 10px 15px;
+    font-size: 1em;
+  }
+
+  #combined {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #combined .inputaccount {
+    width: 100%;
+  }
+
+  #combined .inputaccount input {
+    font-size: 1em;
+  }
+
+  spline-viewer {
+    width: 80%;
+    height: 60%;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .ring {
+    left: 0;
+    width: 250px;
+    height: 250px;
+  }
+
+  .login {
+    width: 200px;
+  }
+
+  .login h2 {
+    font-size: 1em;
+  }
+
+  .inputaccount input {
+    padding: 8px 10px;
+    font-size: 0.9em;
+  }
+
+  #combined {
+    flex-direction: column;
+  }
+
+  #combined .inputaccount {
+    width: 100%;
+  }
+
+  #combined .inputaccount input {
+    font-size: 0.9em;
+  }
+
+  spline-viewer {
+    width: 100%;
+    height: 50%;
+    margin-right: 0;
+  }
+
+  .links {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .links a {
+    font-size: 0.9em;
+  }
+}
