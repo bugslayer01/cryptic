@@ -17,7 +17,8 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }
-    const user = await User.findById(req.user._id);
+    try{
+        const user = await User.findById(req.user._id);
     const team = await Team.findById(user.teamId);
 
     const question = questions[team.questionData.current];
@@ -48,6 +49,11 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
         return res.render('cryptic', { question, isBlocked: true, dare, dareNo })
     }
     return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null })
+    } catch(err){
+        console.error('Error fetching user or team data:', err);
+        return res.status(500).send('Internal Server Error');
+    }
+    
 });
 
 router.post('/cryptic', checkAuth, eventActive, async (req, res) => {

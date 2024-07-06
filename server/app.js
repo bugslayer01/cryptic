@@ -9,6 +9,7 @@ import mainRoute from './src/routes/main.js'
 import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
+import requestLogger from "./src/middlewares/requestLogger.js";
 
 
 // Configure environment variables
@@ -20,11 +21,15 @@ const PORT = process.env.PORT || 8000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// MongoDB connection
+connectMongo();
+
 // Middleware setup
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(methodOverride("_method"));
+app.use(requestLogger)
 
 // Set up view engine
 app.set("view engine", "ejs");
@@ -33,8 +38,6 @@ app.set("views", path.join(__dirname, "../public/views"));
 // Serve static files
 app.use(express.static(path.join(__dirname, "../public")));
 
-// MongoDB connection
-connectMongo();
 // Routes
 app.get("/", (req, res) => {
   res.render("home");

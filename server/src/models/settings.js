@@ -9,6 +9,10 @@ const controlSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    totalRequests: {
+        type: Number,
+        default: 0
+    }
     //will add more if needed
 });
 

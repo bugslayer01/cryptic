@@ -7,8 +7,7 @@ import Team from '../models/team.js';
 import User from '../models/user.js';
 import getRanks from '../utils/rank.js';
 import regActive from '../middlewares/registrations.js';
-import eventActive from '../middlewares/cryptic.js';
-import axios from 'axios';
+import eventActive from '../middlewares/cryptic.js'
 const router = express.Router();
 
 const memberRegisterSchema = z.object({
@@ -17,13 +16,9 @@ const memberRegisterSchema = z.object({
     password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
 });
 
-router.get('/dashboard', checkAuth, async (req, res) => {
-    if (!req.user) {
-        return res.redirect('/login')
-    }
+router.get('/dashboard', async (req, res) => {
     try {
-        const user = await User.findById(req.user._id).populate('teamId');
-        return res.render('dashboard', { username: user.username, teamName: user.teamId.teamName, })
+        return res.render('dashboard',)
     } catch (err) {
         console.error('Error fetching user or team data:', err);
         return res.status(500).send('Internal Server Error');

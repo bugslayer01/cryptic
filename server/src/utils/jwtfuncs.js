@@ -21,7 +21,6 @@ export async function getUser(token) {
     } catch (err) {
         const decoded = jwt.decode(token)
         const user = await User.findById(decoded._id);
-        console.log(user)
         user.loggedIn = false;
         await user.save();// add page reload if you haven't already
         console.error('Token verification for user failed:', err);

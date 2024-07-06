@@ -9,6 +9,10 @@ import { setAdmin, setSuperUser } from '../utils/jwtfuncs.js';
 import { checkAdmin, checkSuperUser } from '../middlewares/auth.js';
 import getRanks from '../utils/rank.js';
 import Control from '../models/settings.js';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from "url";
+
 const router = express.Router();
 dotenv.config();
 
@@ -140,7 +144,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
                     }
                 }
             }
-            else{
+            else {
                 teams = await Team.find()
                 teamsData = teams;
             }
@@ -292,6 +296,25 @@ router.post('/phoenix/award', checkAdmin, async (req, res) => {
     team.questionData.score += points;
     await team.save();
     return res.render('award', { teams, flash: `${points} points awarded to ${team.teamName}` })
+});
+
+router.get('/phoenix/download-log', async (req, res) => {
+    try {
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        
+        const logFilePath = path.join(__dirname, '../logs/request.log');
+
+        const logData = await fs.readFile(logFilePath, 'utf-8');
+
+        res.setHeader('Content-Disposition', 'attachment; filename="request.log"');
+        res.setHeader('Content-Type', 'text/plain');
+
+        res.send(logData);
+    } catch (err) {
+        console.error('Error downloading log file:', err);
+        res.status(500).send('Error downloading log file');
+    }
 });
 
 export default router;
