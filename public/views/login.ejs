@@ -1,71 +1,119 @@
+Sign-up HTML
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Form</title>
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    width: 300px;
-    text-align: center; /* Center the content */
-}
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-sizing: border-box;
-}
-input[type="submit"] {
-    width: 100%;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    border-radius: 3px;
-    cursor: pointer;
-}
-input[type="submit"]:hover {
-    background-color: #0056b3;
-}
-.error-message {
-    color: red;
-}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log-in</title>
+    <link rel="stylesheet" href="../styles/login.css" />
+    <script
+      type="module"
+      src="https://unpkg.com/@splinetool/viewer@1.8.5/build/spline-viewer.js"
+    ></script>
+    <script>
+      window.onload = function () {
+        var shadowRoot = document.querySelector("spline-viewer").shadowRoot;
+        shadowRoot.querySelector("#logo").remove();
+      };
+    </script>
+    <script>
+      const lightBlue = "\x1b[94m";
+      const reset = "\x1b[0m";
 
-    </style>
-</head>
-<body>
-    <form action="/login" method="post">
-        <h2>Login Form</h2>
-        <label for="username">Username</label>
-        <input type="username" id="username" name="username" required>
+      var asciiArt = `
+      ███╗   ███╗██╗     ███████╗ ██████╗ 
+      ████╗ ████║██║     ██╔════╝██╔════╝ 
+      ██╔████╔██║██║     ███████╗██║     
+      ██║╚██╔╝██║██║     ╚════██║██║     
+      ██║ ╚═╝ ██║███████╗███████║╚██████╗
+      ╚═╝     ╚═╝╚══════╝╚══════╝ ╚═════╝
+      `;
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
+      function customConsoleLog(message, style) {
+        console.log(`%c${message}`, style);
+      }
 
-        <input type="submit" value="Login">
+      function disableConsoleMethods() {
+        console.log = function () {};
+        console.warn = function () {};
+        console.error = function () {};
+      }
 
-        <% if(error){ %>
-        <p class="error-message"> <%= error %> </p>
-        <% } %>
-        <p style="color: purple" class = "error-message">Not Registered? <a href="/register">Register</a></p>
-    </form>
-    
-</body>
+      function logMessages() {
+        customConsoleLog(
+          "You finally entered the console😈!",
+          "color: red; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 0px rgba(0,0,0,0.3);"
+        );
+
+        customConsoleLog(
+          asciiArt,
+          "color: rgb(31, 146, 146); font-size: 14px;"
+        );
+
+        customConsoleLog(
+          "Have a great day!",
+          "color: green; font-size: 18px; font-style: italic; background-color: yellow; padding: 2px 4px;"
+        );
+      }
+
+      // Call logMessages every 2 seconds
+      setInterval(logMessages, 2000);
+    </script>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      "
+    >
+      <div
+        style="
+          position: absolute;
+          left: -62px;
+          top: 0;
+          height: 100%;
+          width: 70%;
+          z-index: 0;
+        "
+      >
+        <spline-viewer
+          url="https://prod.spline.design/Qw81Io5Uimr2mRZz/scene.splinecode"
+          style="width: 100%; height: 100%; margin-right: 190px"
+        ></spline-viewer>
+      </div>
+
+      <div class="ring" style="z-index: 1">
+        <i style="--clr: #091833"></i>
+        <i style="--clr: #711c91"></i>
+        <i style="--clr: #0abdc6"></i>
+        <form action="/login" method="post" class="login">
+          <div class="login">
+            <h2>Login</h2>
+            <div class="inputaccount">
+              <input type="text" placeholder="Username" id="username" />
+            </div>
+            <div class="inputaccount">
+              <input type="password" placeholder="Password" id="password" />
+            </div>
+            <div class="inputaccount">
+              <input type="submit" value="Login" id="submit" />
+            </div>
+            <div class="links">
+              <a href="/register">Not a Member? Sign-up</a>
+            </div>
+            <% if(error){ %>
+            <p class="error-message"><%= error %></p>
+            <% } %>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
