@@ -88,9 +88,9 @@ body {
   width: 100%;
   padding: 12px 20px;
   background: transparent;
-  border: 1.5px solid #fff;
-  border-radius: 15px;
-  font-size: 1.2em;
+  border: 2px solid #fff;
+  border-radius: 12px;
+  font-size: 1em;
   color: #fff;
   box-shadow: none;
   outline: none;
