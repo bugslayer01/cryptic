@@ -13,7 +13,7 @@ const __dirname = path.dirname(__filename);
 const logDirectoryPath = path.join(__dirname, '../logs');
 const logFilePath = path.join(__dirname, '../logs/request.log');
 let requestCount = 0;
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 10; //Change it to 500 or higher number later to reduce latency
 let totalRequests = 0;
 
 async function initializeTotalRequests() {

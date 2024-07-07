@@ -16,11 +16,10 @@ const memberRegisterSchema = z.object({
     password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
 });
 
-router.get('/dashboard', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         return res.render('dashboard',)
     } catch (err) {
-        console.error('Error fetching user or team data:', err);
         return res.status(500).send('Internal Server Error');
     }
 });

@@ -84,7 +84,7 @@ router.post('/login', async (req, res) => {
         await user.save();
         // res.cookie('token', token, { httpOnly: true });
 
-        return res.redirect('/dashboard');
+        return res.redirect('/cryptic');
     } catch (error) {
         return res.render('login', { error: error.errors[0].message });
     }

@@ -39,9 +39,6 @@ app.set("views", path.join(__dirname, "../public/views"));
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
-app.get("/", (req, res) => {
-  res.render("home");
-});
 app.use(authRoute);
 app.use(mainRoute);
 app.use(crypticRoute)

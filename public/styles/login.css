@@ -96,6 +96,11 @@ body {
   outline: none;
 }
 
+.error-message{
+  color: red;
+  transform: translateX(12.5%);
+}
+
 #submit {
   width: 100%;
   background: #0078ff;
