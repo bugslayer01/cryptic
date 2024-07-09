@@ -9,6 +9,8 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please enter your password"]
     }
+}, {
+    timestamps: true
 });
 
 const Admin = mongoose.model('Admin', adminSchema);

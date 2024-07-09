@@ -18,6 +18,7 @@ const memberRegisterSchema = z.object({
 
 router.get('/', async (req, res) => {
     try {
+        console.log(req.ip)
         return res.render('dashboard',)
     } catch (err) {
         return res.status(500).send('Internal Server Error');

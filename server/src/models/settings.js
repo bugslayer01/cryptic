@@ -14,6 +14,8 @@ const controlSchema = new mongoose.Schema({
         default: 0
     }
     //will add more if needed
+}, {
+    timestamps: true
 });
 
 const Control = mongoose.model('Control', controlSchema);

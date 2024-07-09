@@ -7,7 +7,7 @@ import express from 'express'
 import { z } from 'zod'
 import eventActive from "../middlewares/cryptic.js";
 const router = express.Router();
-let startTime = null;
+const startTime = new Date("Aug 7, 2024 14:00:00")
 
 const answerSchema = z.object({
     answer: z.string().min(1, { message: "Please enter the answer" })
@@ -76,7 +76,7 @@ router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
             if (questions[current].a.toLowerCase() == answer.toLowerCase()) {
                 team.questionData.questions[current].answered = true;
                 team.questionData.questions[current].answeredBy = user._id;
-                team.questionData.questions[current].submitTime = new Date();
+                team.questionData.questions[current].submitTime = new Date(new Date().getTime() + (5 * 60 + 30) * 60 * 1000);
                 team.questionData.wrongAttempts = 0;
                 team.questionData.score += questions[current].score;
                 user.noOfQuestionsAnswered += 1
@@ -104,7 +104,7 @@ router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
                 user.noOfQuestionsAnswered += 1
                 answeredBy = user._id;
                 answered = true;
-                submitTime = new Date();
+                submitTime = new Date(new Date().getTime() + (5 * 60 + 30) * 60 * 1000);
                 team.questionData.wrongAttempts = 0;
                 team.questionData.score += questions[current].score;
                 if (current == 0) {
@@ -141,10 +141,10 @@ router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
     }
 });
 
-router.get('/start', (req, res) => {
-    console.log("Event started")
-    startTime = new Date();
-    res.redirect('/admin')
-});
+// router.get('/start', (req, res) => {
+//     console.log("Event started")
+//     startTime = new Date();
+//     res.redirect('/phoenix')
+// });
 
 export default router;
