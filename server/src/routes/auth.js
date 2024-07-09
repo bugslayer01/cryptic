@@ -2,14 +2,24 @@ import express from 'express';
 import Team from '../models/team.js';
 import User from '../models/user.js';
 import { z } from 'zod';
+import dotenv from 'dotenv';
 import bcrypt from 'bcrypt'
 import { setUser } from '../utils/jwtfuncs.js';
 import { checkAuth } from '../middlewares/auth.js';
 import regActive from '../middlewares/registrations.js';
+dotenv.config();
 const router = express.Router();
 const registerSchema = z.object({
-    teamName: z.string().min(1, { message: "Please enter the team name" }),
-    username: z.string().min(2, { message: "Username should be atleast 2 characters long" }),
+    teamName: z.string()
+        .min(1, { message: "Please enter the team name" })
+        .refine(value => /^[a-zA-Z0-9@\-_()]+$/.test(value), {
+            message: "Only @ , - , _ , ( , ) are allowed as special characters"
+        }),
+    username: z.string()
+        .min(2, { message: "Username should be atleast 2 characters long" })
+        .refine(value => /^[a-zA-Z0-9@\-_()]+$/.test(value), {
+            message: "Only @ , - , _ , ( , ) are allowed as special characters"
+        }),
     email: z.string().email({ message: "Please enter a valid email address" }),
     password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
 });
@@ -29,10 +39,18 @@ router.get('/login', (req, res) => {
 
 router.post('/register', regActive, async (req, res) => {
     try {
-
-        const { teamName, username, email, password } = registerSchema.parse(req.body);
-        const teamExists = await Team.findOne({ teamName })
-        const usernameExists = await User.findOne({ username })
+        const { teamName, username, password } = registerSchema.parse(req.body);
+        let email = req.body.email.toLowerCase()
+        const teamExists = await Team.findOne({
+            teamName: {
+                $regex: new RegExp('^' + teamName.toLowerCase().replace(/[.*+?^${}()|[\]\\%&-]/g, '\\$&') + '$', 'i')
+            }
+        });
+        const usernameExists = await User.findOne({
+            username: {
+                $regex: new RegExp('^' + username.toLowerCase().replace(/[.*+?^${}()|[\]\\%&-]/g, '\\$&') + '$', 'i')
+            }
+        });
         const emailExists = await User.findOne({ email });
 
         if (teamExists) {
@@ -63,14 +81,24 @@ router.post('/register', regActive, async (req, res) => {
         return res.redirect("/login");
 
     } catch (error) {
-        return res.render('register', { error: (error.errors[0].message || "Bad Credentials") });
+        if (error.errors && error.errors.length > 0) {
+            console.log(error)
+            return res.render('register', { error: error.errors[0].message });
+        } else {
+            console.log(error)
+            return res.render('register', { error: "Bad Credentials" });
+        }
     }
 });
 
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = loginSchema.parse(req.body);
-        const user = await User.findOne({ username })
+        const user = await User.findOne({
+            username: {
+                $regex: new RegExp('^' + username.toLowerCase().replace(/[.*+?^${}()|[\]\\%&-]/g, '\\$&') + '$', 'i')
+            }
+        });
         if (!user) {
             return res.render('login', { error: 'Invalid username or password' });
         }
@@ -78,15 +106,21 @@ router.post('/login', async (req, res) => {
         if (!validPassword) {
             return res.render('login', { error: 'Invalid username or password' });
         }
-        const token = setUser({ _id: user._id, username: user.username, isLeader: user.isLeader });
-        res.cookie('token', token);
+        const token = setUser({ _id: user._id, isLeader: user.isLeader });
+        res.cookie('token', token, { httpOnly: true, secure: (process.env.NODE_ENV || 'dev') === 'prod' });
+        user.currentToken = token;
         user.loggedIn = true;
         await user.save();
         // res.cookie('token', token, { httpOnly: true });
 
         return res.redirect('/cryptic');
     } catch (error) {
-        return res.render('login', { error: error.errors[0].message });
+        if (error.errors && error.errors.length > 0) {
+            return res.render('register', { error: error.errors[0].message });
+        } else {
+            console.log(error)
+            return res.render('register', { error: "Bad Credentials" });
+        }
     }
 });
 

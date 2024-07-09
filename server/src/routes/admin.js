@@ -12,6 +12,7 @@ import Control from '../models/settings.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from "url";
+import updateLoggedState from '../utils/updateLoggedState.js';
 
 const router = express.Router();
 dotenv.config();
@@ -100,6 +101,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         console.log(req.query)
         if (show == 'users' || !show) {
             let users = null
+            await updateLoggedState();
             if (loggedIn == 'true') {
                 users = await User.find({ loggedIn: true }).collation({ locale: 'en', strength: 2 }).sort({ username: 1 });
             }
@@ -155,8 +157,16 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             return res.render('admin', { query: 'allTeams', teamsData, ranks, leaderList });
         }
         if (show == 'teamdetails' && teamName) {
+            await updateLoggedState(teamName)
             const ranks = await getRanks()
-            const team = await Team.findOne({ teamName }).populate('members');
+            const team = await Team.findOne({
+                teamName: { 
+                  $regex: new RegExp('^' + teamName.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i') 
+                }
+              }).populate('members');
+            if(!team){
+                return res.send(`<h1>No team with name ${teamName} found`);
+            }
             const nameOfTeam = team.teamName
             return res.render('admin', { query: 'teamdetails', team, userdata: team.members, ranks, nameOfTeam })
         }

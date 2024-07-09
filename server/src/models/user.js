@@ -26,6 +26,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    currentToken: {
+        type: String,
+        default: null
+    },
     noOfAttempts: {
         type: Number,
         default: 0
