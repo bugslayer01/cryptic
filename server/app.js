@@ -6,10 +6,12 @@ import dotenv from "dotenv";
 import methodOverride from 'method-override'
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
+// import logger from './src/utils/logger.js';
 import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
-import requestLogger from "./src/middlewares/requestLogger.js";
+// import requestLogger from "./src/middlewares/requestLogger.js";
+import rateLimiter from "./src/middlewares/rateLimiter.js";
 
 
 // Configure environment variables
@@ -17,7 +19,6 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 8000;
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -25,11 +26,13 @@ const __dirname = path.dirname(__filename);
 connectMongo();
 
 // Middleware setup
+app.use(rateLimiter)
+// app.use(logger)
+// app.use(requestLogger)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(methodOverride("_method"));
-app.use(requestLogger)
 
 // Set up view engine
 app.set("view engine", "ejs");

@@ -17,43 +17,46 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login');
     }
-    try{
+    try {
         const user = await User.findById(req.user._id);
-    const team = await Team.findById(user.teamId);
+        const team = await Team.findById(user.teamId);
 
-    const question = questions[team.questionData.current];
+        if (team.questionData.current > 10) {
+            return res.render('stats');
+        }
+        const question = questions[team.questionData.current];
 
-    if (team.isBlocked) {
-        let dare = null;
-        let dareNo = null
-        if (!team.questionData.currentDare) {
-            if (team.questionData.daresCompleted.length == dares.length) {
-                dare = "Ask the organisers for the dare";
-                team.questionData.currentDare = 666;
-            }
-            else {
-                while (true) {
-                    const dareNo = Math.floor(Math.random() * dares.length) + 1;
-                    if (!team.questionData.daresCompleted.includes(dareNo))
-                        dare = dares[dareNo]
-                    team.questionData.currentDare = dareNo;
-                    break;
+        if (team.isBlocked) {
+            let dare = null;
+            let dareNo = null;
+            if (!team.questionData.currentDare) {
+                if (team.questionData.daresCompleted.length == dares.length) {
+                    dare = "Ask the organisers for the dare";
+                    team.questionData.currentDare = 666;
+                }
+                else {
+                    while (true) {
+                        const dareNo = Math.floor(Math.random() * dares.length) + 1;
+                        if (!team.questionData.daresCompleted.includes(dareNo))
+                            dare = dares[dareNo];
+                        team.questionData.currentDare = dareNo;
+                        break;
+                    }
                 }
             }
+            else {
+                dareNo = team.questionData.currentDare;
+                dare = dares[dareNo];
+            }
+            await team.save();
+            return res.render('cryptic', { question, isBlocked: true, dare, dareNo });
         }
-        else{
-            dareNo = team.questionData.currentDare
-            dare = dares[dareNo]
-        }
-        await team.save();
-        return res.render('cryptic', { question, isBlocked: true, dare, dareNo })
-    }
-    return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null })
-    } catch(err){
+        return res.render('cryptic', { question, isBlocked: false, dare: null, dareNo: null });
+    } catch (err) {
         console.error('Error fetching user or team data:', err);
         return res.status(500).send('Internal Server Error');
     }
-    
+
 });
 
 router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
@@ -65,10 +68,13 @@ router.post('/cryptic', checkAuth, eventActive, async (req, res) => {
         answer = answer.trim();
         const user = await User.findById(req.user._id);
         const team = await Team.findById(user.teamId);
+        if (team.questionData.current > 10) {
+            return res.redirect('/cryptic');
+        }
         if (team.isBlocked) {
             return res.redirect('/cryptic')
         }
-        user.noOfAttempts +=1;
+        user.noOfAttempts += 1;
         const current = team.questionData.current;
         if (team.questionData.questions[current]) {
             team.questionData.questions[current].allAnswers.push(answer);

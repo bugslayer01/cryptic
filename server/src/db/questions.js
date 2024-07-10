@@ -5,7 +5,7 @@ const questions = [
       imagepath : 'assets/images/questions/q1.png',
       audiopath : null,
       videopath : null,
-      score : 5,
+      score : 0,
     },
     {
       q: "What is the capital of France?",
