@@ -255,7 +255,7 @@ router.post('/phoenix/unblock/:_id', checkAdmin, async (req, res) => {
     const team = await Team.findById(_id);
     team.isBlocked = false
     team.questionData.wrongAttempts = 0;
-    if (team.questionData.currentDare != 666) {
+    if (team.questionData.currentDare != 404 || team.questionData.currentDare != 500) {
         team.questionData.daresCompleted.push(team.questionData.currentDare);
     }
     team.questionData.currentDare = null;
@@ -270,7 +270,7 @@ router.post('/phoenix/block/:_id', checkAdmin, async (req, res) => {
     const { _id } = req.params;
     const team = await Team.findById(_id);
     team.isBlocked = true;
-    team.questionData.currentDare = 420 //Someone delibirately blocked the team from the admin side
+    team.questionData.currentDare = 500 //Someone delibirately blocked the team from the admin side
     team.save();
     return res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`)
 })
@@ -308,23 +308,23 @@ router.post('/phoenix/award', checkAdmin, async (req, res) => {
     return res.render('award', { teams, flash: `${points} points awarded to ${team.teamName}` })
 });
 
-router.get('/phoenix/download-log', async (req, res) => {
-    try {
-        const __filename = fileURLToPath(import.meta.url);
-        const __dirname = path.dirname(__filename);
+// router.get('/phoenix/download-log', async (req, res) => {
+//     try {
+//         const __filename = fileURLToPath(import.meta.url);
+//         const __dirname = path.dirname(__filename);
         
-        const logFilePath = path.join(__dirname, '../logs/request.log');
+//         const logFilePath = path.join(__dirname, '../logs/request.log');
 
-        const logData = await fs.readFile(logFilePath, 'utf-8');
+//         const logData = await fs.readFile(logFilePath, 'utf-8');
 
-        res.setHeader('Content-Disposition', 'attachment; filename="request.log"');
-        res.setHeader('Content-Type', 'text/plain');
+//         res.setHeader('Content-Disposition', 'attachment; filename="request.log"');
+//         res.setHeader('Content-Type', 'text/plain');
 
-        res.send(logData);
-    } catch (err) {
-        console.error('Error downloading log file:', err);
-        res.status(500).send('Error downloading log file');
-    }
-});
+//         res.send(logData);
+//     } catch (err) {
+//         console.error('Error downloading log file:', err);
+//         res.status(500).send('Error downloading log file');
+//     }
+// });
 
 export default router;

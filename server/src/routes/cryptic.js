@@ -32,13 +32,13 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
             if (!team.questionData.currentDare) {
                 if (team.questionData.daresCompleted.length == dares.length) {
                     dare = "Ask the organisers for the dare";
-                    team.questionData.currentDare = 666;
+                    team.questionData.currentDare = 404; //If the team has completed all the available dares
                 }
                 else {
                     while (true) {
                         const dareNo = Math.floor(Math.random() * dares.length) + 1;
                         if (!team.questionData.daresCompleted.includes(dareNo))
-                            dare = dares[dareNo];
+                            dare = dares[dareNo - 1]; 
                         team.questionData.currentDare = dareNo;
                         break;
                     }
@@ -46,7 +46,7 @@ router.get('/cryptic', checkAuth, eventActive, async (req, res) => {
             }
             else {
                 dareNo = team.questionData.currentDare;
-                dare = dares[dareNo];
+                dare = dares[dareNo - 1];
             }
             await team.save();
             return res.render('cryptic', { question, isBlocked: true, dare, dareNo });
