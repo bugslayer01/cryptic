@@ -26,6 +26,77 @@ body {
   font-family: "cryptic", sans-serif;
 }
 
+.nav {
+  position: fixed;
+  width: 100vw;
+  height: 80px;
+  padding: 0px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  top: 0;
+  z-index: 100;
+}
+
+.nav .artist,
+.nav .social-media,
+.nav .menu {
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+}
+
+.artist {
+  z-index: 2;
+  font-family: Helvetica;
+  color: #fff;
+}
+
+.social-media {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+}
+
+.social-media ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.social-media ul li {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.social-media a {
+  z-index: 2;
+  text-decoration: none;
+  color: #bebebe;
+  font-family: Helvetica;
+}
+
+.social-media a:hover,
+.social-media a:active {
+  color: #bebebe;
+}
+
+.menu {
+  z-index: 2;
+  font-size: 20px;
+  color: #bebebe;
+}
+
+.menu a {
+  display: inline-block;
+  color: inherit;
+}
+
+.menu ion-icon {
+  vertical-align: middle;
+}
+
 .back {
   position: fixed;
   top: 0;
