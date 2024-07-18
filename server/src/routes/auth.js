@@ -12,17 +12,18 @@ const router = express.Router();
 const registerSchema = z.object({
     teamName: z.string()
         .min(1, { message: "Please enter the team name" })
-        .refine(value => /^[a-zA-Z0-9@\-_()]+$/.test(value), {
-            message: "Only @ , - , _ , ( , ) are allowed as special characters"
+        .refine(value => /^[a-zA-Z0-9@\-_\(\). ]+$/.test(value), {
+            message: "Only @ , - , _ , ( , ) , . are allowed as special characters"
         }),
     username: z.string()
-        .min(2, { message: "Username should be atleast 2 characters long" })
-        .refine(value => /^[a-zA-Z0-9@\-_()]+$/.test(value), {
-            message: "Only @ , - , _ , ( , ) are allowed as special characters"
+        .min(2, { message: "Username should be at least 2 characters long" })
+        .refine(value => /^[a-zA-Z0-9@\-_\(\). ]+$/.test(value), {
+            message: "Only @ , - , _ , ( , ) , . are allowed as special characters"
         }),
     email: z.string().email({ message: "Please enter a valid email address" }),
     password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
 });
+
 
 const loginSchema = z.object({
     username: z.string().min(2, { message: "Username is atleast 2 characters long" }),
