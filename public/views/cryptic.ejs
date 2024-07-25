@@ -11,6 +11,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles/cryptic.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
       setInterval(() => {
           window.location.reload();
@@ -83,15 +84,18 @@
           <div class="menu">
             <a href="/logout"><ion-icon name="power"></ion-icon></a>
           </div>
+        
         </div>
+        <i class="fa-solid fa-bars icon"></i>
       </div>
       <div <% if(isBlocked){ %> class="blur" <% } %>>
         <video
           src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/d5sfkiefythgflydvfoa"
           autoplay
           loop
-          muted
+          muted    
         ></video>
+        
         <div id="question">
           <h1><%= question.q %></h1>
           <% if(question.imagepath){ %>
@@ -253,6 +257,32 @@
               }
           });
       });
+
+      document.addEventListener('click', function(event) {
+            var iconNavbar = document.querySelector('.nav .icon');
+            var isClickInside = iconNavbar.contains(event.target);
+
+            if (!isClickInside) {
+                var navbarOptions = document.querySelector('.social-media');
+                navbarOptions.style.display = 'none';
+            }
+        });
+
+
+
+
+      var icon = document.querySelector('.nav .icon');
+        icon.addEventListener('click', function() {
+            var navbarOptions = document.querySelector('.social-media');
+            if (navbarOptions.style.display === 'flex') {
+                navbarOptions.style.display = 'none';
+            } else {
+                navbarOptions.style.display = 'flex';
+            }
+        });
+
+
+
   </script>
-  </body>
+  </body>
 </html>
