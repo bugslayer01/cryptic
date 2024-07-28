@@ -6,13 +6,11 @@ import dotenv from "dotenv";
 import methodOverride from 'method-override'
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
-// import logger from './src/utils/logger.js';
 import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
-// import requestLogger from "./src/middlewares/requestLogger.js";
+import requestLogger from "./src/middlewares/requestLogger.js";
 import rateLimiter from "./src/middlewares/rateLimiter.js";
-
 
 // Configure environment variables
 dotenv.config();
@@ -27,8 +25,7 @@ connectMongo();
 
 // Middleware setup
 app.use(rateLimiter)
-// app.use(logger)
-// app.use(requestLogger)
+app.use(requestLogger)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
@@ -46,6 +43,7 @@ app.use(authRoute);
 app.use(mainRoute);
 app.use(crypticRoute)
 app.use(adminRoute)
+
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).render("404", { url: req.originalUrl });

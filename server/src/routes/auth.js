@@ -1,38 +1,20 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import bcrypt from 'bcrypt';
 import Team from '../models/team.js';
 import User from '../models/user.js';
-import { z } from 'zod';
-import dotenv from 'dotenv';
-import bcrypt from 'bcrypt'
 import { setUser } from '../utils/jwtfuncs.js';
 import { checkAuth } from '../middlewares/auth.js';
 import regActive from '../middlewares/registrations.js';
+import { loginSchema, registerSchema } from '../utils/zodSchemas.js';
+
 dotenv.config();
 const router = express.Router();
-const registerSchema = z.object({
-    teamName: z.string()
-        .min(1, { message: "Please enter the team name" })
-        .refine(value => /^[a-zA-Z0-9@\-_\(\). ]+$/.test(value), {
-            message: "Only @ , - , _ , ( , ) , . are allowed as special characters"
-        }),
-    username: z.string()
-        .min(2, { message: "Username should be at least 2 characters long" })
-        .refine(value => /^[a-zA-Z0-9@\-_\(\). ]+$/.test(value), {
-            message: "Only @ , - , _ , ( , ) , . are allowed as special characters"
-        }),
-    email: z.string().email({ message: "Please enter a valid email address" }),
-    password: z.string().min(6, { message: "Password should be atleast 6 characters long" }),
-});
-
-
-const loginSchema = z.object({
-    username: z.string().min(2, { message: "Username is atleast 2 characters long" }),
-    password: z.string().min(6, { message: "Password is atleast 6 characters long" }),
-});
 
 router.get('/register', regActive, (req, res) => {
     return res.render('register', { error: null });
 });
+
 
 router.get('/login', (req, res) => {
     return res.render('login', { error: null });

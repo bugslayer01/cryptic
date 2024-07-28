@@ -1,154 +1,162 @@
-// //Don't run any tests yet
+import { google } from 'googleapis';
+import dotenv from 'dotenv';
+import getISTDateString from '../utils/getDate.js';
 
-// import {existsSync, mkdir} from 'fs';
-// import fs from 'fs/promises';
-// import path from 'path';
-// import Control from '../models/settings.js';
-// import { fileURLToPath } from "url";
-// import getISTDateString from '../utils/getDate.js';
-// import { log } from 'console';
+dotenv.config();
 
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
+const googlejson = {
+    "type": "service_account",
+    "project_id": "mlsc-website",
+    "private_key_id": process.env.GOOGLE_PRIVATE_KEY_ID,
+    "private_key": process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    "client_email": process.env.GOOGLE_CLIENT_EMAIL,
+    "client_id": process.env.GOOGLE_CLIENT_ID,
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": process.env.GOOGLE_CLIENT_CERT_URL,
+    "universe_domain": "googleapis.com"
+};
 
-// const logDirectoryPath = path.join(__dirname, '../logs');
-// const logFilePath = path.join(__dirname, '../logs/request.log');
-// let logMessage = '';
-// let requestCount = 0;
-// const BATCH_SIZE = 500; //Change it to 500 or higher number later to reduce latency
-// let totalRequests = 0;
+const auth = new google.auth.GoogleAuth({
+    credentials: googlejson,
+    scopes: ['https://www.googleapis.com/auth/documents']
+});
 
-// async function initializeTotalRequests() {
-//     try {
-//         const control = await Control.findOne();
-//         if (control) {
-//             totalRequests = control.totalRequests;
-//         }
-//     } catch (error) {
-//         console.error('Error initializing total requests:', error);
-//     }
-// }
+async function writeGoogleDocs(documentId, requests) {
+    try {
+        const docs = google.docs({ version: 'v1', auth });
 
-// initializeTotalRequests();
+        const writer = await docs.documents.batchUpdate({
+            documentId,
+            requestBody: {
+                requests
+            }
+        });
+        return writer;
+    } catch (error) {
+        console.error('error', error);
+    }
+}
 
-// async function updateTotalRequests(logMessage) {
-//     try {
-//         fs.appendFile(logFilePath, logMessage).catch((err) => {
-//             console.error('Error writing to request log file:', err);
-//         });
-//         const control = await Control.findOneAndUpdate(
-//             {},
-//             { $inc: { totalRequests: requestCount } },
-//             { new: true, upsert: true }
-//         );
-//         totalRequests = control.totalRequests;
-//     } catch (error) {
-//         console.error('Error updating request count:', error);
-//     }
-// }
+const logBatch = [];
+const logBatchAll = [];
+let requestCount = 0;
+const BATCH_SIZE = 10; // Change this to 700 for production
 
-// async function ensureLogFileExists() {
-//     if (!existsSync(logDirectoryPath)) {
-//         mkdir(logDirectoryPath, { recursive: true }, (err) => {
-//             if (err) {
-//                 console.error('Error creating directory:', err);
-//                 return;
-//             }
-//         })
-//     }
+function getRequestsArray(date, method, path, ip) {
+    const requests = [
+        {
+            insertText: {
+                location: { index: 1 },
+                text: `${date} | ${method} ${path} | ${ip} \n`
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: 1,
+                    endIndex: date.length + 1
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 0.5, green: 0.0, blue: 0.5 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 4,
+                    endIndex: date.length + 4 + method.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 1.0, green: 0.65, blue: 0.0 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 5 + method.length,
+                    endIndex: date.length + 5 + method.length + path.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 0.0, green: 0.5, blue: 0.5 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 8 + method.length + path.length,
+                    endIndex: date.length + 8 + method.length + path.length + ip.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 0.68, green: 0.85, blue: 0.9 }
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        }
+    ];
+    return requests
+}
 
-//     try {
-//         await fs.access(logFilePath);
-//     } catch (error) {
-//         try {
-//             await fs.writeFile(logFilePath, '');
-//             console.log(`Created log file: ${logFilePath}`);
-//         } catch (err) {
-//             console.error('Error creating log file:', err);
-//         }
-//     }
-// }
+async function logUrl(req) {
+    const assetExtensions = ['.css', '.js', '.mp4', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
+    const url = req.url.toLowerCase();
 
-// ensureLogFileExists();
+    const isAsset = assetExtensions.some(extension => url.endsWith(extension));
 
-// export default async function requestLogger(req, res, next) {
-//     requestCount += 1;
-//     totalRequests += 1;
+    if (!isAsset) {
+        const date = getISTDateString();
+        const method = req.method;
+        const path = req.url;
+        const ip = req.headers['x-real-ip'];
 
-//     const currentMessage = `${getISTDateString()} | ${totalRequests} | ${req.method} ${req.url} \n`;
-//     logMessage += currentMessage;
-//     console.log(currentMessage)
+        const requests = getRequestsArray(date, method, path, ip);
+        logBatch.push(...requests);
+        requestCount++;
 
-//     if (requestCount >= BATCH_SIZE) {
-//         await updateTotalRequests(logMessage);
-//         requestCount = 0;
-//         logMessage = '';
-//     }
+        if (requestCount >= BATCH_SIZE) {
+            await writeGoogleDocs(process.env.documentId, logBatch.splice(0, logBatch.length));
+            await writeGoogleDocs(process.env.documentId2, logBatchAll.splice(0, logBatchAll.length));
+            requestCount = 0;
+        }
+    }
+}
 
-//     return next();
-// }
+function logAll(req) {
+    const date = getISTDateString();
+    const method = req.method;
+    const path = req.url;
+    const ip = '192.168.1.1';
 
+    const requests = getRequestsArray(date, method, path, ip);
+    logBatchAll.push(...requests);
+}
 
+export default async function requestLogger(req, res, next) {
 
-
-
-
-
-
-// import { createLogger, format, transports } from 'winston';
-// const { combine, timestamp, printf, colorize } = format;
-
-// const customFormat = printf(({ level, message, timestamp }) => {
-//     return `${timestamp} ${level}: ${message}`;
-// });
-
-// const logger = createLogger({
-//     level: 'info', 
-//     format: combine(
-//         timestamp(),
-//         customFormat
-//     ),
-//     transports: [
-//         new transports.Console({
-//             format: combine(
-//                 colorize(),
-//                 customFormat
-//             )
-//         }),
-//         new transports.File({ filename: 'logs/error.log', level: 'error' }),
-//         new transports.File({ filename: 'logs/combined.log' })
-//     ]
-// });
-
-// logger.info('This is an info log');
-// logger.error('This is an error log');
-
-
-
-
-
-
-
-
-
-// import logger from '../utils/logger.js';
-// import getISTDateString from '../utils/getDate.js'; 
-
-// const requestLogger = (req, res, next) => {
-//     const start = Date.now();
-
-//     res.on('finish', () => {
-//         const duration = Date.now() - start;
-//         const logMessage = `${getISTDateString()} | ${req.method} ${req.originalUrl} | Status: ${res.statusCode} | Duration: ${duration}ms`;
-        
-//         if (res.statusCode >= 400) {
-//             logger.error(logMessage);
-//         } else {
-//             logger.info(logMessage);
-//         }
-//     });
-
-//     next();
-// };
-
-// export default requestLogger;
+    logAll(req);
+    await logUrl(req);
+    next();
+}
