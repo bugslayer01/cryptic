@@ -266,6 +266,7 @@ spline-viewer {
     width: 100%;
     height: 50%;
     margin-right: 0;
+    display: none;
   }
 
   .links {
