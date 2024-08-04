@@ -13,7 +13,7 @@ import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
 import requestLogger from "./src/middlewares/requestLogger.js";
 import rateLimiter from "./src/middlewares/rateLimiter.js";
-
+console.log(req.connection.remoteAddress);
 // Configure environment variables
 dotenv.config();
 
@@ -52,9 +52,7 @@ app.use(authRoute);
 app.use(mainRoute);
 app.use(crypticRoute)
 app.use(adminRoute)
-app.get("/headers", (req, res) => {
-  res.send(req.headers);
-});
+
 // Handle 404 errors
 app.use((req, res, next) => {
   res.status(404).render("404", { url: req.originalUrl });

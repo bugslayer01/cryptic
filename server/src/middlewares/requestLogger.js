@@ -121,7 +121,7 @@ function getRequestsArray(date, method, path, ip) {
 }
 
 async function logUrl(req) {
-    const assetExtensions = ['.css', '.js', '.mp4', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot'];
+    const assetExtensions = ['.css', '.js', '.mp4', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.otf'];
     const url = req.url.toLowerCase();
 
     const isAsset = assetExtensions.some(extension => url.endsWith(extension));
@@ -130,7 +130,7 @@ async function logUrl(req) {
         const date = getISTDateString();
         const method = req.method;
         const path = req.url;
-        const ip = '192.168.1.1';
+        const ip = req.headers['do-connecting-ip'] || req.connection.remoteAddress;
 
         const requests = getRequestsArray(date, method, path, ip);
         logBatch.push(...requests);
@@ -148,7 +148,7 @@ function logAll(req) {
     const date = getISTDateString();
     const method = req.method;
     const path = req.url;
-    const ip = '192.168.1.1';
+    const ip = req.headers['do-connecting-ip'] || req.connection.remoteAddress;
 
     const requests = getRequestsArray(date, method, path, ip);
     logBatchAll.push(...requests);
