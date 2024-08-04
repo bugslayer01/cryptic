@@ -94,7 +94,6 @@ router.route('/registermember')
     });
 
 router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
-    const backURL = req.header('Referer') || '/phoenix';
     if (req.admin) {
         const { _id } = req.params;
         const user = await User.findById(_id);
@@ -149,7 +148,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
             console.log(error);
         }
     }
-    return res.redirect(backURL);
+    return res.redirect('/team');
 });
 
 router.get('/leaderboard', checkAuth, async (_, res) => {
