@@ -167,7 +167,7 @@
     <h3 class="font-bold">Score - <%= team.questionData.score %></h3>
     <% if(team.questionData.current < 11){ %>
     <h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
-    <h3 class="font-bold">Time spent on current question - <span class="time-taken" data-submit-time='<% if(team.questionData.current == 0) { %><%= new Date( new Date("Aug 3, 2024 23:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(team.questionData.questions[team.questionData.current - 1].submitTime).toISOString()  %><% } %>'></span></h3>
+    <h3 class="font-bold">Time spent on current question - <span class="time-taken" data-submit-time='<% if(team.questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(team.questionData.questions[team.questionData.current - 1].submitTime).toISOString()  %><% } %>'></span></h3>
     <% } else{ %>
         <h1 class="text-4xl font-bold text-green-400">Game Completed</h1>
         <% } %>

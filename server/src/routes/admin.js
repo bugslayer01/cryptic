@@ -91,7 +91,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
     }
     try {
         const { show, loggedIn, teamName, sort } = req.query;
-        if (show == 'users' || !show) {
+        if (show == 'users') {
             let users = null
             await updateLoggedState();
             if (loggedIn == 'true') {
@@ -118,7 +118,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             return res.render('admin', { query: "allUsers", userdata: users, teams });
 
         }
-        if (show == 'teams') {
+        if (show == 'teams' || !show) {
             let teams = null;
             let teamsData = null;
             let leaderList = []
@@ -300,7 +300,8 @@ router.route('/phoenix/award')
         if (!req.admin) {
             return res.redirect('/phoenix/login');
         }
-        const { teamId, points } = req.body;
+        let { teamId, points } = req.body;
+        points = parseInt(points);
         const teams = await Team.find();
         const team = await Team.findById(teamId);
         team.questionData.score += points;
