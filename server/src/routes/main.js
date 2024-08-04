@@ -117,7 +117,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
                 return res.status(500).send('Failed to delete team');
             }
         }
-        return res.redirect(backURL)
+        return res.redirect('/phoenix')
     } else if (!req.user) {
         return res.redirect('/login');
     } else if (req.user?.isLeader) {
@@ -143,7 +143,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
             else {
                 return res.send("<h1>Zyada hacker banne ki koshish kar rahe ho🤡</h1>");
             }
-            return res.redirect(backURL);
+            return res.redirect('/team');
         } catch (error) {
             res.status(500).send('Internal Server Error');
             console.log(error);
