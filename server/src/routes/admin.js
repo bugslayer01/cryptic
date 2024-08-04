@@ -30,7 +30,7 @@ router.route('/phoenix/superlogin')
             const { password } = req.body;
             if (password == process.env.superaccesskey) {
                 const token = setSuperUser({ message: "You are logged in My Lord" });
-                res.cookie('titan', token, { httpOnly: true });
+                res.cookie('titan', token, { httpOnly: true, secure: (process.env.NODE_ENV || 'dev') === 'prod' });
                 return res.redirect('/phoenix/settings');
             }
             else
@@ -224,7 +224,7 @@ router.route('/phoenix/login')
             }
             const token = setAdmin({ id: admin._id, username: admin.username });
 
-            res.cookie('pelican', token, { httpOnly: true });
+            res.cookie('pelican', token, { httpOnly: true, secure: (process.env.NODE_ENV || 'dev') === 'prod' });
             res.redirect('/phoenix');
         } catch (error) {
             console.log(error);

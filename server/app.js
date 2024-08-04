@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import mongoSanitize from "express-mongo-sanitize";
 import methodOverride from 'method-override'
 import helmet from "helmet";
+import csrf from "csurf";
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
 import adminRoute from './src/routes/admin.js'
@@ -18,7 +19,7 @@ import rateLimiter from "./src/middlewares/rateLimiter.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -33,12 +34,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(methodOverride("_method"));
 app.use(mongoSanitize());
+app.disable('x-powered-by');
 //helmet
 app.use(helmet.xssFilter()); 
 app.use(helmet.noSniff()); 
 app.use(helmet.ieNoOpen());
 app.use(helmet.hsts());
 app.use(helmet.referrerPolicy());
+app.use(helmet.frameguard({ action: 'deny' }));
+// Set up CSRF protection middleware
+app.use(csrf({ cookie: true }));
 
 // Set up view engine
 app.set("view engine", "ejs");

@@ -258,10 +258,8 @@
         const timeElements = document.querySelectorAll('.time-taken');
         
         timeElements.forEach(function(element) {
-            // console.log(element.dataset.submitTime);
             const submitTime = new Date(new Date(element.dataset.submitTime).getTime() - (5 * 60 + 30) * 60 * 1000);
             const currentTime = new Date();
-            console.log(submitTime, currentTime);
             const timeDiff = currentTime - submitTime;
             
             const seconds = Math.floor((timeDiff / 1000) % 60);
