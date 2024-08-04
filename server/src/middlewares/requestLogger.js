@@ -155,7 +155,7 @@ function logAll(req) {
 }
 
 export default async function requestLogger(req, res, next) {
-
+    console.log(req.connection.remoteAddress);
     logAll(req);
     await logUrl(req);
     next();

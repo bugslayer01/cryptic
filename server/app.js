@@ -13,7 +13,7 @@ import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
 import requestLogger from "./src/middlewares/requestLogger.js";
 import rateLimiter from "./src/middlewares/rateLimiter.js";
-console.log(req.connection.remoteAddress);
+
 // Configure environment variables
 dotenv.config();
 
