@@ -19,8 +19,6 @@ export default async function getRanks() {
         ranks[team.teamName] = index + 1;
     });
 
-    return ranks
+    return ranks;
 
 }
-
-// req.admin

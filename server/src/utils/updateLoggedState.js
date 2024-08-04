@@ -1,7 +1,7 @@
-import User from "../models/user.js";
-import Team from "../models/team.js";
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv'
+import User from "../models/user.js";
+import Team from "../models/team.js";
 dotenv.config();
 
 export default async function updateLoggedState(teamName = null) {
@@ -11,17 +11,16 @@ export default async function updateLoggedState(teamName = null) {
             return;
         }
         for (let user of users) {
-            updateOne(user)
+            updateOne(user);
         }
     }
     else {
-        console.log(teamName)
         const team = await Team.findOne({ teamName }).populate('members');
         if (!team) {
             return;
         }
         for (let user of team.members) {
-            updateOne(user)
+            updateOne(user);
         }
     }
     return;

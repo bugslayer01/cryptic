@@ -19,7 +19,7 @@ export async function getUser(token) {
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'notaverygoodsecret');
         return decoded;
     } catch (err) {
-        const decoded = jwt.decode(token)
+        const decoded = jwt.decode(token);
         const user = await User.findById(decoded._id);
         if(!user){
             console.log('User not found in database');

@@ -6,7 +6,6 @@ import dotenv from "dotenv";
 import mongoSanitize from "express-mongo-sanitize";
 import methodOverride from 'method-override'
 import helmet from "helmet";
-import csrf from "csurf";
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
 import adminRoute from './src/routes/admin.js'
@@ -42,8 +41,6 @@ app.use(helmet.ieNoOpen());
 app.use(helmet.hsts());
 app.use(helmet.referrerPolicy());
 app.use(helmet.frameguard({ action: 'deny' }));
-// Set up CSRF protection middleware
-app.use(csrf({ cookie: true }));
 
 // Set up view engine
 app.set("view engine", "ejs");

@@ -96,7 +96,7 @@ router.route('/cryptic')
                 return res.redirect('/cryptic');
             }
             if (team.isBlocked) {
-                return res.redirect('/cryptic')
+                return res.redirect('/cryptic');
             }
             user.noOfAttempts += 1;
             const current = team.questionData.current;
@@ -109,7 +109,7 @@ router.route('/cryptic')
                     team.questionData.questions[current].submitTime = new Date(new Date().getTime() + (5 * 60 + 30) * 60 * 1000);
                     team.questionData.wrongAttempts = 0;
                     team.questionData.score += questions[current].score;
-                    user.noOfQuestionsAnswered += 1
+                    user.noOfQuestionsAnswered += 1;
                     if (current == 0) {
                         team.questionData.questions[0].timeTaken = team.questionData.questions[0].submitTime - startTime;
                     }
@@ -166,7 +166,7 @@ router.route('/cryptic')
             await team.save();
             return res.redirect('/cryptic')
         } catch (error) {
-            console.log(error)
+            console.log(error);
             return res.render('cryptic', { error: error.errors[0].message });
         }
     });

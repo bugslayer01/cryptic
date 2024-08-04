@@ -45,25 +45,71 @@ let requestCount = 0;
 const BATCH_SIZE = 100;
 
 function getRequestsArray(date, method, path, ip) {
-    const text = `${date} | ${method} ${path} | ${ip} \n`;
-
     const requests = [
         {
             insertText: {
                 location: { index: 1 },
-                text: text
+                text: `${date} | ${method} ${path} | ${ip} \n`
             }
         },
         {
             updateTextStyle: {
                 range: {
                     startIndex: 1,
-                    endIndex: 1 + text.length
+                    endIndex: date.length + 1
                 },
                 textStyle: {
                     foregroundColor: {
                         color: {
-                            rgbColor: { red: 0.0, green: 0.0, blue: 1.0 }
+                            rgbColor: { red: 0.5, green: 0.0, blue: 0.5 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 4,
+                    endIndex: date.length + 4 + method.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 1.0, green: 0.65, blue: 0.0 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 5 + method.length,
+                    endIndex: date.length + 5 + method.length + path.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 0.0, green: 0.5, blue: 0.5 } 
+                        }
+                    }
+                },
+                fields: 'foregroundColor'
+            }
+        },
+        {
+            updateTextStyle: {
+                range: {
+                    startIndex: date.length + 8 + method.length + path.length,
+                    endIndex: date.length + 8 + method.length + path.length + ip.length
+                },
+                textStyle: {
+                    foregroundColor: {
+                        color: {
+                            rgbColor: { red: 0.68, green: 0.85, blue: 0.9 }
                         }
                     }
                 },
@@ -71,8 +117,7 @@ function getRequestsArray(date, method, path, ip) {
             }
         }
     ];
-
-    return requests;
+    return requests
 }
 
 async function logUrl(req) {
@@ -109,7 +154,7 @@ function logAll(req) {
     logBatchAll.push(...requests);
 }
 
-export default async function requestLogger(req, res, next) {
+export default async function requestLogger(req, _, next) {
     logAll(req);
     await logUrl(req);
     next();

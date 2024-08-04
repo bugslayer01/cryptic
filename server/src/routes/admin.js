@@ -17,14 +17,14 @@ dotenv.config();
 router.route('/phoenix/superlogin')
     .get(checkAdmin, (req, res) => {
         if (!req.admin) {
-            return res.redirect('/phoenix/login')
+            return res.redirect('/phoenix/login');
         }
         res.render('superlogin', { error: null });
     })
 
     .post(checkAdmin, (req, res) => {
         if (!req.admin) {
-            return res.redirect('/phoenix/login')
+            return res.redirect('/phoenix/login');
         }
         try {
             const { password } = req.body;
@@ -36,20 +36,20 @@ router.route('/phoenix/superlogin')
             else
                 return res.render('superlogin', { error: "Wrong Key" });
         } catch (err) {
-            console.log(err)
+            console.log(err);
             return res.status(500).send("Internal Server Error");
         }
     });
 router.route('/phoenix/settings')
     .get(checkAdmin, checkSuperUser, async (req, res) => {
         if (!req.admin) {
-            return res.redirect('/phoenix/login')
+            return res.redirect('/phoenix/login');
         }
         if (!req.superuser) {
             return res.redirect('/phoenix/superlogin');
         }
 
-        let { flash } = req.query
+        let { flash } = req.query;
         const control = await Control.findOne();
 
         res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations });
@@ -57,7 +57,7 @@ router.route('/phoenix/settings')
 
     .put(checkAdmin, checkSuperUser, async (req, res) => {
         if (!req.admin) {
-            return res.redirect('/phoenix/login')
+            return res.redirect('/phoenix/login');
         }
         if (!req.superuser) {
             return res.redirect('/phoenix/superlogin');
@@ -79,7 +79,7 @@ router.route('/phoenix/settings')
 
             return res.redirect('/phoenix/settings?flash=true');
         } catch (err) {
-            console.log(err)
+            console.log(err);
             return res.status(500).send("Internal Server Error");
         }
     });
@@ -87,12 +87,12 @@ router.route('/phoenix/settings')
 
 router.get('/phoenix', checkAdmin, async (req, res) => {
     if (!req.admin) {
-        return res.redirect('/phoenix/login')
+        return res.redirect('/phoenix/login');
     }
     try {
         const { show, loggedIn, teamName, sort } = req.query;
         if (show == 'users') {
-            let users = null
+            let users = null;
             await updateLoggedState();
             if (loggedIn == 'true') {
                 users = await User.find({ loggedIn: true }).collation({ locale: 'en', strength: 2 }).sort({ username: 1 });
@@ -112,8 +112,8 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             }
             let teams = []
             for (let user of users) {
-                const team = await Team.findById(user.teamId)
-                teams.push(team.teamName)
+                const team = await Team.findById(user.teamId);;
+                teams.push(team.teamName);
             }
             return res.render('admin', { query: "allUsers", userdata: users, teams });
 
@@ -121,7 +121,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         if (show == 'teams' || !show) {
             let teams = null;
             let teamsData = null;
-            let leaderList = []
+            let leaderList = [];
             const ranks = await getRanks();
             if (sort == 'alpha') {
                 teams = await Team.find().collation({ locale: 'en', strength: 2 }).sort({ teamName: 1 });
@@ -133,13 +133,13 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
                 for (let i = 1; i <= teams.length; i++) {
                     for (let j = 0; j < teams.length; j++) {
                         if (i == ranks[teams[j].teamName]) {
-                            teamsData.push(teams[j])
+                            teamsData.push(teams[j]);
                         }
                     }
                 }
             }
             else {
-                teams = await Team.find()
+                teams = await Team.find();
                 teamsData = teams;
             }
             for (let team of teamsData) {
@@ -150,7 +150,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         }
         if (show == 'teamdetails' && teamName) {
             await updateLoggedState(teamName)
-            const ranks = await getRanks()
+            const ranks = await getRanks();
             const team = await Team.findOne({
                 teamName: {
                     $regex: new RegExp('^' + teamName.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '$', 'i')
@@ -159,8 +159,8 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
             if (!team) {
                 return res.send(`<h1>No team with name ${teamName} found`);
             }
-            const nameOfTeam = team.teamName
-            return res.render('admin', { query: 'teamdetails', team, userdata: team.members, ranks, nameOfTeam })
+            const nameOfTeam = team.teamName;
+            return res.render('admin', { query: 'teamdetails', team, userdata: team.members, ranks, nameOfTeam });
         }
     } catch (error) {
         console.log(error);
@@ -202,14 +202,14 @@ router.route('/tempreg')
 router.route('/phoenix/login')
     .get((req, res) => {
         if (req.pelican) {
-            return res.redirect('/admin')
+            return res.redirect('/admin');
         }
         return res.render('adminlogin', { error: null });
     })
 
     .post(async (req, res) => {
         if (req.pelican) {
-            return res.redirect('/admin')
+            return res.redirect('/admin');
         }
         try {
             const { username, password } = adminSchema.parse(req.body);
@@ -234,10 +234,10 @@ router.route('/phoenix/login')
 
 router.get('/phoenix/blocked', checkAdmin, async (req, res) => {
     if (!req.admin) {
-        return res.redirect('/phoenix/login')
+        return res.redirect('/phoenix/login');
     }
-    let leaderList = []
-    const ranks = await getRanks()
+    let leaderList = [];
+    const ranks = await getRanks();
     const teamsData = await Team.find({ isBlocked: true });
     for (let team of teamsData) {
         const leader = await User.findById(team.members[0]);
@@ -248,43 +248,43 @@ router.get('/phoenix/blocked', checkAdmin, async (req, res) => {
 
 router.post('/phoenix/unblock/:_id', checkAdmin, async (req, res) => {
     if (!req.admin) {
-        return res.redirect('/phoenix/login')
+        return res.redirect('/phoenix/login');
     }
     const { _id } = req.params;
     const team = await Team.findById(_id);
-    team.isBlocked = false
+    team.isBlocked = false;
     team.questionData.wrongAttempts = 0;
     if (team.questionData.currentDare != 404 && team.questionData.currentDare != 500) {
         team.questionData.daresCompleted.push(team.questionData.currentDare);
     }
     team.questionData.currentDare = null;
-    await team.save()
-    res.redirect('/phoenix/blocked')
+    await team.save();
+    res.redirect('/phoenix/blocked');
 
 });
 router.post('/phoenix/block/:_id', checkAdmin, async (req, res) => {
     if (!req.admin) {
-        return res.redirect('/phoenix/login')
+        return res.redirect('/phoenix/login');
     }
     const { _id } = req.params;
     const team = await Team.findById(_id);
     team.isBlocked = true;
-    team.questionData.currentDare = 500 //Someone delibirately blocked the team from the admin side
+    team.questionData.currentDare = 500; //Someone delibirately blocked the team from the admin side
     team.save();
-    return res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`)
+    return res.redirect(`/phoenix?show=teamdetails&teamName=${team.teamName}`);
 })
 
 router.delete('/phoenix/deleteteam/:_id', checkAdmin, async (req, res) => {
     if (!req.admin) {
-        return res.redirect('/phoenix/login')
+        return res.redirect('/phoenix/login');
     }
-    const { _id } = req.params
+    const { _id } = req.params;
     const team = await Team.findById(_id).populate('members');
     for (let member of team.members) {
         await User.findByIdAndDelete(member._id);
     }
     await Team.findByIdAndDelete(team._id);
-    return res.redirect('/phoenix?show=teams')
+    return res.redirect('/phoenix?show=teams');
 });
 
 router.route('/phoenix/award')
@@ -306,7 +306,7 @@ router.route('/phoenix/award')
         const team = await Team.findById(teamId);
         team.questionData.score += points;
         await team.save();
-        return res.render('award', { teams, flash: `${points} points awarded to ${team.teamName}` })
+        return res.render('award', { teams, flash: `${points} points awarded to ${team.teamName}` });
     });
 
 export default router;

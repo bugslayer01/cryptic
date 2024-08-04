@@ -23,7 +23,7 @@ router.get('/login', (req, res) => {
 router.post('/register', regActive, async (req, res) => {
     try {
         const { teamName, username, password } = registerSchema.parse(req.body);
-        let email = req.body.email.toLowerCase()
+        let email = req.body.email.toLowerCase();
         const teamExists = await Team.findOne({
             teamName: {
                 $regex: new RegExp('^' + teamName.toLowerCase().replace(/[.*+?^${}()|[\]\\%&-]/g, '\\$&') + '$', 'i')
@@ -58,7 +58,7 @@ router.post('/register', regActive, async (req, res) => {
             isLeader: true,
         });
         let newUser = await user.save();
-        team.members.push(newUser._id)
+        team.members.push(newUser._id);
         await team.save();
         sendMail({teamName, username, email});
         return res.redirect("/login");
@@ -94,7 +94,6 @@ router.post('/login', async (req, res) => {
         user.currentToken = token;
         user.loggedIn = true;
         await user.save();
-        // res.cookie('token', token, { httpOnly: true });
 
         return res.redirect('/cryptic');
     } catch (error) {
@@ -115,11 +114,11 @@ router.get('/logout', checkAuth, async (req, res) => {
     }
     req.user = null;
     req.admin = null;
-    req.superuser = null
+    req.superuser = null;
     res.clearCookie('token');
     res.clearCookie('pelican');
     res.clearCookie('titan');
-    return res.redirect('/login')
+    return res.redirect('/login');
 })
 
 export default router;
