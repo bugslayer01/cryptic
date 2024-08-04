@@ -172,11 +172,17 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
 });
 router.route('/tempreg')
     .get((req, res) => {
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'prod') {
+            return res.redirect('/404');
+        }
         return res.render('registeradmin', { error: null });
     })
 
     .post(async (req, res) => {
         try {
+            if (!process.env.NODE_ENV || process.env.NODE_ENV === 'prod') {
+                return res.redirect('/404');
+            }
             const { username, password } = adminSchema.parse(req.body);
             const hash = await bcrypt.hash(password, 12);
             const adminCheck = await Admin.findOne({ username });

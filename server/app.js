@@ -3,7 +3,9 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import mongoSanitize from "express-mongo-sanitize";
 import methodOverride from 'method-override'
+import helmet from "helmet";
 import authRoute from './src/routes/auth.js'
 import mainRoute from './src/routes/main.js'
 import adminRoute from './src/routes/admin.js'
@@ -30,6 +32,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
 app.use(methodOverride("_method"));
+app.use(mongoSanitize());
+//helmet
+app.use(helmet.xssFilter()); 
+app.use(helmet.noSniff()); 
+app.use(helmet.ieNoOpen());
+app.use(helmet.hsts());
+app.use(helmet.referrerPolicy());
 
 // Set up view engine
 app.set("view engine", "ejs");

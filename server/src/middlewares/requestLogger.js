@@ -130,7 +130,7 @@ async function logUrl(req) {
         const date = getISTDateString();
         const method = req.method;
         const path = req.url;
-        const ip = req.headers['x-real-ip'];
+        const ip = '192.168.1.1';
 
         const requests = getRequestsArray(date, method, path, ip);
         logBatch.push(...requests);
@@ -148,7 +148,7 @@ function logAll(req) {
     const date = getISTDateString();
     const method = req.method;
     const path = req.url;
-    const ip = req.headers['x-real-ip'];
+    const ip = '192.168.1.1';
 
     const requests = getRequestsArray(date, method, path, ip);
     logBatchAll.push(...requests);

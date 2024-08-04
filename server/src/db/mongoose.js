@@ -4,7 +4,7 @@ dotenv.config();
 
 export default function connectMongo() {
     mongoose
-        .connect("mongodb+srv://parthktr9400:FYSukMFUMSyrEhWo@team.88fkbkw.mongodb.net/?retryWrites=true&w=majority&appName=team")
+        .connect(process.env.MONGODB_URI)
         .then(async () => {
             console.log("Connected to MongoDB");
         })

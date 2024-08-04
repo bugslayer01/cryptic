@@ -7,6 +7,7 @@ import { setUser } from '../utils/jwtfuncs.js';
 import { checkAuth } from '../middlewares/auth.js';
 import regActive from '../middlewares/registrations.js';
 import { loginSchema, registerSchema } from '../utils/zodSchemas.js';
+import sendMail from '../utils/mail.js';
 
 dotenv.config();
 const router = express.Router();
@@ -59,7 +60,7 @@ router.post('/register', regActive, async (req, res) => {
         let newUser = await user.save();
         team.members.push(newUser._id)
         await team.save();
-
+        sendMail({teamName, username, email});
         return res.redirect("/login");
 
     } catch (error) {

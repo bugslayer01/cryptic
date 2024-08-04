@@ -8,12 +8,7 @@ const controlSchema = new mongoose.Schema({
     registrations: {
         type: Boolean,
         default: false
-    },
-    totalRequests: {
-        type: Number,
-        default: 0
     }
-    //will add more if needed
 }, {
     timestamps: true
 });

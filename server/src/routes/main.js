@@ -8,6 +8,7 @@ import getRanks from '../utils/rank.js';
 import regActive from '../middlewares/registrations.js';
 import eventActive from '../middlewares/cryptic.js'
 import { memberRegisterSchema } from '../utils/zodSchemas.js';
+import sendMail from '../utils/mail.js';
 const router = express.Router();
 
 router.get('/', async (req, res) => {
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/team', checkAuth, async (req, res) => {
+router.get('/team', checkAuth, regActive, async (req, res) => {
     if (!req.user) {
         return res.redirect('/login')
     }
@@ -82,7 +83,7 @@ router.route('/registermember')
             let newUser = await user.save();
             team.members.push(newUser._id)
             await team.save();
-
+            sendMail({username, email, teamName: team.teamName})
             return res.redirect("/team");
         } catch (error) {
             console.log(error)
