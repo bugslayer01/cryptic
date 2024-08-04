@@ -124,14 +124,22 @@
                 <div class="flex-1">
                     <p><span class="font-semibold">Score:</span> <%= teamsData[i].questionData.score %></p>
                 </div>
+                <% if(teamsData[i].questionData.current > 10){ %>
+                                <h1 class="font-bold text-green-400" >Game Completed &emsp; &emsp; &emsp;  &emsp; &emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
+                <% }else{ %>
+                    <div class="flex-1">
+                        <p><span class="font-semibold">Current Question:</span> <%= teamsData[i].questionData.current %></p>
+                    </div>
+                    <div class="flex-1">
+                        <p>
+                            <span class="font-semibold">Time Spent on Current Question:</span>
+                            <span class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 3, 2024 23:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
+                        </p>
+                        
+                    </div>
+                <% } %>
                 <div class="flex-1">
-                    <p><span class="font-semibold">Current Question:</span> <%= teamsData[i].questionData.current %></p>
-                </div>
-                <div class="flex-1">
-                    <p><span class="font-semibold">Time Spent on Current Question:</span> To be configured</p>
-                </div>
-                <div class="flex-1">
-                    <p><span class="font-semibold">No of Members:</span> <%= teamsData[i].members.length %></p>
+                    <p>&emsp;<span class="font-semibold">No of Members:</span> <%= teamsData[i].members.length %></p>
                 </div>
                 <div class="flex-1 text-right">
                     <a href="/phoenix?show=teamdetails&teamName=<%= teamsData[i].teamName %>">
@@ -151,9 +159,13 @@
     <% if(query == 'teamdetails'){ %>
     <h1 class="text-3xl font-bold"><%= team.teamName %></h1>
     <h2 class="text-xl font-bold">Rank - <%= ranks[nameOfTeam] %></h2>
-    <h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
     <h3 class="font-bold">Score - <%= team.questionData.score %></h3>
-    <h3 class="font-bold">Time spent on current question - To be configured</h3>
+    <% if(team.questionData.current < 11){ %>
+    <h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
+    <h3 class="font-bold">Time spent on current question - <span class="time-taken" data-submit-time='<% if(team.questionData.current == 0) { %><%= new Date( new Date("Aug 3, 2024 23:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(team.questionData.questions[team.questionData.current - 1].submitTime).toISOString()  %><% } %>'></span></h3>
+    <% } else{ %>
+        <h1 class="text-4xl font-bold text-green-400">Game Completed</h1>
+        <% } %>
     <div class="container mx-auto mt-8 px-4">
         <% if (userdata && userdata.length > 0) { %>
         <% for(let i = 0; i < userdata.length; i++){ %>
@@ -236,6 +248,32 @@
                 }
             });
         });
+
+        function updateTime() {
+        const timeElements = document.querySelectorAll('.time-taken');
+        
+        timeElements.forEach(function(element) {
+            // console.log(element.dataset.submitTime);
+            const submitTime = new Date(new Date(element.dataset.submitTime).getTime() - (5 * 60 + 30) * 60 * 1000);
+            const currentTime = new Date();
+            console.log(submitTime, currentTime);
+            const timeDiff = currentTime - submitTime;
+            
+            const seconds = Math.floor((timeDiff / 1000) % 60);
+            const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+            const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+
+            element.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        });
+    }
+
+    // Initial update
+    updateTime();
+
+    // Update every second
+    setInterval(updateTime, 1000);
+
+
     </script>
 </body>
 

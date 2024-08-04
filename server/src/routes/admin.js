@@ -10,7 +10,7 @@ import getRanks from '../utils/rank.js';
 import Control from '../models/settings.js';
 import updateLoggedState from '../utils/updateLoggedState.js';
 import { adminSchema } from '../utils/zodSchemas.js';
-
+const startTime = new Date("Aug 3, 2024 23:15:00")
 const router = express.Router();
 dotenv.config();
 
@@ -90,6 +90,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         return res.redirect('/phoenix/login')
     }
     try {
+        console.log(startTime)
         const { show, loggedIn, teamName, sort } = req.query;
         console.log(req.query)
         if (show == 'users' || !show) {
@@ -147,7 +148,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
                 const leader = await User.findById(team.members[0]);
                 leaderList.push(leader.username);
             }
-            return res.render('admin', { query: 'allTeams', teamsData, ranks, leaderList });
+            return res.render('admin', { query: 'allTeams', teamsData, ranks, leaderList, startTime });
         }
         if (show == 'teamdetails' && teamName) {
             await updateLoggedState(teamName)

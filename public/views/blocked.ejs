@@ -64,7 +64,7 @@
                                 </p>
                             </div>
                             <div class="flex-1">
-                                <p><span class="font-semibold">Time Spent on Current Question:</span> To be configured
+                                <p><span class="font-semibold">Time Spent on Current Question:</span> <span class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 3, 2024 23:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
                                 </p>
                             </div>
                             <div class="flex-1">
@@ -100,6 +100,31 @@
                             <p class="text-center text-gray-500">No teams are blocked</p>
                             <% } %>
         </div>
+        <script>
+            function updateTime() {
+        const timeElements = document.querySelectorAll('.time-taken');
+        
+        timeElements.forEach(function(element) {
+            // console.log(element.dataset.submitTime);
+            const submitTime = new Date(new Date(element.dataset.submitTime).getTime() - (5 * 60 + 30) * 60 * 1000);
+            const currentTime = new Date();
+            console.log(submitTime, currentTime);
+            const timeDiff = currentTime - submitTime;
+            
+            const seconds = Math.floor((timeDiff / 1000) % 60);
+            const minutes = Math.floor((timeDiff / (1000 * 60)) % 60);
+            const hours = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
+
+            element.textContent = `${hours}h ${minutes}m ${seconds}s`;
+        });
+    }
+
+    // Initial update
+    updateTime();
+
+    // Update every second
+    setInterval(updateTime, 1000);
+        </script>
 </body>
 
 </html>

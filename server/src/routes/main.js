@@ -60,6 +60,9 @@ router.route('/registermember')
             const team = await Team.findById(leader.teamId);
             if (!team)
                 return res.redirect('/login')
+            if(team.members.length == 4){
+                return res.render('registerMember', { error: 'Max 4 members allowed' });
+            }
             const usernameExists = await User.findOne({ username })
             const emailExists = await User.findOne({ email });
             if (usernameExists) {

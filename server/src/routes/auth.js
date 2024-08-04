@@ -15,7 +15,6 @@ router.get('/register', regActive, (req, res) => {
     return res.render('register', { error: null });
 });
 
-
 router.get('/login', (req, res) => {
     return res.render('login', { error: null });
 });

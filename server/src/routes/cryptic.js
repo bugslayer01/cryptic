@@ -8,7 +8,7 @@ import eventActive from "../middlewares/cryptic.js";
 import { answerSchema } from "../utils/zodSchemas.js";
 
 const router = express.Router();
-const startTime = new Date("Aug 7, 2024 14:00:00")
+const startTime = new Date("Aug 3, 2024 23:15:00")
 
 router.route('/cryptic')
     .get(checkAuth, eventActive, async (req, res) => {
@@ -16,11 +16,38 @@ router.route('/cryptic')
             return res.redirect('/login');
         }
         try {
+            console.log(req.user)
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
-
+            if(team.members.length < 2){
+                return res.send('Minimum of two members should be in the team to play');
+            }
             if (team.questionData.current > 10) {
-                return res.render('stats');
+                const allQuestions = team.questionData.questions;
+            let lowestTime = 999999999;
+            let highestTime = -99999999;
+            let maxAttempts = -99999999;
+            let totalDares = team.questionData.daresCompleted.length;
+            let question1 = null;
+            let question2 = null;
+            let question3 = null;
+            for(let i = 0; i < allQuestions.length; i++){
+                if(allQuestions[i].timeTaken < lowestTime){
+                    lowestTime = allQuestions[i].timeTaken;
+                    question1 = i;
+                }
+
+                if(allQuestions[i].timeTaken > highestTime){
+                    highestTime = allQuestions[i].timeTaken;
+                    question2 = i;
+                }
+
+                if(allQuestions[i].attempts > maxAttempts){
+                    maxAttempts = allQuestions[i].attempts;
+                    question3 = i;
+                }
+            }
+                return res.render('stats', {lowestTime, highestTime, maxAttempts, totalDares, question1, question2, question3});
             }
             const question = questions[team.questionData.current];
 

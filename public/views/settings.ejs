@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <form action="/phoenix/settings/save" method="POST">
+    <form action="/phoenix/settings?_method=PUT" method="POST">
         <div>
             <h1 class="text-3xl inline-block transform translate-y-5">Cryptic:</h1>
             <input type="checkbox" id="cryptic" class="checkbox" value="true" name="crypticStatus" <% if(eventActive){
