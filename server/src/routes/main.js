@@ -153,7 +153,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
     return res.redirect(backURL);
 });
 
-router.get('/leaderboard', checkAuth, eventActive, async (req, res) => {
+router.get('/leaderboard', checkAuth, async (req, res) => {
     const ranks = await getRanks();
     const teamsData = [];
     const teams = await Team.find();
