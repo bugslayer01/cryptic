@@ -8,7 +8,7 @@ import eventActive from "../middlewares/cryptic.js";
 import { answerSchema } from "../utils/zodSchemas.js";
 
 const router = express.Router();
-const startTime = new Date("Aug 3, 2024 23:15:00")
+const startTime = new Date("Aug 13, 2024 14:15:00");
 
 router.route('/cryptic')
     .get(checkAuth, eventActive, async (req, res) => {
@@ -16,7 +16,6 @@ router.route('/cryptic')
             return res.redirect('/login');
         }
         try {
-            console.log(req.user)
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
             if(team.members.length < 2){

@@ -6,12 +6,11 @@ import Team from '../models/team.js';
 import User from '../models/user.js';
 import getRanks from '../utils/rank.js';
 import regActive from '../middlewares/registrations.js';
-import eventActive from '../middlewares/cryptic.js'
 import { memberRegisterSchema } from '../utils/zodSchemas.js';
 import sendMail from '../utils/mail.js';
 const router = express.Router();
 
-router.get('/', async (req, res) => {
+router.get('/', async (_, res) => {
     try {
         return res.render('dashboard',)
     } catch (err) {
@@ -153,7 +152,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
     return res.redirect(backURL);
 });
 
-router.get('/leaderboard', checkAuth, async (req, res) => {
+router.get('/leaderboard', checkAuth, async (_, res) => {
     const ranks = await getRanks();
     const teamsData = [];
     const teams = await Team.find();

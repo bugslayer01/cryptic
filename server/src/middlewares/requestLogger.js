@@ -42,7 +42,7 @@ async function writeGoogleDocs(documentId, requests) {
 const logBatch = [];
 const logBatchAll = [];
 let requestCount = 0;
-const BATCH_SIZE = 10; // Change this to 700 for production
+const BATCH_SIZE = 700;
 
 function getRequestsArray(date, method, path, ip) {
     const requests = [

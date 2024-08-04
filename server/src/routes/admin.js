@@ -90,9 +90,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         return res.redirect('/phoenix/login')
     }
     try {
-        console.log(startTime)
         const { show, loggedIn, teamName, sort } = req.query;
-        console.log(req.query)
         if (show == 'users' || !show) {
             let users = null
             await updateLoggedState();

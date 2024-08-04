@@ -1,4 +1,4 @@
-let countDownDate = new Date("Aug 7, 2024 14:00:00").getTime(); // will change the date accordingly
+let countDownDate = new Date("Aug 13, 2024 14:15:00").getTime(); // will change the date accordingly
 
 let timer = setInterval(() => {
     let now = new Date().getTime();
@@ -17,3 +17,7 @@ let timer = setInterval(() => {
         document.querySelector("#timer span").innerHTML = "Starting Soon";
     }
 }, 1000);
+
+setInterval(() => {
+    window.location.reload();
+}, 60000);

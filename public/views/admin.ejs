@@ -6,6 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel</title>
+    <link
+    rel="shortcut icon"
+    href="https://res.cloudinary.com/dvhwz7ptr/image/upload/f_auto,q_auto/qubw0db5njuheicndqst"
+    type="image/x-icon"
+  />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="scripts/console.js"></script>
 </head>
@@ -133,7 +138,7 @@
                     <div class="flex-1">
                         <p>
                             <span class="font-semibold">Time Spent on Current Question:</span>
-                            <span class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 3, 2024 23:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
+                            <span class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
                         </p>
                         
                     </div>
@@ -272,7 +277,9 @@
 
     // Update every second
     setInterval(updateTime, 1000);
-
+    setInterval(() => {
+          window.location.reload();
+      }, 60000);
 
     </script>
 </body>
