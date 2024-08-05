@@ -29,6 +29,7 @@ router.get('/team', checkAuth, regActive, async (req, res) => {
         return res.render('team', { userData: team.members, isLeader: req.user.isLeader, teamName: team.teamName })
     } catch (err) {
         console.error('Error fetching user or team data:', err);
+        res.clearCookie('token');
         return res.status(500).send('Internal Server Error');
     }
 });
@@ -151,18 +152,25 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
     return res.redirect('/team');
 });
 
-router.get('/leaderboard', checkAuth, async (_, res) => {
-    const ranks = await getRanks();
-    const teamsData = [];
-    const teams = await Team.find();
-    for (let i = 1; i <= teams.length; i++) {
-        for (let j = 0; j < teams.length; j++) {
-            if (i == ranks[teams[j].teamName]) {
-                teamsData.push(teams[j])
+router.get('/leaderboard', checkAuth, async (req, res) => {
+    try {
+        const ranks = await getRanks();
+        const teamsData = [];
+        const teams = await Team.find();
+
+        for (let i = 1; i <= teams.length; i++) {
+            for (let j = 0; j < teams.length; j++) {
+                if (i == ranks[teams[j].teamName]) {
+                    teamsData.push(teams[j]);
+                }
             }
         }
+
+        return res.render('leaderboard', { teamsData });
+    } catch (error) {
+        console.error('Error during GET /leaderboard:', error);
+        res.status(500).send('Internal Server Error');
     }
-    return res.render('leaderboard', { teamsData })
 });
 
 export default router;
