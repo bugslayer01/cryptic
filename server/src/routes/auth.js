@@ -60,7 +60,7 @@ router.post('/register', regActive, async (req, res) => {
         let newUser = await user.save();
         team.members.push(newUser._id);
         await team.save();
-        sendMail({teamName, username, email});
+        sendMail({ teamName, username, email });
         return res.redirect("/login");
 
     } catch (error) {
@@ -107,18 +107,28 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', checkAuth, async (req, res) => {
-    if (req.user) {
-        const user = await User.findById(req.user._id);
-        user.loggedIn = false;
-        await user.save();
+    try {
+        if (req.user) {
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                res.clearCookie('token');
+                return res.redirect('/register');
+            }
+            user.loggedIn = false;
+            await user.save();
+        }
+        req.user = null;
+        req.admin = null;
+        req.superuser = null;
+        res.clearCookie('token');
+        res.clearCookie('pelican');
+        res.clearCookie('titan');
+        return res.redirect('/login');
+    } catch (error) {
+        console.error('Error during logout:', error);
+        res.status(500).send('Internal Server Error');
     }
-    req.user = null;
-    req.admin = null;
-    req.superuser = null;
-    res.clearCookie('token');
-    res.clearCookie('pelican');
-    res.clearCookie('titan');
-    return res.redirect('/login');
-})
+});
+
 
 export default router;

@@ -3,73 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link
-      rel="shortcut icon"
-      href="assets/images/website/favicon.png"
-      type="image/x-icon"
-    />
+    <link rel="shortcut icon" href="assets/images/website/favicon.png" type="image/x-icon" />
     <title>Registration Form</title>
     <script src="scripts/console.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 300px;
-        }
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-            box-sizing: border-box;
-        }
-        input[type="submit"] {
-            width: 100%;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
         .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 10px;
+            color: #ff4d4f;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
-<body>
-    <form action="/registermember" method="post">
-        <h2>Registration Form</h2>
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required>
-
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-
-        <input type="submit" value="Register">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <form action="/registermember" method="post" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Add Member</h2>
+        
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <input type="text" id="username" name="username" required class="mt-1 mb-4 p-3 border border-gray-300 rounded w-full focus:ring-blue-500 focus:border-blue-500">
+        
+        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+        <input type="email" id="email" name="email" required class="mt-1 mb-4 p-3 border border-gray-300 rounded w-full focus:ring-blue-500 focus:border-blue-500">
+        
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input type="password" id="password" name="password" required class="mt-1 mb-4 p-3 border border-gray-300 rounded w-full focus:ring-blue-500 focus:border-blue-500">
+        
+        <input type="submit" value="Register" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 cursor-pointer">
+        
         <% if(error){ %>
         <p class="error"> <%= error %></p>
         <% } %>
