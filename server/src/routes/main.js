@@ -25,8 +25,14 @@ router.get('/team', checkAuth, regActive, async (req, res) => {
 
     try {
         const user = await User.findById(req.user._id)
-        const team = await Team.findById(user.teamId).populate('members')
-        return res.render('team', { userData: team.members, isLeader: req.user.isLeader, teamName: team.teamName })
+        if(!user){
+            return res.redirect('/login');
+        }
+        const team = await Team.findById(user.teamId).populate('members');
+        if (!team) {
+            return res.redirect('/login');
+        }
+        return res.render('team', { userData: team.members, isLeader: req.user.isLeader, teamName: team.teamName });
     } catch (err) {
         console.error('Error fetching user or team data:', err);
         res.clearCookie('token');
