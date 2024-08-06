@@ -23,17 +23,16 @@ const auth = new google.auth.GoogleAuth({
     scopes: ['https://www.googleapis.com/auth/documents']
 });
 
-async function writeGoogleDocs(documentId, requests) {
+function writeGoogleDocs(documentId, requests) {
     try {
         const docs = google.docs({ version: 'v1', auth });
 
-        const writer = await docs.documents.batchUpdate({
+        docs.documents.batchUpdate({
             documentId,
             requestBody: {
                 requests
             }
         });
-        return writer;
     } catch (error) {
         console.error('error', error);
     }
@@ -120,7 +119,7 @@ function getRequestsArray(date, method, path, ip) {
     return requests
 }
 
-async function logUrl(req) {
+function logUrl(req) {
     const assetExtensions = ['.css', '.js', '.mp4', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf', '.eot', '.otf'];
     const url = req.url.toLowerCase();
 
@@ -137,8 +136,8 @@ async function logUrl(req) {
         requestCount++;
 
         if (requestCount >= BATCH_SIZE) {
-            await writeGoogleDocs(process.env.documentId, logBatch.splice(0, logBatch.length));
-            await writeGoogleDocs(process.env.documentId2, logBatchAll.splice(0, logBatchAll.length));
+            writeGoogleDocs(process.env.documentId, logBatch.splice(0, logBatch.length));
+            writeGoogleDocs(process.env.documentId2, logBatchAll.splice(0, logBatchAll.length));
             requestCount = 0;
         }
     }
@@ -154,8 +153,8 @@ function logAll(req) {
     logBatchAll.push(...requests);
 }
 
-export default async function requestLogger(req, _, next) {
+export default function requestLogger(req, _, next) {
     logAll(req);
-    await logUrl(req);
+    logUrl(req);
     next();
 }

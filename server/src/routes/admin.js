@@ -10,7 +10,7 @@ import getRanks from '../utils/rank.js';
 import Control from '../models/settings.js';
 import updateLoggedState from '../utils/updateLoggedState.js';
 import { adminSchema } from '../utils/zodSchemas.js';
-const startTime = new Date("Aug 3, 2024 23:15:00")
+const startTime = new Date("Aug 13, 2024 14:15:00");
 const router = express.Router();
 dotenv.config();
 
@@ -360,6 +360,5 @@ router.route('/phoenix/award')
             res.status(500).send('Internal Server Error');
         }
     });
-
 
 export default router;
