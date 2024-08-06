@@ -123,7 +123,7 @@ router.get('/logout', checkAuth, async (req, res) => {
         res.clearCookie('token');
         res.clearCookie('pelican');
         res.clearCookie('titan');
-        return res.redirect('/register');
+        return res.redirect('/login');
     } catch (error) {
         console.error('Error during logout:', error);
         res.status(500).send('Internal Server Error');
