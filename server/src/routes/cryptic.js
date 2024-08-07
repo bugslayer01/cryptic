@@ -33,17 +33,17 @@ router.route('/cryptic')
             for(let i = 0; i < allQuestions.length; i++){
                 if(allQuestions[i].timeTaken < lowestTime){
                     lowestTime = allQuestions[i].timeTaken;
-                    question1 = i;
+                    question1 = questions[i].q;
                 }
 
                 if(allQuestions[i].timeTaken > highestTime){
                     highestTime = allQuestions[i].timeTaken;
-                    question2 = i;
+                    question2 = questions[i].q;
                 }
 
                 if(allQuestions[i].attempts > maxAttempts){
                     maxAttempts = allQuestions[i].attempts;
-                    question3 = i;
+                    question3 = questions[i].q;
                 }
             }
                 return res.render('stats', {lowestTime, highestTime, maxAttempts, totalDares, question1, question2, question3});

@@ -112,7 +112,7 @@ router.get('/logout', checkAuth, async (req, res) => {
             const user = await User.findById(req.user._id);
             if (!user) {
                 res.clearCookie('token');
-                return res.redirect('/register');
+                return res.redirect('/login');
             }
             user.loggedIn = false;
             await user.save();
