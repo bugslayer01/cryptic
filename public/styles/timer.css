@@ -52,3 +52,9 @@ body {
     opacity: 0;
   }
 }
+
+@media (max-width:600px){
+  #timer {
+    font-size: 3rem;
+  }
+}

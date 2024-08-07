@@ -10,11 +10,59 @@
       type="image/x-icon"
     />
     <script src="scripts/console.js"></script>
+    <link rel="stylesheet" href="../styles/cursor.css" />
+    <link rel="stylesheet" href="../styles/stats.css">
 </head>
 <body>
-    <h1>Lowest time taken in a question: <%= lowestTime %> question: <%= question1 %></h1>
-    <h1>Highest time taken in a question: <%= highestTime %> question2: <%= question2  %></h1>
-    <h1>maximum number of attempts in a question: <%= maxAttempts %> question3: <%= question3 %></h1>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
+  <div class="nav">
+      <div class="artist">Stats</div>
+      <div class="social-media">
+        <ul>
+          <li>
+            <a href="/">Dashboard</a>
+          </li>
+          <li>
+            <a href="/leaderboard">Leaderboard</a>
+          </li>
+        </ul>
+        <div class="menu">
+          <a href="/logout"><ion-icon name="power"></ion-icon></a>
+        </div>
+      </div>
+    </div>
+  <video
+    src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/ovc1pcbq0lhthc8w5mgo"
+    autoplay
+    muted
+    loop
+    id="back"
+    class="back"
+  ></video>
+  <div id="stats">
+    <h1>Lowest time taken in a question: <%= lowestTime %> >>> <i>Question: <%= question1 %></i></h1><br>
+    <h1>Highest time taken in a question: <%= highestTime %> >>> <i>Question: <%= question2  %></i></h1><br>
+    <h1>maximum number of attempts in a question: <%= maxAttempts %> >>> <i>Question: <%= question3 %></i></h1><br>
     <h1>Total number of dares completed: <%= totalDares %></h1>
+  </div>
 </body>
 </html>
