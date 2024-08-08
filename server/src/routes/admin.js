@@ -62,7 +62,7 @@ router.route('/phoenix/settings')
             res.status(500).send('Internal Server Error');
         }
     })
-    
+
     .put(checkAdmin, checkSuperUser, async (req, res) => {
         if (!req.admin) {
             return res.redirect('/phoenix/login');
@@ -360,5 +360,65 @@ router.route('/phoenix/award')
             res.status(500).send('Internal Server Error');
         }
     });
+router.route('/phoenix/changePassword')
+    .get(checkAdmin, async (req, res) => {
+        try {
+            if (!req.admin) {
+                return res.redirect('/phoenix/login');
+            }
+            const { teamId } = req.query;
+            if (!teamId) {
+                const teams = await Team.find();
+                return res.render('changePassword', { flash: null, teams, show: "teams" });
+            }
+            const team = await Team.findById(teamId).populate('members');
+            if (!team) {
+                const teams = await Team.find();
+                return res.render('changePassword', { flash: 'Team not found', teams, show: "teams" });
+            }
+            return res.render('changePassword', { flash: null, team, show: "team" });
+        } catch (error) {
+            console.error('Error during GET /phoenix/changePassword:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    })
 
+    .post(checkAdmin, async (req, res) => {
+        console.log(req.body);
+        try {
+            if (!req.admin) {
+                return res.redirect('/phoenix/login');
+            }
+            if (!req.body.all) {
+                const { userId, password } = req.body;
+                const user = await User.findById(userId);
+                if (!user) {
+                    const teams = await Team.find();
+                    return res.render('changePassword', { flash: 'User not found', teams, show: "teams" });
+                }
+                const hash = await bcrypt.hash(password, 12);
+                user.password = hash;
+                await user.save();
+                const teams = await Team.find();
+                return res.render('changePassword', { flash: 'Password changed successfully', teams, show: "teams" });
+            }
+            const { teamId, password } = req.body;
+            const team = await Team.findById(teamId).populate('members');
+            if (!team) {
+                const teams = await Team.find();
+                return res.render('changePassword', { flash: 'Team not found', teams, show: "teams" });
+            }
+            const hash = await bcrypt.hash(password, 12);
+            for (let member of team.members) {
+                member.password = hash;
+                await member.save();
+            }
+            const teams = await Team.find();
+            return res.render('changePassword', { flash: 'Password changed successfully', teams, show: "teams" });
+        } catch (error) {
+            console.error('Error during POST /phoenix/changePassword:', error);
+            res.status(500).send('Internal Server Error');
+        }
+    });
+    
 export default router;
