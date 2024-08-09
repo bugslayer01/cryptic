@@ -12,7 +12,6 @@ import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
 import requestLogger from "./src/middlewares/requestLogger.js";
-// import rateLimiter from "./src/middlewares/rateLimiter.js";
 
 // Configure environment variables
 dotenv.config();
@@ -22,11 +21,18 @@ const PORT = process.env.PORT || 8080;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Redirect to www
+app.use((req, res, next) => {
+  if (req.hostname === 'mystixia.live') {
+    return res.redirect(301, `https://www.${req.hostname}${req.url}`);
+  }
+  next();
+});
+
 // MongoDB connection
 connectMongo();
 
 // Middleware setup
-// app.use(rateLimiter)
 app.use(requestLogger)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
