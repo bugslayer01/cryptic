@@ -56,7 +56,7 @@ router.route('/phoenix/settings')
                 return res.render('settings', { flash: 'Control settings not found.', eventActive: false, regActive: false });
             }
 
-            res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations });
+            res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations, statsActive: control.stats });
         } catch (error) {
             console.error('Error during GET /phoenix/settings:', error);
             res.status(500).send('Internal Server Error');
@@ -71,7 +71,7 @@ router.route('/phoenix/settings')
             return res.redirect('/phoenix/superlogin');
         }
         try {
-            let { crypticStatus, regStatus } = req.body;
+            let { crypticStatus, regStatus, statsStatus } = req.body;
             if (!crypticStatus) {
                 crypticStatus = false;
             }
@@ -79,10 +79,15 @@ router.route('/phoenix/settings')
             if (!regStatus) {
                 regStatus = false;
             }
+
+            if (!statsStatus) {
+                statsStatus = false;
+            }
             const control = await Control.findOne();
 
             control.eventActive = crypticStatus;
             control.registrations = regStatus;
+            control.stats = statsStatus;
             await control.save();
 
             return res.redirect('/phoenix/settings?flash=true');
@@ -177,7 +182,7 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
 
 });
 router.route('/tempreg')
-    .get((req, res) => {
+    .get((_, res) => {
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'prod') {
             return res.redirect('/404');
         }
@@ -209,14 +214,14 @@ router.route('/tempreg')
 
 router.route('/phoenix/login')
     .get((req, res) => {
-        if (req.pelican) {
+        if (req.admin) {
             return res.redirect('/admin');
         }
         return res.render('adminlogin', { error: null });
     })
 
     .post(async (req, res) => {
-        if (req.pelican) {
+        if (req.admin) {
             return res.redirect('/admin');
         }
         try {

@@ -8,6 +8,10 @@ const controlSchema = new mongoose.Schema({
     registrations: {
         type: Boolean,
         default: false
+    },
+    stats: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

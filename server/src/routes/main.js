@@ -158,7 +158,7 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
     return res.redirect('/team');
 });
 
-router.get('/leaderboard', checkAuth, async (req, res) => {
+router.get('/leaderboard', async (req, res) => {
     try {
         const ranks = await getRanks();
         const teamsData = [];

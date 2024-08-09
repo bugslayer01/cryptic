@@ -8,6 +8,7 @@ import { checkAuth } from '../middlewares/auth.js';
 import regActive from '../middlewares/registrations.js';
 import { loginSchema, registerSchema } from '../utils/zodSchemas.js';
 import sendMail from '../utils/mail.js';
+import Control from '../models/settings.js';
 
 dotenv.config();
 const router = express.Router();
@@ -16,8 +17,9 @@ router.get('/register', regActive, (req, res) => {
     return res.render('register', { error: null });
 });
 
-router.get('/login', (req, res) => {
-    return res.render('login', { error: null });
+router.get('/login', async (req, res) => {
+    const control = await Control.findOne();
+    return res.render('login', { error: null, registrations: control.registrations });
 });
 
 router.post('/register', regActive, async (req, res) => {
@@ -83,11 +85,13 @@ router.post('/login', async (req, res) => {
             }
         });
         if (!user) {
-            return res.render('login', { error: 'Invalid username or password' });
+            const control = await Control.findOne();
+            return res.render('login', { error: 'Invalid username or password', registrations: control.registrations });
         }
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-            return res.render('login', { error: 'Invalid username or password' });
+            const control = await Control.findOne();
+            return res.render('login', { error: 'Invalid username or password', registrations: control.registrations });
         }
         const token = setUser({ _id: user._id, isLeader: user.isLeader });
         res.cookie('token', token, { httpOnly: true, secure: (process.env.NODE_ENV || 'dev') === 'prod' });

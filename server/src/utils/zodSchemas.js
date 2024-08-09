@@ -25,10 +25,6 @@ export const loginSchema = z.object({
     password: z.string().min(6, { message: "Password is atleast 6 characters long" }),
 });
 
-export const answerSchema = z.object({
-    answer: z.string().min(1, { message: "Please enter the answer" })
-});
-
 export const memberRegisterSchema = z.object({
     username: z.string().min(2, { message: "Username should be atleast 2 characters long" }),
     email: z.string().email({ message: "Please enter a valid email address" }),

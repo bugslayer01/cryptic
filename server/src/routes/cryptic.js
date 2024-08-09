@@ -5,7 +5,6 @@ import Team from "../models/team.js";
 import questions from "../db/questions.js";
 import dares from "../db/dares.js";
 import eventActive from "../middlewares/cryptic.js";
-import { answerSchema } from "../utils/zodSchemas.js";
 
 const router = express.Router();
 const startTime = new Date("Aug 13, 2024 14:15:00");
@@ -19,9 +18,9 @@ router.route('/cryptic')
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
             if(team.members.length < 2){
-                return res.send('Minimum of two members should be in the team to play');
+                return res.send('<h1>Minimum of two members should be in the team to play</h1>');
             }
-            if (team.questionData.current > 10) {
+            if (team.questionData.current > 10 || req.stats) {
                 const allQuestions = team.questionData.questions;
             let lowestTime = 999999999;
             let highestTime = -99999999;
@@ -55,7 +54,7 @@ router.route('/cryptic')
                 let dareNo = null;
                 if (!team.questionData.currentDare) {
                     if (team.questionData.daresCompleted.length == dares.length) {
-                        dare = "Ask the organisers for the dare";
+                        dare = "Ask MLSC for the dare";
                         team.questionData.currentDare = 404; //If the team has completed all the available dares
                     }
                     else {
@@ -70,7 +69,12 @@ router.route('/cryptic')
                 }
                 else {
                     dareNo = team.questionData.currentDare;
-                    dare = dares[dareNo - 1];
+                    if(team.questionData.currentDare == 500){
+                        dare = "You have been blocked by MLSC";
+                    }
+                    else{
+                        dare = dares[dareNo - 1];
+                    }
                 }
                 await team.save();
                 return res.render('cryptic', { question, isBlocked: true, dare, dareNo });
@@ -88,8 +92,12 @@ router.route('/cryptic')
             return res.redirect('/login');
         }
         try {
-            let { answer } = answerSchema.parse(req.body);
+            let { answer } = req.body;
             answer = answer.trim();
+            console.log(answer);
+            if (!answer) {
+                return res.redirect('/cryptic');
+            }
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
             if (team.questionData.current > 10) {
@@ -167,7 +175,7 @@ router.route('/cryptic')
             return res.redirect('/cryptic')
         } catch (error) {
             console.log(error);
-            return res.render('cryptic', { error: error.errors[0].message });
+            return res.cryptic('/cryptic');
         }
     });
 

@@ -116,18 +116,26 @@
                   disabled
                   <% } %>
               />
-              <button type="submit" id="button">submit</button>
+              <button type="submit" id="button" <% if(isBlocked){ %>
+                disabled
+                <% } %>>submit</button>
             </form>
           </div>
         </div>
       </div>
       <% if(isBlocked){ %>
+        <% if(dareNo == 500 || dareNo == 404){ %>
+          <div class="centered-box">
+            <p><%= dare %></p>
+          </div>
+          <% }else{ %>
       <div class="centered-box">
         <p>You have been blocked due to three wrong attempts.</p>
         <p>Complete the following dare to unblock:</p>
         <br>
         <p><%= dare %></p>
       </div>
+      <% } %>
       <% } %>
     </div>
 
@@ -154,7 +162,6 @@
       }
 
       document.addEventListener("DOMContentLoaded", function() {
-          console.log("DOM fully loaded and parsed");
 
           if (!localStorage.getItem("loaderShown")) {
               localStorage.setItem("loaderShown", "true");
@@ -246,13 +253,22 @@
                   delay: 7.5,
               });
           } else {
-              console.log("Loader already shown, skipping...");
               document.getElementById("loader").style.display = "none";
               document.getElementById("container").style.display = "block";
           }
 
           const input = document.getElementById("placeholder");
           const button = document.getElementById("button");
+
+          button.addEventListener("click", (event) => {
+            const answer = input.value.trim();
+              if (answer=== "") {
+                  event.preventDefault();
+                  return;
+              }
+              input.form.submit();
+              button.disabled = true;
+          });
 
           input.addEventListener("keypress", (event) => {
               if (event.key === "Enter") {

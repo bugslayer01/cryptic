@@ -87,9 +87,11 @@
             <div class="inputaccount">
               <input type="submit" value="Login" id="submit" />
             </div>
+            <% if(registrations){ %>
             <div class="links">
               <a href="/register">Not a Member? Sign-up</a>
             </div>
+            <% } %>
             <% if(error){ %>
             <p class="error-message"><%= error %></p>
             <% } %>
