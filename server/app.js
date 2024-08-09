@@ -12,7 +12,7 @@ import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
 import requestLogger from "./src/middlewares/requestLogger.js";
-import rateLimiter from "./src/middlewares/rateLimiter.js";
+// import rateLimiter from "./src/middlewares/rateLimiter.js";
 
 // Configure environment variables
 dotenv.config();
@@ -26,7 +26,7 @@ const __dirname = path.dirname(__filename);
 connectMongo();
 
 // Middleware setup
-app.use(rateLimiter)
+// app.use(rateLimiter)
 app.use(requestLogger)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
