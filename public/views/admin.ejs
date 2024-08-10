@@ -175,6 +175,18 @@
     <% } else{ %>
         <h1 class="text-4xl font-bold text-green-400">Game Completed</h1>
         <% } %>
+        <h3 class="font-bold"> Dares Completed - 
+            <% for(let dare of team.questionData.daresCompleted){ %>
+                <%=  dare %>,
+                <% } %>
+        </h3>
+        <h3 class="font-bold">Total no of attempts: 
+            <% let allAttempts = 0;
+            for(let user of userdata){
+                allAttempts += user.noOfAttempts;
+            } %>
+            <%= allAttempts %>
+        </h3>
     <div class="container mx-auto mt-8 px-4">
         <% if (userdata && userdata.length > 0) { %>
         <% for(let i = 0; i < userdata.length; i++){ %>
