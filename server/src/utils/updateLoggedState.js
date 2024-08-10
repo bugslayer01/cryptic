@@ -5,25 +5,31 @@ import Team from "../models/team.js";
 dotenv.config();
 
 export default async function updateLoggedState(teamName = null) {
-    if (!teamName) {
-        const users = await User.find();
-        if (!users) {
-            return;
+    try {
+        if (!teamName) {
+            const users = await User.find();
+            if (!users) {
+                return;
+            }
+            for (let user of users) {
+                updateOne(user);
+            }
         }
-        for (let user of users) {
-            updateOne(user);
+        else {
+            const team = await Team.findOne({ teamName }).populate('members');
+            if (!team) {
+                return;
+            }
+            for (let user of team.members) {
+                updateOne(user);
+            }
         }
+        return;
     }
-    else {
-        const team = await Team.findOne({ teamName }).populate('members');
-        if (!team) {
-            return;
-        }
-        for (let user of team.members) {
-            updateOne(user);
-        }
+    catch (err) {
+        console.error('Error updating logged in state:', err);
     }
-    return;
+   
 }
 
 async function updateOne(user) {

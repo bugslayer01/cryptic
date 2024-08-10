@@ -119,6 +119,7 @@ router.get('/logout', checkAuth, async (req, res) => {
                 return res.redirect('/login');
             }
             user.loggedIn = false;
+            user.currentToken = null;
             await user.save();
         }
         req.user = null;
