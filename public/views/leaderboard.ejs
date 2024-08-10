@@ -11,6 +11,11 @@
       href="assets/images/website/favicon.png"
       type="image/x-icon"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script
+    type="module"
+    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
+  ></script>
     <script>
       setInterval(() => {
           window.location.reload();
@@ -39,22 +44,29 @@
     <div class="circle"></div>
     <div class="circle"></div>
     <div class="circle"></div>
-    <div class="nav">
-        <div class="artist">Leaderboard</div>
-        <div class="social-media">
-          <ul>
-            <li>
-              <a href="/">Dashboard</a>
-            </li>
-            <li>
-              <a href="/cryptic">Cryptic</a>
-            </li>
-          </ul>
-          <div class="menu">
-            <a href="/logout"><ion-icon name="power"></ion-icon></a>
+  
+
+
+         <div class="nav">
+          <div class="artist">Leaderboard</div>
+          <div class="social-media">
+            <ul>
+              <li>
+                <a href="/">Dashboard</a>
+              </li>
+              <li>
+                <a href="/cryptic">Cryptic</a>
+              </li>
+            </ul>
+            <div class="menu">
+              <a href="/logout"><ion-icon name="power"></ion-icon></a>
+            </div>
+          
           </div>
+          <i class="fa-solid fa-bars icon"></i>
         </div>
-      </div>
+     
+   
     <video
       src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/ovc1pcbq0lhthc8w5mgo"
       autoplay
@@ -63,7 +75,10 @@
       id="back"
       class="back"
     ></video>
-    <h1 style="margin-top: 7vh">Leaderboard</h1>
+    <div class="leadhead"> 
+      <h1 style="margin-top: 7vh" class="leadhead">Leaderboard</h1>
+    </div>
+   
     <div class="table-container">
       <table>
         <thead>
@@ -84,6 +99,38 @@
         </tbody>
       </table>
     </div>
-    <script src="scripts/cursor.js"></script>
+    <script src="scripts/cursor.js"> </script>
+
+
+    <script>
+        document.addEventListener('click', function(event) {
+            var iconNavbar = document.querySelector('.nav .icon');
+            var isClickInside = iconNavbar.contains(event.target);
+
+            if (!isClickInside) {
+                var navbarOptions = document.querySelector('.social-media');
+                navbarOptions.style.display = 'none';
+            }
+        });
+
+
+
+
+      var icon = document.querySelector('.nav .icon');
+        icon.addEventListener('click', function() {
+            var navbarOptions = document.querySelector('.social-media');
+            if (navbarOptions.style.display === 'flex') {
+                navbarOptions.style.display = 'none';
+            } else {
+                navbarOptions.style.display = 'flex';
+            }
+        });
+    </script>
+
+
+
+
+   
   </body>
+
 </html>
