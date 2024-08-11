@@ -71,6 +71,7 @@
     <% if(query == "allUsers"){ %>
     <div class="container mx-auto mt-8 px-4">
         <% if (userdata && userdata.length > 0) { %>
+            <p class="text-xl font-semibold">Users (<%= userdata.length%>)</p>
         <% for(let i = 0; i < userdata.length; i++){ %>
         <div class="bg-white shadow-md rounded-lg p-4 mb-4">
             <div class="flex justify-between items-center">
@@ -99,7 +100,8 @@
                 </div>
                 <div class="flex-1">
                     <p><span class="font-semibold">No of Questions Answered:</span>
-                        <%= userdata[i].noOfQuestionsAnswered %></p>
+                        <%= (userdata[i].noOfQuestionsAnswered > 15) ? 'Completed' : userdata[i].noOfQuestionsAnswered %>
+                    </p>
                 </div>
                 <div class="flex-1 text-right">
                     <p><span class="font-semibold"><%=userdata[i].loggedIn ?'🟢 Logged in' : '🔴 Logged out'%></span></p>
@@ -107,6 +109,8 @@
             </div>
         </div>
         <% } %>
+
+
         <% } else { %>
         <p class="text-center text-gray-500">No user data available.</p>
         <% } %>
@@ -116,6 +120,7 @@
     <% if(query == "allTeams"){ %>
     <div class="container mx-auto mt-8 px-4">
         <% if (teamsData && teamsData.length > 0) { %>
+            <p class="text-xl font-semibold">All Teams (<%= teamsData.length%>)</p>
         <% for(let i = 0; i < teamsData.length; i++) { %>
         <div class="bg-white shadow-md rounded-lg p-4 mb-4">
             <div class="flex justify-between items-center">
@@ -133,7 +138,7 @@
                 <div class="flex-1">
                     <p><span class="font-semibold">Score:</span> <%= teamsData[i].questionData.score %></p>
                 </div>
-                <% if(teamsData[i].questionData.current > 10){ %>
+                <% if(teamsData[i].questionData.current > 15){ %>
                                 <h1 class="font-bold text-green-400" >Game Completed &emsp; &emsp; &emsp;  &emsp; &emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
                 <% }else{ %>
                     <div class="flex-1">
@@ -142,7 +147,7 @@
                     <div class="flex-1">
                         <p>
                             <span class="font-semibold">Time Spent on Current Question:</span>
-                            <span class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
+                            <span style="color: blue;" class="time-taken" data-submit-time='<% if(teamsData[i].questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(teamsData[i].questionData.questions[teamsData[i].questionData.current - 1].submitTime).toISOString()  %><% } %>'></span>
                         </p>
                         
                     </div>
@@ -169,9 +174,9 @@
     <h1 class="text-3xl font-bold"><%= team.teamName %></h1>
     <h2 class="text-xl font-bold">Rank - <%= ranks[nameOfTeam] %></h2>
     <h3 class="font-bold">Score - <%= team.questionData.score %></h3>
-    <% if(team.questionData.current < 11){ %>
+    <% if(team.questionData.current < 16){ %>
     <h3 class="font-bold">Current question - <%= team.questionData.current %></h3>
-    <h3 class="font-bold">Time spent on current question - <span class="time-taken" data-submit-time='<% if(team.questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(team.questionData.questions[team.questionData.current - 1].submitTime).toISOString()  %><% } %>'></span></h3>
+    <h3 class="font-bold">Time spent on current question - <span style="color: blue;" class="time-taken" data-submit-time='<% if(team.questionData.current == 0) { %><%= new Date( new Date("Aug 13, 2024 14:15:00").getTime() + (5 * 60 + 30) * 60 * 1000).toISOString() %><% } else { %><%= new Date(team.questionData.questions[team.questionData.current - 1].submitTime).toISOString()  %><% } %>'></span></h3>
     <% } else{ %>
         <h1 class="text-4xl font-bold text-green-400">Game Completed</h1>
         <% } %>

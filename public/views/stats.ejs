@@ -68,10 +68,10 @@
     loop id="back" class="back"></video>
   <div id="stats">
     <h1 id="lowh" data-lowest="<%= lowestTime %>">Lowest time taken in a question: <span id="lowestSpan"></span> >>>
-      <i>Question: <%= question1 %></i></h1><br>
+      <i>Question: <%- question1 %></i></h1><br>
     <h1 id="highh" data-highest="<%= highestTime %>">Highest time taken in a question: <span id="highestSpan"></span>
-      >>> <i>Question: <%= question2 %></i></h1><br>
-    <h1>maximum number of attempts in a question: <%= maxAttempts %> >>> <i>Question: <%= question3 %></i></h1><br>
+      >>> <i>Question: <%- question2 %></i></h1><br>
+    <h1>maximum number of attempts in a question: <%= maxAttempts %> >>> <i>Question: <%- question3 %></i></h1><br>
     <h1>Total number of dares completed: <%= totalDares %>
     </h1>
   </div>

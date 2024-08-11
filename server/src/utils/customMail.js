@@ -30,4 +30,4 @@ export default async function sendMail(response) {
   console.log(info);
 }
 
-sendMail({email: '<email-address>', username: '<username>', teamName: '<Team Name>', });
+sendMail({ email: '<email-address>', username: '<username>', teamName: '<Team Name>', });

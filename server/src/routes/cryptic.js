@@ -17,35 +17,35 @@ router.route('/cryptic')
         try {
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
-            if(team.members.length < 2){
+            if (team.members.length < 2) {
                 return res.send('<h1>Minimum of two members should be in the team to play</h1>');
             }
-            if (team.questionData.current > 10 || req.stats) {
+            if (team.questionData.current > (questions.length - 1) || req.stats) {
                 const allQuestions = team.questionData.questions;
-            let lowestTime = 999999999;
-            let highestTime = -99999999;
-            let maxAttempts = -99999999;
-            let totalDares = team.questionData.daresCompleted.length;
-            let question1 = null;
-            let question2 = null;
-            let question3 = null;
-            for(let i = 1; i < allQuestions.length; i++){
-                if(allQuestions[i].timeTaken < lowestTime){
-                    lowestTime = allQuestions[i].timeTaken;
-                    question1 = questions[i].q;
-                }
+                let lowestTime = 999999999;
+                let highestTime = -99999999;
+                let maxAttempts = -99999999;
+                let totalDares = team.questionData.daresCompleted.length;
+                let question1 = null;
+                let question2 = null;
+                let question3 = null;
+                for (let i = 1; i < allQuestions.length; i++) {
+                    if (allQuestions[i].timeTaken < lowestTime) {
+                        lowestTime = allQuestions[i].timeTaken;
+                        question1 = questions[i].q ? questions[i].q : questions[i].keyword;
+                    }
 
-                if(allQuestions[i].timeTaken > highestTime){
-                    highestTime = allQuestions[i].timeTaken;
-                    question2 = questions[i].q;
-                }
+                    if (allQuestions[i].timeTaken > highestTime) {
+                        highestTime = allQuestions[i].timeTaken;
+                        question2 = questions[i].q > questions[i].keyword ? questions[i].q : questions[i].keyword;
+                    }
 
-                if(allQuestions[i].attempts > maxAttempts){
-                    maxAttempts = allQuestions[i].attempts;
-                    question3 = questions[i].q;
+                    if (allQuestions[i].attempts > maxAttempts) {
+                        maxAttempts = allQuestions[i].attempts;
+                        question3 = questions[i].q ? questions[i].q : questions[i].keyword;
+                    }
                 }
-            }
-                return res.render('stats', {lowestTime, highestTime, maxAttempts, totalDares, question1, question2, question3});
+                return res.render('stats', { lowestTime, highestTime, maxAttempts, totalDares, question1, question2, question3 });
             }
             const question = questions[team.questionData.current];
 
@@ -69,10 +69,10 @@ router.route('/cryptic')
                 }
                 else {
                     dareNo = team.questionData.currentDare;
-                    if(team.questionData.currentDare == 500){
+                    if (team.questionData.currentDare == 500) {
                         dare = "You have been blocked by MLSC";
                     }
-                    else{
+                    else {
                         dare = dares[dareNo - 1];
                     }
                 }
@@ -94,20 +94,21 @@ router.route('/cryptic')
         try {
             let { answer } = req.body;
             answer = answer.trim();
-            console.log(answer);
             if (!answer) {
                 return res.redirect('/cryptic');
             }
             const user = await User.findById(req.user._id);
             const team = await Team.findById(user.teamId);
-            if (team.questionData.current > 10) {
+            if (team.questionData.current > (questions.length - 1)) {
                 return res.redirect('/cryptic');
             }
             if (team.isBlocked) {
                 return res.redirect('/cryptic');
             }
-            user.noOfAttempts += 1;
             const current = team.questionData.current;
+            if(current != 0) {
+            user.noOfAttempts += 1;
+            }
             if (team.questionData.questions[current]) {
                 team.questionData.questions[current].allAnswers.push(answer);
                 team.questionData.questions[current].attempts += 1;
@@ -117,7 +118,9 @@ router.route('/cryptic')
                     team.questionData.questions[current].submitTime = new Date(new Date().getTime() + (5 * 60 + 30) * 60 * 1000);
                     team.questionData.wrongAttempts = 0;
                     team.questionData.score += questions[current].score;
+                    if(current != 0) {
                     user.noOfQuestionsAnswered += 1;
+                    }
                     if (current == 0) {
                         team.questionData.questions[0].timeTaken = team.questionData.questions[0].submitTime - startTime;
                     }
@@ -139,7 +142,9 @@ router.route('/cryptic')
                 let submitTime = null;
                 let timeTaken = 0;
                 if (questions[current].a.toLowerCase() == answer.toLowerCase()) {
+                    if(current != 0) {
                     user.noOfQuestionsAnswered += 1
+                    }
                     answeredBy = user._id;
                     answered = true;
                     submitTime = new Date(new Date().getTime() + (5 * 60 + 30) * 60 * 1000);

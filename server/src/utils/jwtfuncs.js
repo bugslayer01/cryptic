@@ -21,12 +21,12 @@ export async function getUser(token) {
     } catch (err) {
         const decoded = jwt.decode(token);
         const user = await User.findById(decoded._id);
-        if(!user){
+        if (!user) {
             console.log('User not found in database');
             return null;
         }
         user.loggedIn = false;
-        await user.save();// add page reload if you haven't already
+        await user.save();
         console.error('Token verification for user failed:', err);
         return null;
     }
@@ -34,7 +34,7 @@ export async function getUser(token) {
 
 export function setAdmin(data) {
     try {
-        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret', {expiresIn: '1h'});
+        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret', { expiresIn: '1h' });
     } catch (err) {
         console.error('Token signing for admin failed:', err);
         return null;
@@ -56,7 +56,7 @@ export function getAdmin(pelican) {
 
 export function setSuperUser(data) {
     try {
-        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret',{ expiresIn: '1m'});
+        return jwt.sign(data, process.env.JWT_SECRET || 'notaverygoodsecret', { expiresIn: '1m' });
     } catch (err) {
         console.error('Token signing for super user failed:', err);
         return null;

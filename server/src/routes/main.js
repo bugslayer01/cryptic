@@ -25,7 +25,7 @@ router.get('/team', checkAuth, regActive, async (req, res) => {
 
     try {
         const user = await User.findById(req.user._id)
-        if(!user){
+        if (!user) {
             return res.redirect('/login');
         }
         const team = await Team.findById(user.teamId).populate('members');
@@ -67,7 +67,7 @@ router.route('/registermember')
             const team = await Team.findById(leader.teamId);
             if (!team)
                 return res.redirect('/login')
-            if(team.members.length == 4){
+            if (team.members.length == 4) {
                 return res.render('registerMember', { error: 'Max 4 members allowed' });
             }
             const usernameExists = await User.findOne({ username })
@@ -89,7 +89,7 @@ router.route('/registermember')
             let newUser = await user.save();
             team.members.push(newUser._id)
             await team.save();
-            sendMail({username, email, teamName: team.teamName})
+            sendMail({ username, email, teamName: team.teamName })
             return res.redirect("/team");
         } catch (error) {
             console.log(error)

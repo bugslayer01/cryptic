@@ -60,7 +60,7 @@ function getRequestsArray(date, method, path, ip) {
                 textStyle: {
                     foregroundColor: {
                         color: {
-                            rgbColor: { red: 0.5, green: 0.0, blue: 0.5 } 
+                            rgbColor: { red: 0.5, green: 0.0, blue: 0.5 }
                         }
                     }
                 },
@@ -76,7 +76,7 @@ function getRequestsArray(date, method, path, ip) {
                 textStyle: {
                     foregroundColor: {
                         color: {
-                            rgbColor: { red: 1.0, green: 0.65, blue: 0.0 } 
+                            rgbColor: { red: 1.0, green: 0.65, blue: 0.0 }
                         }
                     }
                 },
@@ -92,7 +92,7 @@ function getRequestsArray(date, method, path, ip) {
                 textStyle: {
                     foregroundColor: {
                         color: {
-                            rgbColor: { red: 0.0, green: 0.5, blue: 0.5 } 
+                            rgbColor: { red: 0.0, green: 0.5, blue: 0.5 }
                         }
                     }
                 },
