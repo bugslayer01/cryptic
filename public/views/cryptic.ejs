@@ -104,6 +104,7 @@
         ></video>
 
         <div id="question">
+          <% if(question.no != 9){ %>
           <% if(question.q){ %>
           <h1><%- question.q %></h1>
           <% } %> <% if(question.imagepath){ %>
@@ -111,6 +112,17 @@
           <% } %> <% if(question.audiopath){ %>
           <audio src="<%= question.audiopath %>" controls></audio>
           <% } %>
+          <% }else{ %>
+            <!-- question no 9 -->
+            <% if(question.q){ %>
+              <h1><%- question.q %></h1>
+              <% } %> <% if(question.imagepath){ %>
+              <img src="<%= question.imagepath %>" alt="question one" />
+              <% } %> <% if(question.audiopath){ %>
+              <audio src="<%= question.audiopath %>" controls></audio>
+              <% } %>
+            <!-- question no 9 ends -->
+            <% } %>
           <div>
             <form action="/cryptic" method="post">
               <input

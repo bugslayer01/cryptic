@@ -1,5 +1,6 @@
 const questions = [
   {//0
+    no: 0,
     q: "Demo Question",
     a: "Demo Answer",
     imagepath: 'assets/images/questions/demo1.png',
@@ -8,6 +9,7 @@ const questions = [
     score: 0,
   },
   {//1
+    no: 1,
     q: "What colour is you MLSC?",
     a: "Knight",
     imagepath: 'assets/images/questions/q1.jpg',
@@ -16,6 +18,7 @@ const questions = [
     score: 5,
   },
   {//2
+    no: 2,
     q: null,
     a: "The dolphin and the shark",
     keyword: 'The dolphin and the shark question',
@@ -25,6 +28,7 @@ const questions = [
     score: 5,
   },
   {//3
+    no: 3,
     q: '15xx 18xx<br>“Can we do something about it?”',
     a: "JMW TURNER",
     imagepath: null,
@@ -33,6 +37,7 @@ const questions = [
     score: 5,
   },
   {//4
+    no: 4,
     q: null,
     a: 'DG IMMORTALS',
     keyword: 'Systumm question',
@@ -42,6 +47,7 @@ const questions = [
     score: 5,
   },
   {//5
+    no: 5,
     q: '⠞⠗⠁⠝⠎⠇⠁⠞⠑ Lord Mellstroy',
     a: "Mango",
     imagepath: 'assets/images/questions/q5.jpg',
@@ -50,6 +56,7 @@ const questions = [
     score: 5,
   },
   {//6
+    no: 6,
     q: '“Huh, a pigeon?”',
     a: "The Brave Fighter of Sun Fighbird",
     imagepath: 'assets/images/questions/q6.jpg',
@@ -58,6 +65,7 @@ const questions = [
     score: 5,
   },
   {//7
+    no: 7,
     q: null,
     a: 'Elizabeth tower',
     keyword: 'Elizabeth tower',
@@ -67,6 +75,7 @@ const questions = [
     score: 5,
   },
   {//8
+    no: 8,
     q: 'Guess his favourite lnmsg',
     a: 'August',
     imagepath: 'assets/images/questions/q8.jpg',
@@ -75,6 +84,7 @@ const questions = [
     score: 5,
   },
   {//9
+    no: 9,
     q: '! moj krdii vhaa bete vhaa tum toh bde heavy driver ho',
     a: "Chalk",
     imagepath: null,
@@ -83,6 +93,7 @@ const questions = [
     score: 5,
   },
   {//10
+    no: 10,
     q: null,
     a: 'Amphiprioninae',
     keyword: 'mirror nemo question',
@@ -92,6 +103,7 @@ const questions = [
     score: 5,
   },
   {//11
+    no: 11,
     q: null,
     a: 'london guildhall',
     keyword: 'pigeon cipher question',
@@ -101,6 +113,7 @@ const questions = [
     score: 5,
   },
   {//12
+    no: 12,
     q: null,
     a: 'Galileo Galilei',
     keyword: 'Galileo Galilei question',
@@ -110,6 +123,7 @@ const questions = [
     score: 5,
   },
   {//13
+    no: 13,
     q: '"Agaya mera paisa leke?"<br>"Babu Bhaiya se direct Babu!?"<br>Answer Format: <b>xxxx</b><i>px</i> <b>xxxx</b><i>deg</i>',
     a: '2520px 150deg',
     imagepath: 'assets/images/questions/q13.jpg',
@@ -118,6 +132,7 @@ const questions = [
     score: 5,
   },
   {//14
+    no: 14,
     q: null,
     a: 'Grace Hopper',
     keyword: 'Grace Hopper question',
@@ -127,6 +142,7 @@ const questions = [
     score: 5,
   },
   {//15
+    no: 15,
     q: 'FFG3BBI3ABGH(Шестиричная система ↑↓)',
     a: 'Whenever you need somebody',
     imagepath: null,
