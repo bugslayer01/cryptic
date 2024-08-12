@@ -15,15 +15,20 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles/cryptic.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <script>
       setInterval(() => {
-          window.location.reload();
+        window.location.reload();
       }, 120000);
-  </script>
-   <script src="scripts/console.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-
+    </script>
+    <script src="scripts/console.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 
     <script
       type="module"
@@ -31,8 +36,7 @@
     ></script>
 
     <title>Cryptic</title>
-    <link rel="stylesheet" href="styles/cursor.css">
-
+    <link rel="stylesheet" href="styles/cursor.css" />
   </head>
   <body>
     <div class="circle"></div>
@@ -57,7 +61,6 @@
     <div class="circle"></div>
 
     <script src="scripts/cursor.js"></script>
-
 
     <div class="loader" id="loader">
       <h1 class="counter">0</h1>
@@ -88,27 +91,25 @@
           <div class="menu">
             <a href="/logout"><ion-icon name="power"></ion-icon></a>
           </div>
-        
         </div>
         <i class="fa-solid fa-bars icon"></i>
       </div>
-      <div <% if(isBlocked){ %> class="blur" <% } %>>
+      <div <% if(isBlocked){ %>
+        class="blur" <% } %>>
         <video
           src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/d5sfkiefythgflydvfoa"
           autoplay
           loop
-          muted    
+          muted
         ></video>
-        
+
         <div id="question">
           <% if(question.q){ %>
           <h1><%- question.q %></h1>
-          <% } %>
-          <% if(question.imagepath){ %>
+          <% } %> <% if(question.imagepath){ %>
           <img src="<%= question.imagepath %>" alt="question one" />
-          <% } %>
-          <% if(question.audiopath){ %>
-            <audio src="<%= question.audiopath %>" controls></audio>
+          <% } %> <% if(question.audiopath){ %>
+          <audio src="<%= question.audiopath %>" controls></audio>
           <% } %>
           <div>
             <form action="/cryptic" method="post">
@@ -117,205 +118,203 @@
                 placeholder="answer*"
                 id="placeholder"
                 name="answer"
-                <% if(isBlocked){ %>
-                  disabled
-                  <% } %>
+                <%
+                if(isBlocked){
+                %
               />
+              disabled <% } %> />
               <button type="submit" id="button" <% if(isBlocked){ %>
-                disabled
-                <% } %>>submit</button>
+                disabled <% } %>>submit
+              </button>
             </form>
           </div>
         </div>
       </div>
-      <% if(isBlocked){ %>
-        <% if(dareNo == 500 || dareNo == 404){ %>
-          <div class="centered-box">
-            <p><%= dare %></p>
-          </div>
-          <% }else{ %>
+      <% if(isBlocked){ %> <% if(dareNo == 500 || dareNo == 404){ %>
+      <div class="centered-box">
+        <p><%= dare %></p>
+      </div>
+      <% }else{ %>
       <div class="centered-box">
         <p>You have been blocked due to three wrong attempts.</p>
         <p>Complete the following dare to unblock:</p>
-        <br>
+        <br />
         <p><%= dare %></p>
       </div>
-      <% } %>
-      <% } %>
+      <% } %> <% } %>
     </div>
 
     <script>
-      function startLoader() {
-          let counterElement = document.querySelector(".counter");
-          let currentValue = 0;
-
-          function updateCounter() {
-              if (currentValue >= 100) {
-                  currentValue = 100;
-                  counterElement.textContent = currentValue + "%";
-                  return;
-              }
-
-              currentValue += Math.floor(Math.random() * 10) + 1;
-              counterElement.textContent = currentValue + "%";
-
-              let delay = Math.floor(Math.random() * 200) + 250;
-              setTimeout(updateCounter, delay);
-          }
-
-          updateCounter();
-      }
-
-      document.addEventListener("DOMContentLoaded", function() {
-
-          if (!localStorage.getItem("loaderShown")) {
-              localStorage.setItem("loaderShown", "true");
-
-              startLoader();
-
-              gsap.from(".circles", 2, {
-                  top: "-100%",
-                  ease: "elastic.out",
-                  delay: 0.5,
-              });
-
-              gsap.to(".circle-inner", 1, {
-                  width: "75px",
-                  height: "75px",
-                  ease: "power4.inOut",
-                  delay: 2,
-              });
-
-              gsap.to(".circle-inner-rotator", 1, {
-                  scale: 1,
-                  ease: "power4.inOut",
-                  delay: 2.5,
-              });
-
-              gsap.to(".circles", 1.5, {
-                  rotation: 360,
-                  ease: "power4.inOut",
-                  delay: 3,
-              });
-
-              gsap.to(".block", 0.75, {
-                  display: "block",
-                  height: "200px",
-                  ease: "power4.inOut",
-                  delay: 4,
-              });
-              gsap.to(".block", 0.75, {
-                  display: "block",
-                  height: "800px",
-                  ease: "power4.inOut",
-                  delay: 4.5,
-              });
-
-              gsap.fromTo(
-                  ".container",
-                  {
-                      duration: 2,
-                      left: "100%",
-                      scale: 0.5,
-                      ease: "power4.inOut",
-                      delay: 4,
-                  },
-                  {
-                      duration: 2,
-                      left: "50%",
-                      scale: 0.5,
-                      transform: "TranslateX(-50%)",
-                      ease: "power4.inOut",
-                      delay: 4,
-                  }
-              );
-
-              gsap.to(".block", 1.5, {
-                  width: "0px",
-                  ease: "power4.inOut",
-                  delay: 5,
-              });
-
-              gsap.from(".circles", 1.5, {
-                  rotation: 0,
-                  ease: "power4.inOut",
-                  delay: 6.5,
-              });
-
-              gsap.to(".loader", 2.5, {
-                  scale: 0,
-                  ease: "power4.inOut",
-                  delay: 7,
-                  onComplete: function () {
-                      document.getElementById("loader").style.display = "none";
-                      document.getElementById("container").style.display = "block";
-                  },
-              });
-
-              gsap.to(".container", 2, {
-                  scale: 1,
-                  ease: "power4.inOut",
-                  delay: 7.5,
-              });
-          } else {
-              document.getElementById("loader").style.display = "none";
-              document.getElementById("container").style.display = "block";
-          }
-
-          const input = document.getElementById("placeholder");
-          const button = document.getElementById("button");
-
-          button.addEventListener("click", (event) => {
-            const answer = input.value.trim();
-              if (answer=== "") {
-                  event.preventDefault();
-                  return;
-              }
-              input.form.submit();
-              button.disabled = true;
-          });
-
-          input.addEventListener("keypress", (event) => {
-              if (event.key === "Enter") {
-                  event.preventDefault();
-                  button.click();
-              }
-          });
-      });
-  </script>
-  
-  <script>
-    function toggleNavbar() {
-        var iconNavbar = document.querySelector('.nav .icon');
+      function toggleNavbar() {
+        var iconNavbar = document.querySelector(".nav .icon");
         var isClickInside = iconNavbar.contains(event.target);
 
         if (!isClickInside) {
-            var navbarOptions = document.querySelector('.social-media');
-            navbarOptions.style.display = 'none';
+          var navbarOptions = document.querySelector(".social-media");
+          navbarOptions.style.display = "none";
         }
-    }
+      }
 
-    function checkScreenSize() {
+      function checkScreenSize() {
         if (window.matchMedia("(max-width: 500px)").matches) {
-            document.addEventListener('click', toggleNavbar);
+          document.addEventListener("click", toggleNavbar);
 
-            var icon = document.querySelector('.nav .icon');
-            icon.addEventListener('click', function() {
-                var navbarOptions = document.querySelector('.social-media');
-                if (navbarOptions.style.display === 'flex') {
-                    navbarOptions.style.display = 'none';
-                } else {
-                    navbarOptions.style.display = 'flex';
-                }
-            });
+          var icon = document.querySelector(".nav .icon");
+          icon.addEventListener("click", function () {
+            var navbarOptions = document.querySelector(".social-media");
+            if (navbarOptions.style.display === "flex") {
+              navbarOptions.style.display = "none";
+            } else {
+              navbarOptions.style.display = "flex";
+            }
+          });
         } else {
-            document.removeEventListener('click', toggleNavbar);
+          document.removeEventListener("click", toggleNavbar);
         }
-    }
+      }
 
-    checkScreenSize();
+      checkScreenSize();
 
-    window.addEventListener('resize', checkScreenSize);
-</script>
+      window.addEventListener("resize", checkScreenSize);
+    </script>
+
+    <script>
+      function startLoader() {
+        let counterElement = document.querySelector(".counter");
+        let currentValue = 0;
+
+        function updateCounter() {
+          if (currentValue >= 100) {
+            currentValue = 100;
+            counterElement.textContent = currentValue + "%";
+            return;
+          }
+
+          currentValue += Math.floor(Math.random() * 10) + 1;
+          counterElement.textContent = currentValue + "%";
+
+          let delay = Math.floor(Math.random() * 200) + 250;
+          setTimeout(updateCounter, delay);
+        }
+
+        updateCounter();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (!localStorage.getItem("loaderShown")) {
+          localStorage.setItem("loaderShown", "true");
+
+          startLoader();
+
+          gsap.from(".circles", 2, {
+            top: "-100%",
+            ease: "elastic.out",
+            delay: 0.5,
+          });
+
+          gsap.to(".circle-inner", 1, {
+            width: "75px",
+            height: "75px",
+            ease: "power4.inOut",
+            delay: 2,
+          });
+
+          gsap.to(".circle-inner-rotator", 1, {
+            scale: 1,
+            ease: "power4.inOut",
+            delay: 2.5,
+          });
+
+          gsap.to(".circles", 1.5, {
+            rotation: 360,
+            ease: "power4.inOut",
+            delay: 3,
+          });
+
+          gsap.to(".block", 0.75, {
+            display: "block",
+            height: "200px",
+            ease: "power4.inOut",
+            delay: 4,
+          });
+          gsap.to(".block", 0.75, {
+            display: "block",
+            height: "800px",
+            ease: "power4.inOut",
+            delay: 4.5,
+          });
+
+          gsap.fromTo(
+            ".container",
+            {
+              duration: 2,
+              left: "100%",
+              scale: 0.5,
+              ease: "power4.inOut",
+              delay: 4,
+            },
+            {
+              duration: 2,
+              left: "50%",
+              scale: 0.5,
+              transform: "TranslateX(-50%)",
+              ease: "power4.inOut",
+              delay: 4,
+            }
+          );
+
+          gsap.to(".block", 1.5, {
+            width: "0px",
+            ease: "power4.inOut",
+            delay: 5,
+          });
+
+          gsap.from(".circles", 1.5, {
+            rotation: 0,
+            ease: "power4.inOut",
+            delay: 6.5,
+          });
+
+          gsap.to(".loader", 2.5, {
+            scale: 0,
+            ease: "power4.inOut",
+            delay: 7,
+            onComplete: function () {
+              document.getElementById("loader").style.display = "none";
+              document.getElementById("container").style.display = "block";
+            },
+          });
+
+          gsap.to(".container", 2, {
+            scale: 1,
+            ease: "power4.inOut",
+            delay: 7.5,
+          });
+        } else {
+          document.getElementById("loader").style.display = "none";
+          document.getElementById("container").style.display = "block";
+        }
+
+        const input = document.getElementById("placeholder");
+        const button = document.getElementById("button");
+
+        button.addEventListener("click", (event) => {
+          const answer = input.value.trim();
+          if (answer === "") {
+            event.preventDefault();
+            return;
+          }
+          input.form.submit();
+          button.disabled = true;
+        });
+
+        input.addEventListener("keypress", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            button.click();
+          }
+        });
+      });
+    </script>
   </body>
 </html>
