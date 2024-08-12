@@ -15,6 +15,12 @@
     <script src="scripts/console.js"></script>
 </head>
 <style>
+    #detailsa{
+        color: blue;
+    }
+    #detailsa:hover{
+        color: red;
+    }
     .sort:active{
         color: rgba(0, 0, 0, 0.532)
     }
@@ -77,7 +83,7 @@
             <div class="flex justify-between items-center">
                 <div class="flex-1">
                     <p class="text-xl font-semibold"><%= userdata[i].username %></p>
-                    <p class="text-sm text-gray-500"><%= teams[i] %></p>
+                    <p class="text-sm text-gray-500"><a id="detailsa" href="/phoenix?show=teamdetails&teamName=<%= teams[i] %>"><%= teams[i] %></a></p>
                 </div>
                 <div class="flex space-x-4 items-center">
                     <% if (userdata[i].isLeader) { %>

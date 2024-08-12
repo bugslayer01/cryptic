@@ -107,6 +107,11 @@ router.get('/phoenix', checkAdmin, async (req, res) => {
         return res.redirect('/phoenix/login');
     }
     try {
+        const admin = await Admin.findById(req.admin.id);
+        if (!admin) {
+            res.clearCookie('pelican');
+            return res.redirect('/phoenix/login');
+        }
         const { show, loggedIn, teamName, sort } = req.query;
         if (show == 'users') {
             let users = null;
