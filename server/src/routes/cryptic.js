@@ -37,7 +37,7 @@ router.route('/cryptic')
 
                     if (allQuestions[i].timeTaken > highestTime) {
                         highestTime = allQuestions[i].timeTaken;
-                        question2 = questions[i].q > questions[i].keyword ? questions[i].q : questions[i].keyword;
+                        question2 = questions[i].q ? questions[i].q : questions[i].keyword;
                     }
 
                     if (allQuestions[i].attempts > maxAttempts) {

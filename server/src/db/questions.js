@@ -18,6 +18,7 @@ const questions = [
   {//2
     q: null,
     a: "The dolphin and the shark",
+    keyword: 'The dolphin and the shark question',
     imagepath: 'assets/images/questions/q2.jpg',
     audiopath: 'assets/audios/q2.mp3',
     videopath: null,
@@ -92,7 +93,7 @@ const questions = [
   },
   {//11
     q: null,
-    a: 'Amphiprioninae',
+    a: 'london guildhall',
     keyword: 'pigeon cipher question',
     imagepath: 'assets/images/questions/q11.jpg',
     audiopath: null,
@@ -109,7 +110,7 @@ const questions = [
     score: 5,
   },
   {//13
-    q: '"Agaya mera paisa leke?"<br>"Babu Bhaiya se direct Babu!?"<br>Answer Format: <b>Xxxx</b><i>px</i> <b>xxx</b><i>deg</i>',
+    q: '"Agaya mera paisa leke?"<br>"Babu Bhaiya se direct Babu!?"<br>Answer Format: <b>xxxx</b><i>px</i> <b>xxxx</b><i>deg</i>',
     a: '2520px 150deg',
     imagepath: 'assets/images/questions/q13.jpg',
     audiopath: null,

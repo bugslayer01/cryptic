@@ -282,32 +282,7 @@
               }
           });
       });
-
-      document.addEventListener('click', function(event) {
-            var iconNavbar = document.querySelector('.nav .icon');
-            var isClickInside = iconNavbar.contains(event.target);
-
-            if (!isClickInside) {
-                var navbarOptions = document.querySelector('.social-media');
-                navbarOptions.style.display = 'none';
-            }
-        });
-
-
-
-
-      var icon = document.querySelector('.nav .icon');
-        icon.addEventListener('click', function() {
-            var navbarOptions = document.querySelector('.social-media');
-            if (navbarOptions.style.display === 'flex') {
-                navbarOptions.style.display = 'none';
-            } else {
-                navbarOptions.style.display = 'flex';
-            }
-        });
-
-
-
   </script>
+  <script src="nav.js"></script>
   </body>
 </html>
