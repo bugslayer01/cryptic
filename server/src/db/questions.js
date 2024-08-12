@@ -30,7 +30,7 @@ const questions = [
   },
   {//3
     no: 3,
-    q: null,
+    q: 'Check his Audacity👇',
     a: 'DG IMMORTALS',
     keyword: 'Systumm question',
     imagepath: 'assets/images/questions/q4.jpg',
@@ -95,7 +95,7 @@ const questions = [
   },
   {//10
     no: 10,
-    q: null,
+    q: "Pigeon Pigeon on the wall",
     a: 'london guildhall',
     keyword: 'pigeon cipher question',
     imagepath: 'assets/images/questions/q11.jpg',
@@ -128,9 +128,9 @@ const questions = [
     a: 'Grace Hopper',
     keyword: 'Grace Hopper question',
     imagepath: 'assets/images/questions/q14.jpg',
-    audiopath: 40,
+    audiopath: null,
     videopath: null,
-    score: 5,
+    score: 40,
   },
   {//14
     no: 14,

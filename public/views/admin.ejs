@@ -106,7 +106,7 @@
                 </div>
                 <div class="flex-1">
                     <p><span class="font-semibold">No of Questions Answered:</span>
-                        <%= (userdata[i].noOfQuestionsAnswered > 15) ? 'Completed' : userdata[i].noOfQuestionsAnswered %>
+                        <%= (userdata[i].noOfQuestionsAnswered > 14) ? 'Completed' : userdata[i].noOfQuestionsAnswered %>
                     </p>
                 </div>
                 <div class="flex-1 text-right">
@@ -144,7 +144,7 @@
                 <div class="flex-1">
                     <p><span class="font-semibold">Score:</span> <%= teamsData[i].questionData.score %></p>
                 </div>
-                <% if(teamsData[i].questionData.current > 15){ %>
+                <% if(teamsData[i].questionData.current > 14){ %>
                                 <h1 class="font-bold text-green-400" >Game Completed &emsp; &emsp; &emsp;  &emsp; &emsp; &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</h1>
                 <% }else{ %>
                     <div class="flex-1">
