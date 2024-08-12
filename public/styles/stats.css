@@ -17,7 +17,6 @@ body {
   height: 100vh;
   color: white;
   font-weight: 400;
-  font-family: "cryptic", sans-serif;
   overflow: hidden;
 }
 
@@ -193,16 +192,33 @@ body {
   justify-content: center;
   flex-direction: column;
   height: 100vh;
+  font-size: 10px;
   align-items: center;
+}
+
+@media (max-width : 768px) {
+  #stats {
+    display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  font-size: 8px;
+  align-items: center;
+  }
+
+  .nav .artist {
+   margin-left: -1rem;
+  }
 }
 
 @media (max-width : 480px) {
   #stats {
-    font-size: small;
-    width: 440px;
-    margin: 13px;
-    justify-content: center;
-    margin-right: 27px;
+    display: flex;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  font-size: 4.5px;
+  align-items: center;
   }
 
   .nav .artist {

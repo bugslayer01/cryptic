@@ -67,12 +67,12 @@
   <video src="https://res.cloudinary.com/dvhwz7ptr/video/upload/f_auto:video,q_auto/ovc1pcbq0lhthc8w5mgo" autoplay muted
     loop id="back" class="back"></video>
   <div id="stats">
-    <h1 id="lowh" data-lowest="<%= lowestTime %>">Lowest time taken in a question: <span id="lowestSpan"></span> >>>
+    <h1 id="lowh" data-lowest="<%= lowestTime %>" style="overflow: hidden;">Lowest time taken in a question: <span id="lowestSpan"></span> >>>
       <i>Question: <%- question1 %></i></h1><br>
-    <h1 id="highh" data-highest="<%= highestTime %>">Highest time taken in a question: <span id="highestSpan"></span>
+    <h1 id="highh" data-highest="<%= highestTime %>" style="overflow: hidden;">Highest time taken in a question: <span id="highestSpan"></span>
       >>> <i>Question: <%- question2 %></i></h1><br>
-    <h1>maximum number of attempts in a question: <%= maxAttempts %> >>> <i>Question: <%- question3 %></i></h1><br>
-    <h1>Total number of dares completed: <%= totalDares %>
+    <h1 style="overflow: hidden;">maximum number of attempts in a question: <%= maxAttempts %> >>> <i>Question: <%- question3 %></i></h1><br>
+    <h1 style="overflow: hidden;">Total number of dares completed: <%= totalDares %>
     </h1>
   </div>
 </body>
@@ -95,6 +95,37 @@
   });
 </script>
 
-<script src="nav.js"></script>
+<script>
+  function toggleNavbar() {
+    var iconNavbar = document.querySelector(".nav .icon");
+    var isClickInside = iconNavbar.contains(event.target);
 
+    if (!isClickInside) {
+      var navbarOptions = document.querySelector(".social-media");
+      navbarOptions.style.display = "none";
+    }
+  }
+
+  function checkScreenSize() {
+    if (window.matchMedia("(max-width: 500px)").matches) {
+      document.addEventListener("click", toggleNavbar);
+
+      var icon = document.querySelector(".nav .icon");
+      icon.addEventListener("click", function () {
+        var navbarOptions = document.querySelector(".social-media");
+        if (navbarOptions.style.display === "flex") {
+          navbarOptions.style.display = "none";
+        } else {
+          navbarOptions.style.display = "flex";
+        }
+      });
+    } else {
+      document.removeEventListener("click", toggleNavbar);
+    }
+  }
+
+  checkScreenSize();
+
+  window.addEventListener("resize", checkScreenSize);
+</script>
 </html>
