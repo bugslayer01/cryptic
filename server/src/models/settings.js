@@ -12,6 +12,10 @@ const controlSchema = new mongoose.Schema({
     stats: {
         type: Boolean,
         default: false
+    },
+    scores: {
+        type: Boolean,
+        default: false
     }
 }, {
     timestamps: true

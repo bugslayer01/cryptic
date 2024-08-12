@@ -8,6 +8,7 @@ import getRanks from '../utils/rank.js';
 import regActive from '../middlewares/registrations.js';
 import { memberRegisterSchema } from '../utils/zodSchemas.js';
 import sendMail from '../utils/mail.js';
+import Control from '../models/settings.js';
 const router = express.Router();
 
 router.get('/', async (_, res) => {
@@ -163,7 +164,7 @@ router.get('/leaderboard', async (req, res) => {
         const ranks = await getRanks();
         const teamsData = [];
         const teams = await Team.find();
-
+        const control = await Control.findOne();
         for (let i = 1; i <= teams.length; i++) {
             for (let j = 0; j < teams.length; j++) {
                 if (i == ranks[teams[j].teamName]) {
@@ -171,8 +172,7 @@ router.get('/leaderboard', async (req, res) => {
                 }
             }
         }
-
-        return res.render('leaderboard', { teamsData });
+        return res.render('leaderboard', { teamsData, scores: control.scores });
     } catch (error) {
         console.error('Error during GET /leaderboard:', error);
         res.status(500).send('Internal Server Error');

@@ -56,7 +56,7 @@ router.route('/phoenix/settings')
                 return res.render('settings', { flash: 'Control settings not found.', eventActive: false, regActive: false });
             }
 
-            res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations, statsActive: control.stats });
+            res.render('settings', { flash, eventActive: control.eventActive, regActive: control.registrations, statsActive: control.stats, scoresActive: control.scores });
         } catch (error) {
             console.error('Error during GET /phoenix/settings:', error);
             res.status(500).send('Internal Server Error');
@@ -71,7 +71,7 @@ router.route('/phoenix/settings')
             return res.redirect('/phoenix/superlogin');
         }
         try {
-            let { crypticStatus, regStatus, statsStatus } = req.body;
+            let { crypticStatus, regStatus, statsStatus, scoresStatus } = req.body;
             if (!crypticStatus) {
                 crypticStatus = false;
             }
@@ -83,11 +83,15 @@ router.route('/phoenix/settings')
             if (!statsStatus) {
                 statsStatus = false;
             }
+            if(!scoresStatus){
+                scoresStatus = false;
+            }
             const control = await Control.findOne();
 
             control.eventActive = crypticStatus;
             control.registrations = regStatus;
             control.stats = statsStatus;
+            control.scores = scoresStatus;
             await control.save();
 
             return res.redirect('/phoenix/settings?flash=true');

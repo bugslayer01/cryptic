@@ -85,6 +85,9 @@
           <tr>
             <th>Rank</th>
             <th>Team Name</th>
+            <% if(scores){ %>
+            <th>Scores</th>
+            <% } %>
           </tr>
         </thead>
         <tbody>
@@ -92,6 +95,9 @@
           <tr>
             <td class="rank"><%= i + 1 %></td>
             <td class="team-name"><%= teamsData[i].teamName %></td>
+            <% if(scores){ %>
+            <td class="score"><%= teamsData[i].questionData.score %></td>
+            <% } %>
           </tr>
           <% } %>
         </tbody>

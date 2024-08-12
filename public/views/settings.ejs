@@ -108,6 +108,18 @@
                 </label>
         </div>
         <br>
+        <div>
+            <h1 class="text-3xl inline-block transform translate-y-5">Scores:</h1>
+            <input type="checkbox" id="scores" class="checkbox" value="true" name="scoresStatus" <% if(scoresActive){ %> checked
+            <% } %> />
+
+                <label for="scores" class="toggle">
+                    <p class="transform translate-y-3 translate-x-4">
+                        OFF ON
+                    </p>
+                </label>
+        </div>
+        <br>
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Save configuration
         </button>
