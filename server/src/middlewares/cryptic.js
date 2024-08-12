@@ -1,6 +1,9 @@
 import Control from '../models/settings.js'
 
 export default async function eventActive(req, res, next) {
+    if(!req.user) {
+        return res.redirect('/login');
+    }
     const control = await Control.findOne();
     if (control.registrations) {
         return res.redirect('/team');
