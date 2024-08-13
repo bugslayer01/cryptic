@@ -133,7 +133,7 @@ router.route('/cryptic')
                     if(current != 0) {
                     team.questionData.wrongAttempts += 1;
                     }
-                    if (team.questionData.wrongAttempts >= 7) {
+                    if (team.questionData.wrongAttempts >= 4) {
                         team.isBlocked = true;
                     }
                 }
@@ -164,7 +164,7 @@ router.route('/cryptic')
                     if(current != 0) {
                     team.questionData.wrongAttempts += 1;
                     }
-                    if (team.questionData.wrongAttempts >= 7) {
+                    if (team.questionData.wrongAttempts >= 4) {
                         team.isBlocked = true;
                     }
                 }
