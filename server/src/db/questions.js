@@ -115,7 +115,7 @@ const questions = [
   },
   {//12
     no: 12,
-    q: '"Agaya mera paisa leke?"<br>"Babu Bhaiya se direct Babu!?"<br>Answer Format: <b>xxxx</b><i>px</i> <b>xxxx</b><i>deg</i>',
+    q: '"Agaya mera paisa leke?"<br>"Babu Bhaiya se direct Babu!?"<br>Answer Format: <b>xxxx</b><i>px</i> <b>xxx</b><i>deg</i>',
     a: '2520px 150deg',
     imagepath: 'assets/images/questions/q13.jpg',
     audiopath: null,
