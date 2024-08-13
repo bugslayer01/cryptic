@@ -129,14 +129,14 @@ router.route('/cryptic')
                     }
                     team.questionData.current += 1;
                 }
-                else {
-                    if(current != 0) {
-                    team.questionData.wrongAttempts += 1;
-                    }
-                    if (team.questionData.wrongAttempts >= 4) {
-                        team.isBlocked = true;
-                    }
-                }
+                // else {
+                //     if(current != 0) {
+                //     team.questionData.wrongAttempts += 1;
+                //     }
+                //     if (team.questionData.wrongAttempts >= 4) {
+                //         team.isBlocked = true;
+                //     }
+                // }
             }
             else {
                 let answeredBy = null
@@ -160,14 +160,14 @@ router.route('/cryptic')
                     }
                     team.questionData.current += 1;
                 }
-                else {
-                    if(current != 0) {
-                    team.questionData.wrongAttempts += 1;
-                    }
-                    if (team.questionData.wrongAttempts >= 4) {
-                        team.isBlocked = true;
-                    }
-                }
+                // else {
+                //     if(current != 0) {
+                //     team.questionData.wrongAttempts += 1;
+                //     }
+                //     if (team.questionData.wrongAttempts >= 4) {
+                //         team.isBlocked = true;
+                //     }
+                // }
                 let newQuestion = {
                     answered,
                     timeTaken,
