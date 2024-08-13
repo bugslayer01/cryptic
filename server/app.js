@@ -11,7 +11,7 @@ import mainRoute from './src/routes/main.js'
 import adminRoute from './src/routes/admin.js'
 import crypticRoute from './src/routes/cryptic.js'
 import connectMongo from "./src/db/mongoose.js";
-import requestLogger from "./src/middlewares/requestLogger.js";
+// import requestLogger from "./src/middlewares/requestLogger.js";
 
 // Configure environment variables
 dotenv.config();
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 connectMongo();
 
 // Middleware setup
-app.use(requestLogger)
+// app.use(requestLogger)
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
