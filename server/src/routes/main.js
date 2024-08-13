@@ -159,24 +159,24 @@ router.delete('/deleteuser/:_id', checkAuth, checkAdmin, async (req, res) => {
     return res.redirect('/team');
 });
 
-router.get('/leaderboard', async (req, res) => {
-    try {
-        const ranks = await getRanks();
-        const teamsData = [];
-        const teams = await Team.find();
-        const control = await Control.findOne();
-        for (let i = 1; i <= teams.length; i++) {
-            for (let j = 0; j < teams.length; j++) {
-                if (i == ranks[teams[j].teamName]) {
-                    teamsData.push(teams[j]);
-                }
-            }
-        }
-        return res.render('leaderboard', { teamsData, scores: control.scores });
-    } catch (error) {
-        console.error('Error during GET /leaderboard:', error);
-        res.status(500).send('Internal Server Error');
-    }
-});
+// router.get('/leaderboard', async (req, res) => {
+//     try {
+//         const ranks = await getRanks();
+//         const teamsData = [];
+//         const teams = await Team.find();
+//         const control = await Control.findOne();
+//         for (let i = 1; i <= teams.length; i++) {
+//             for (let j = 0; j < teams.length; j++) {
+//                 if (i == ranks[teams[j].teamName]) {
+//                     teamsData.push(teams[j]);
+//                 }
+//             }
+//         }
+//         return res.render('leaderboard', { teamsData, scores: control.scores });
+//     } catch (error) {
+//         console.error('Error during GET /leaderboard:', error);
+//         res.status(500).send('Internal Server Error');
+//     }
+// });
 
 export default router;
