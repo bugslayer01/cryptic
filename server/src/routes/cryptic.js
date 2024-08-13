@@ -29,7 +29,7 @@ router.route('/cryptic')
                 let question1 = null;
                 let question2 = null;
                 let question3 = null;
-                for (let i = 1; i < allQuestions.length; i++) {
+                for (let i = 1; i < allQuestions.length - 1; i++) {
                     if (allQuestions[i].timeTaken < lowestTime) {
                         lowestTime = allQuestions[i].timeTaken;
                         question1 = questions[i].q ? questions[i].q : questions[i].keyword;
