@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import dotenv from "dotenv";
+dotenv.config();
 
 export function setUser(data) {
     try {
